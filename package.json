@@ -1,0 +1,35 @@
+{
+  "name": "spokoj-fe",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@metamask/eth-sig-util": "^5.1.0",
+    "@openzeppelin/contracts": "^4.8.3",
+    "@types/marked": "^4.3.0",
+    "@types/node": "20.1.0",
+    "@types/react": "18.2.6",
+    "@types/react-dom": "18.2.4",
+    "@usewinter/checkout": "^0.1.46",
+    "axios": "^1.4.0",
+    "crypto": "^1.0.1",
+    "eslint": "8.40.0",
+    "eslint-config-next": "13.4.1",
+    "ipfs-core": "^0.18.0",
+    "ipfs-http-client": "^60.0.0",
+    "marked": "^5.0.2",
+    "next": "13.4.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "typescript": "5.0.4",
+    "web3": "^1.9.0"
+  },
+  "devDependencies": {
+    "@types/ethereumjs-util": "^6.1.0"
+  }
+}
