@@ -1,6 +1,14 @@
+export interface StrapiDataInterface<T> {
+  attributes: T;
+  id: number;
+}
+
 export interface StrapiResponseInterface<T> {
-  data: {
-    attributes: T;
-    id: string;
-  }
+  id: number;
+  data: StrapiDataInterface<T>;
+}
+
+export interface StrapiArrayResponseInterface<T> {
+  id: number;
+  data: StrapiDataInterface<T>[];
 }

@@ -16,10 +16,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // get the total number of tokens minted by the contract
       const totalSupply = await contract.methods.totalSupply().call();
 
-      const mintedTokens = MAX_TOKENS - totalSupply;
-
       // iterate over each token and get its owner's address
-      for (let i = 1; i <= mintedTokens; i++) {
+      for (let i = 1; i <= totalSupply; i++) {
         const ownerAddress = await contract.methods.ownerOf(i).call();
         holders.push(ownerAddress);
         console.log(`Token ${i} owner: ${ownerAddress}`);

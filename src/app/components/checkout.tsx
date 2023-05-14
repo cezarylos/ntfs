@@ -6,9 +6,10 @@ interface CheckoutPropsInterface {
   projectId: string;
   isBuyPanelOpen: boolean;
   setIsBuyPanelOpen: (isBuyPanelOpen: boolean) => void;
+  onSuccess: () => void;
 }
 
-export default function Checkout({ address, projectId, isBuyPanelOpen, setIsBuyPanelOpen}: CheckoutPropsInterface) {
+export default function Checkout({ address, projectId, isBuyPanelOpen, setIsBuyPanelOpen, onSuccess}: CheckoutPropsInterface) {
   if (!address) {
     return <></>;
   }
@@ -23,6 +24,7 @@ export default function Checkout({ address, projectId, isBuyPanelOpen, setIsBuyP
     fillSource={'opensea.io'}
     production={false}
     language={'english'}
+    onSuccess={onSuccess}
     appearance={{
       leftBackgroundColor: '#131317',
       rightBackgroundColor: '#22222d',

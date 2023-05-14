@@ -3,10 +3,8 @@
 
 import React, { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 import Web3 from 'web3';
-import WinterCheckout from '@usewinter/checkout/dist/components/WinterCheckout';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 
-import { marked } from 'marked';
 import { EventInterface } from '@/app/typings/event.interface';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
@@ -33,8 +31,6 @@ export default function Homepage({ events }: HomeInterface): ReactElement {
   };
 
   const getIsTokenHolder = useCallback(async () => {
-    const web3 = new Web3(window.ethereum);
-    web3Ref.current = web3;
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     const currentAccount = accounts[0];
     setAddress(currentAccount);
@@ -51,8 +47,6 @@ export default function Homepage({ events }: HomeInterface): ReactElement {
 
   const getMyTokens = useCallback(async () => {
     const contractAddress = events[0].contractAddress;
-    const web3 = new Web3(window.ethereum);
-    web3Ref.current = web3;
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     const currentAccount = accounts[0];
     setAddress(currentAccount);
@@ -70,7 +64,6 @@ export default function Homepage({ events }: HomeInterface): ReactElement {
 
     setMyTokens(myTokensResponse.data);
   }, [window]);
-
 
   useEffect(() => {
     if (!window?.ethereum) {

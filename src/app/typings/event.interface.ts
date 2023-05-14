@@ -4,5 +4,5 @@ export interface EventInterface {
   ABI: Array<Record<string, any>>;
   eventName: string;
   eventDescription: string;
-  id?: number;
+  id: number;
 }
