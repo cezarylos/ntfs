@@ -8,6 +8,7 @@ import { marked } from 'marked';
 import Checkout from '@/app/components/checkout';
 import { getMaticProvider } from '@/app/utils';
 import Web3 from 'web3';
+import Link from 'next/link';
 
 export default function Event({ id, winterProjectId }: EventInterface): ReactElement {
   const [myTokens, setMyTokens] = useState([]);
@@ -41,7 +42,6 @@ export default function Event({ id, winterProjectId }: EventInterface): ReactEle
     try {
       const response = await axios.get(`/api/${EndpointsEnum.GET_TOKENS_AMOUNT_LEFT}/${id}`, {
         params: {
-          eventId: id,
           providerUrl
         }
       });
@@ -88,5 +88,10 @@ export default function Event({ id, winterProjectId }: EventInterface): ReactEle
     {!!tokensLeft && <button onClick={toggleBuyPanel}>
       <h1>BUY THIS FUCKER</h1>
     </button>}
+    <Link href={`event/${id}/result`}>
+      <button>
+        <h3>Check for tickets</h3>
+      </button>
+    </Link>
   </>;
 }

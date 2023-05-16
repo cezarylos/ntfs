@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       await Promise.all(mappedTickets.map(async (ticket: TicketInterface, index: number) => {
         if (ticket.holderAddress) {
-          return ticket;
+          return;
         }
         if (shuffledHolders[index]) {
           StrapiService.assignHolderAddressToTicket(jwt, ticket.id, shuffledHolders[index]).finally();
