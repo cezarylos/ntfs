@@ -16,24 +16,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { data } = response;
 
         const tickets = await Promise.all(data.map(async ticketWrapper => {
-          const { url, mime } = ticketWrapper.attributes.ticket.data.attributes;
-          const response = await fetch(`${BASE_STRAPI_URL}${url}`, {
-            headers: {
-              Accept: 'application/octet-stream'
-            }
-          });
-
-          if (!response.ok) {
-            throw new Error(`File retrieval failed for URL: ${url}`);
-          }
-
-          const fileData = await response.arrayBuffer();
-          const fileBlob = new Blob([fileData], { type: mime });
-
+          const { url } = ticketWrapper.attributes.ticket.data.attributes;
           return {
-            name: url.split('/').pop(),
-            data: URL.createObjectURL(fileBlob)
-          };
+            url: `${BASE_STRAPI_URL}${url}`
+          }
         }));
 
         return res.status(201).json(tickets);
