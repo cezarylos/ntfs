@@ -17,7 +17,7 @@ const getHeaders = (jwt: string): Headers => new Headers({
 export class StrapiService {
   public static async getAllEvents(fields?: string[]): Promise<EventInterface[]> {
     try {
-      const res = await fetch(`${BASE_STRAPI_URL}/api/events${filerFields(fields)}`);
+      const res = await fetch(`${BASE_STRAPI_URL}/api/events${filerFields(fields)}`, { next: { revalidate: 60 }});
       const resJson = await res.json();
       return resJson.data?.map(({ attributes, id }: { attributes: Partial<EventInterface>, id: number }) =>
         ({ ...attributes, id })) || [];
