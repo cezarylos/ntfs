@@ -3,7 +3,7 @@ import { StrapiArrayResponseInterface, StrapiResponseInterface } from '@/app/typ
 import { TicketInterface } from '@/app/typings/ticket.interface';
 import axios, { AxiosPromise } from 'axios';
 
-export const BASE_STRAPI_URL = process.env.STRAPI_BASE_URL;
+export const BASE_STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
 const noLimitPagination = '&pagination[limit]=-1';
 
 const filerFields = (fields: string[] = [], isFirstParam = true): string =>

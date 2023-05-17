@@ -2,7 +2,8 @@
 
 import { ReactNode } from 'react';
 import { MetaMaskContextProvider } from '@/app/hooks/useMetaMask';
-import { Navigation } from '@/app/components/Navigation';
+import dynamic from 'next/dynamic';
+const Navigation = dynamic(() => import('../components/Navigation/Navigation'), { ssr: false });
 
 export default function DashboardLayout({
   children // will be a page or nested layout

@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactElement, useCallback, useState } from 'react';
+import React, { ReactElement, useCallback, useState } from 'react';
 import { StrapiService } from '@/app/services/strapi.service';
 import { EventInterface } from '@/app/typings/event.interface';
 import axios from 'axios';

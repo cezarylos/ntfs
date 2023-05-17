@@ -1,17 +1,14 @@
 'use client';
 
+import React, { ReactElement } from 'react';
 import { useMetaMask } from '../../hooks/useMetaMask';
 import { formatAddress } from '../../utils';
 import styles from './Navigation.module.css';
 import Link from 'next/link';
 
-export const Navigation = () => {
+const Navigation = (): ReactElement => {
 
   const { wallet, hasProvider, isConnecting, connectMetaMask } = useMetaMask();
-
-  if (!window) {
-    return <></>;
-  }
 
   return (
     <div className={styles.navigation}>
@@ -36,3 +33,5 @@ export const Navigation = () => {
     </div>
   );
 };
+
+export default Navigation;

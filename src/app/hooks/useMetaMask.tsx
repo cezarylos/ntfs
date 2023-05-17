@@ -2,10 +2,6 @@ import { createContext, PropsWithChildren, useCallback, useContext, useEffect, u
 
 import detectEthereumProvider from '@metamask/detect-provider';
 import { formatBalance } from '../utils';
-import Web3 from 'web3';
-
-
-const web3 = new Web3(Web3.givenProvider);
 
 interface WalletState {
   accounts: any[];

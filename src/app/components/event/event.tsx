@@ -42,8 +42,6 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
     setMyTokens(myTokensResponse.data);
   }, [chainId, id]);
 
-  console.log(hasProvider);
-
   const getTokensLeft = useCallback(async () => {
     const providerUrl = await getMaticProvider(window);
     try {

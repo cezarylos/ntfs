@@ -1,6 +1,5 @@
 'use client'; // this is a client component 👈🏽
 
-
 import React, { ReactElement } from 'react';
 
 import { EventInterface } from '@/app/typings/event.interface';
