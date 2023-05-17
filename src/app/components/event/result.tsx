@@ -54,7 +54,7 @@ export default function Result({ eventId }: { eventId: string; }): ReactElement 
     <h1>Result</h1>
     {files?.map(({ name, data }, idx) => <div key={idx}>
         <h2>{name}</h2>
-        <button onClick={handleDownload(name, data)}>Download</button>
+        <a href={`/thank-you`} target='_blank' onClick={handleDownload(name, data)}>Download</a>
       </div>
     )}
     {files?.length === 0 && <h2>No luck</h2>}
