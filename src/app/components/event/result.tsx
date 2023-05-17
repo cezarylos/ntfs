@@ -32,7 +32,6 @@ export default function Result({ eventId }: { eventId: string; }): ReactElement 
           eventId
         });
         setFiles(res.data);
-        console.log(res.data);
       } catch (e) {
         console.error(e);
       }
