@@ -9,6 +9,7 @@ import Checkout from '@/app/components/checkout';
 import { getChainIdFromString, getMaticProvider } from '@/app/utils';
 import Link from 'next/link';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
+import MetaMaskLinks from '@/app/components/metamaskLinks';
 
 export default function Event({ id, winterProjectId, chainId }: EventInterface): ReactElement {
   const { hasProvider } = useMetaMask();
@@ -113,13 +114,18 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
         {!!tokensLeft && <button onClick={toggleBuyPanel}>
             <h1>BUY THIS FUCKER</h1>
         </button>}
+        <br/>
         <Link href={`event/${id}/result`}>
           <button>
             <h3>Check for tickets</h3>
           </button>
         </Link>
+        <br/>
       </> :
-      <p>Log in to MetaMask to interact with tokens</p>
+      <>
+        <p>Log in to MetaMask to interact with tokens</p>
+        <MetaMaskLinks/>
+      </>
     }
   </>;
 }

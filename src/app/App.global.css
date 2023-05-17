@@ -19,6 +19,7 @@ a {
   color: #e757fa;
   text-decoration: underline;
 }
+
 a:hover {
   color: #2bf9f9;
 }
@@ -26,8 +27,8 @@ a:hover {
 body {
   margin: 0;
   display: flex;
+  flex-flow: column;
   place-items: center;
-  min-width: 320px;
 }
 
 h1 {

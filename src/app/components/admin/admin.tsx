@@ -19,12 +19,14 @@ export default function Admin({ events }: AdminProps): ReactElement {
   const [error, setError] = useState<string | null>(null);
   const [log, setLog] = useState<string[]>([]);
 
-  const handleSend = async (): Promise<void> => {
+  const handleSend = async (event: React.FormEvent): Promise<void> => {
+    event.preventDefault();
     try {
       const res = await StrapiService.loginAdmin(password);
       setAdminUser(res);
     } catch (e) {
       setError(e.response.data.error.message);
+      setPassword('');
       console.error(e);
     }
   };
@@ -61,14 +63,18 @@ export default function Admin({ events }: AdminProps): ReactElement {
   }
 
   return (
-    <div>
+    <form>
       <h1>Admin</h1>
       <br/>
       <br/>
       {!adminUser && <>
           <label>Admin password:</label>
-          <input type='password' onChange={event => setPassword(event.target.value)}/>
-          <button onClick={handleSend}>
+          <input
+              value={password}
+              type='password'
+              onChange={event => setPassword(event.target.value)}
+          />
+          <button onClick={handleSend} type='submit'>
               SEND
           </button>
       </>}
@@ -85,6 +91,6 @@ export default function Admin({ events }: AdminProps): ReactElement {
           <h3>LOG:</h3>
         {log.map((message: string, id: number) => <p key={id}>{message}</p>)}
       </>}
-    </div>
+    </form>
   );
 }
