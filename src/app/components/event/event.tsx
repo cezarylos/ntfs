@@ -19,9 +19,9 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
   const [tokensLeft, setTokensLeft] = useState(0);
   const [isTokensLoading, setIsTokensLoading] = useState(false);
 
-  const toggleBuyPanel = () => {
+  const toggleBuyPanel = useCallback((): void => {
     setIsBuyPanelOpen(!isBuyPanelOpen);
-  };
+  }, [isBuyPanelOpen]);
 
   const getMyTokens = useCallback(async () => {
     try {
@@ -82,6 +82,14 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
     }
   }, [getMyTokens, getTokensLeft, hasProvider]);
 
+  const openWidget = useCallback(async (): Promise<void> => {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: getChainIdFromString(chainId) }]
+    });
+    toggleBuyPanel();
+  }, [toggleBuyPanel, chainId]);
+
   return <>
     {address && <Checkout
         address={address}
@@ -111,7 +119,7 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
         <br/>
         <br/>
         <br/>
-        {!!tokensLeft && <button onClick={toggleBuyPanel}>
+        {!!tokensLeft && <button onClick={openWidget}>
             <h1>BUY THIS FUCKER</h1>
         </button>}
         <br/>
