@@ -65,9 +65,9 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
   }, [id]);
 
   const onSuccess = useCallback(async (): Promise<void> => {
+    toggleBuyPanel();
     await Promise.all([getMyTokens(), getTokensLeft()]);
-    setIsBuyPanelOpen(false);
-  }, [getMyTokens, getTokensLeft]);
+  }, [getMyTokens, getTokensLeft, toggleBuyPanel]);
 
   useEffect(() => {
     if (!window?.ethereum) {
