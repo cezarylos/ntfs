@@ -10,6 +10,7 @@ import { getChainIdFromString, getMaticProvider } from '@/app/utils';
 import Link from 'next/link';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
 import MetaMaskLinks from '@/app/components/metamaskLinks';
+import { ChainsEnum } from '@/app/typings/chains.enum';
 
 export default function Event({ id, winterProjectId, chainId }: EventInterface): ReactElement {
   const { hasProvider } = useMetaMask();
@@ -22,6 +23,32 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
   const toggleBuyPanel = useCallback((): void => {
     setIsBuyPanelOpen(!isBuyPanelOpen);
   }, [isBuyPanelOpen]);
+
+  const addMumbaiNetwork = useCallback(async (): Promise<void> => {
+    try {
+      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+      if (chainId === ChainsEnum.MUMBAI) {
+        return;
+      }
+      await window.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [{
+          chainId: ChainsEnum.MUMBAI, //todo - change in prod
+          rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
+          chainName: 'Mumbai Testnet',
+          nativeCurrency: {
+            name: 'MATIC',
+            symbol: 'MATIC',
+            decimals: 18
+          },
+          blockExplorerUrls: ['https://polygonscan.com/']
+        }]
+      });
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   const getMyTokens = useCallback(async () => {
     try {
@@ -75,12 +102,11 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
       return;
     }
     const init = async () => {
+      await addMumbaiNetwork();
       await Promise.all([getMyTokens(), getTokensLeft()]);
     };
-    if (hasProvider) {
-      init().finally();
-    }
-  }, [getMyTokens, getTokensLeft, hasProvider]);
+    init().finally();
+  }, [getMyTokens, getTokensLeft, hasProvider, addMumbaiNetwork]);
 
   const openWidget = useCallback(async (): Promise<void> => {
     await window.ethereum.request({
