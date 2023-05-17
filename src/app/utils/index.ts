@@ -34,3 +34,13 @@ export const getMaticProvider = async (window: Window): Promise<string | null> =
   const chainId = await provider.request({ method: 'eth_chainId' });
   return chainId === '0x89' ? 'https://rpc-mainnet.matic.network' : 'https://rpc-mumbai.maticvigil.com';
 }
+
+export const getChainIdFromString = (chainString: string): string | void => {
+  const input = chainString;
+  const regex = /\[\w+\]:\s(0x[a-fA-F0-9]+)/;
+  const match = input.match(regex);
+
+  if (match) {
+    return match[1];
+  }
+}

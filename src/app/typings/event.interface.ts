@@ -5,4 +5,5 @@ export interface EventInterface {
   eventName: string;
   eventDescription: string;
   id: number;
+  chainId: string;
 }

@@ -3,6 +3,7 @@
 import { useMetaMask } from '../../hooks/useMetaMask';
 import { formatAddress } from '../../utils';
 import styles from './Navigation.module.css';
+import Link from 'next/link';
 
 export const Navigation = () => {
 
@@ -15,7 +16,7 @@ export const Navigation = () => {
   return (
     <div className={styles.navigation}>
       <div className={styles.flexContainer}>
-        <div className={styles.leftNav}>TOKENY YEYEYEYYEYE</div>
+        <Link className={styles.leftNav} href={'/'}>TOKENY YEYEYEYYEYE</Link>
         <div className={styles.rightNav}>
           {!hasProvider &&
             <a href='https://metamask.io' target='_blank' rel='noreferrer'>
@@ -28,14 +29,7 @@ export const Navigation = () => {
             </button>
           }
           {wallet.accounts.length > 0 &&
-            <a
-              className='text_link tooltip-bottom'
-              href={`https://etherscan.io/address/${wallet}`}
-              target='_blank'
-              data-tooltip='Open in Block Explorer' rel='noreferrer'
-            >
-              {formatAddress(wallet.accounts[0])}
-            </a>
+            <p>{formatAddress(wallet.accounts[0])}</p>
           }
         </div>
       </div>

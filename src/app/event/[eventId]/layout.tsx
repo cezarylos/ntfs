@@ -13,8 +13,8 @@ export default function DashboardLayout({
     <>
       <MetaMaskContextProvider>
         <Navigation />
+        {children}
       </MetaMaskContextProvider>
-      {children}
     </>
   );
 }

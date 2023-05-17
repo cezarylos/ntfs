@@ -6,11 +6,12 @@ import axios from 'axios';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { marked } from 'marked';
 import Checkout from '@/app/components/checkout';
-import { getMaticProvider } from '@/app/utils';
-import Web3 from 'web3';
+import { getChainIdFromString, getMaticProvider } from '@/app/utils';
 import Link from 'next/link';
+import { useMetaMask } from '@/app/hooks/useMetaMask';
 
-export default function Event({ id, winterProjectId }: EventInterface): ReactElement {
+export default function Event({ id, winterProjectId, chainId }: EventInterface): ReactElement {
+  const { hasProvider } = useMetaMask();
   const [myTokens, setMyTokens] = useState([]);
   const [address, setAddress] = useState(null);
   const [isBuyPanelOpen, setIsBuyPanelOpen] = useState(false);
@@ -21,6 +22,10 @@ export default function Event({ id, winterProjectId }: EventInterface): ReactEle
   };
 
   const getMyTokens = useCallback(async () => {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: getChainIdFromString(chainId) }]
+    })
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     const currentAccount = accounts[0];
     setAddress(currentAccount);
@@ -35,7 +40,9 @@ export default function Event({ id, winterProjectId }: EventInterface): ReactEle
     });
 
     setMyTokens(myTokensResponse.data);
-  }, [window]);
+  }, [chainId, id]);
+
+  console.log(hasProvider);
 
   const getTokensLeft = useCallback(async () => {
     const providerUrl = await getMaticProvider(window);
@@ -58,8 +65,10 @@ export default function Event({ id, winterProjectId }: EventInterface): ReactEle
     const init = async () => {
       await Promise.all([getMyTokens(), getTokensLeft()]);
     };
-    init().finally();
-  }, [getMyTokens, getTokensLeft]);
+    if (hasProvider) {
+      init().finally();
+    }
+  }, [getMyTokens, getTokensLeft, hasProvider]);
 
   return <>
     {address && <Checkout
@@ -69,29 +78,34 @@ export default function Event({ id, winterProjectId }: EventInterface): ReactEle
       setIsBuyPanelOpen={setIsBuyPanelOpen}
       onSuccess={getMyTokens}
     />}
-    <h1>Tokens left: {tokensLeft}</h1>
-    <div>
-      <h2>MY TOKENS:</h2>
-      {myTokens.map((token: any, id: number) => {
-        return <div key={`${token.tokenId}_${id}`} style={{ marginBottom: '24px' }}>
-          <div>{token.name}</div>
-          <div
-            dangerouslySetInnerHTML={{ __html: marked.parse(token.description).replace('<a ', '<a target="_blank" ') }} />
-          <div>{token.tokenId}</div>
-          <img style={{ width: '100px' }} src={token.image} alt={token.name} />
-        </div>;
-      })}
-    </div>
-    <br />
-    <br />
-    <br />
-    {!!tokensLeft && <button onClick={toggleBuyPanel}>
-      <h1>BUY THIS FUCKER</h1>
-    </button>}
-    <Link href={`event/${id}/result`}>
-      <button>
-        <h3>Check for tickets</h3>
-      </button>
-    </Link>
+    {hasProvider ?
+      <>
+        <h1>Tokens left: {tokensLeft}</h1>
+        <div>
+          <h2>MY TOKENS:</h2>
+          {myTokens.map((token: any, id: number) => {
+            return <div key={`${token.tokenId}_${id}`} style={{ marginBottom: '24px' }}>
+              <div>{token.name}</div>
+              <div
+                dangerouslySetInnerHTML={{ __html: marked.parse(token.description).replace('<a ', '<a target="_blank" ') }} />
+              <div>{token.tokenId}</div>
+              <img style={{ width: '100px' }} src={token.image} alt={token.name} />
+            </div>;
+          })}
+        </div>
+        <br />
+        <br />
+        <br />
+        {!!tokensLeft && <button onClick={toggleBuyPanel}>
+            <h1>BUY THIS FUCKER</h1>
+        </button>}
+        <Link href={`event/${id}/result`}>
+          <button>
+            <h3>Check for tickets</h3>
+          </button>
+        </Link>
+      </> :
+      <p>Log in to MetaMask to interact with tokens</p>
+    }
   </>;
 }

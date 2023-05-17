@@ -3,9 +3,12 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import axios from 'axios';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
+import { TicketInterface } from '@/app/typings/ticket.interface';
+import { useRedirectWhenNoProvider } from '@/app/hooks/useRedirectWhenNoProvider';
 
 export default function Result({ eventId }: { eventId: string; }): ReactElement {
-  const [files, setFiles] = useState([]);
+  const hasProvider = useRedirectWhenNoProvider();
+  const [files, setFiles] = useState<TicketInterface[] | null>(null);
 
   useEffect((): void => {
     if (!window?.ethereum) {
@@ -44,6 +47,10 @@ export default function Result({ eventId }: { eventId: string; }): ReactElement 
     link.click();
   };
 
+  if (!hasProvider) {
+    return <></>;
+  }
+
   return <>
     <h1>Result</h1>
     {files?.map(({ name, data }, idx) => <div key={idx}>
@@ -51,5 +58,6 @@ export default function Result({ eventId }: { eventId: string; }): ReactElement 
         <button onClick={handleDownload(name, data)}>Download</button>
       </div>
     )}
+    {files?.length === 0 && <h2>No luck</h2>}
   </>;
 }
