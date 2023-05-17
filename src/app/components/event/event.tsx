@@ -16,30 +16,38 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
   const [address, setAddress] = useState(null);
   const [isBuyPanelOpen, setIsBuyPanelOpen] = useState(false);
   const [tokensLeft, setTokensLeft] = useState(0);
+  const [isTokensLoading, setIsTokensLoading] = useState(false);
 
   const toggleBuyPanel = () => {
     setIsBuyPanelOpen(!isBuyPanelOpen);
   };
 
   const getMyTokens = useCallback(async () => {
-    await window.ethereum.request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: getChainIdFromString(chainId) }]
-    })
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    const currentAccount = accounts[0];
-    setAddress(currentAccount);
-    const providerUrl = await getMaticProvider(window);
+    try {
+      setIsTokensLoading(true);
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: getChainIdFromString(chainId) }]
+      });
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const currentAccount = accounts[0];
+      setAddress(currentAccount);
+      const providerUrl = await getMaticProvider(window);
 
-    const myTokensResponse = await axios.get(`/api/${EndpointsEnum.GET_MY_TOKENS}`, {
-      params: {
-        providerUrl,
-        address: currentAccount,
-        eventId: id
-      }
-    });
+      const myTokensResponse = await axios.get(`/api/${EndpointsEnum.GET_MY_TOKENS}`, {
+        params: {
+          providerUrl,
+          address: currentAccount,
+          eventId: id
+        }
+      });
 
-    setMyTokens(myTokensResponse.data);
+      setMyTokens(myTokensResponse.data);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsTokensLoading(false);
+    }
   }, [chainId, id]);
 
   const getTokensLeft = useCallback(async () => {
@@ -56,6 +64,11 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
     }
   }, [id]);
 
+  const onSuccess = useCallback(async (): Promise<void> => {
+    await Promise.all([getMyTokens(), getTokensLeft()]);
+    setIsBuyPanelOpen(false);
+  }, [getMyTokens, getTokensLeft]);
+
   useEffect(() => {
     if (!window?.ethereum) {
       return;
@@ -70,30 +83,33 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
 
   return <>
     {address && <Checkout
-      address={address}
-      projectId={winterProjectId}
-      isBuyPanelOpen={isBuyPanelOpen}
-      setIsBuyPanelOpen={setIsBuyPanelOpen}
-      onSuccess={getMyTokens}
+        address={address}
+        projectId={winterProjectId}
+        isBuyPanelOpen={isBuyPanelOpen}
+        setIsBuyPanelOpen={setIsBuyPanelOpen}
+        onSuccess={onSuccess}
     />}
     {hasProvider ?
       <>
         <h1>Tokens left: {tokensLeft}</h1>
         <div>
           <h2>MY TOKENS:</h2>
-          {myTokens.map((token: any, id: number) => {
-            return <div key={`${token.tokenId}_${id}`} style={{ marginBottom: '24px' }}>
-              <div>{token.name}</div>
-              <div
-                dangerouslySetInnerHTML={{ __html: marked.parse(token.description).replace('<a ', '<a target="_blank" ') }} />
-              <div>{token.tokenId}</div>
-              <img style={{ width: '100px' }} src={token.image} alt={token.name} />
-            </div>;
-          })}
+          {isTokensLoading && <p>Loading...</p>}
+          {myTokens?.length ? myTokens.map((token: any, id: number) => {
+              return <div key={`${token.tokenId}_${id}`} style={{ marginBottom: '24px' }}>
+                <div>{token.name}</div>
+                <div
+                  dangerouslySetInnerHTML={{ __html: marked.parse(token.description).replace('<a ', '<a target="_blank" ') }}/>
+                <div>{token.tokenId}</div>
+                <img style={{ width: '100px' }} src={token.image} alt={token.name}/>
+              </div>;
+            }) :
+            <p>{`You don't have any tokens yet`}</p>
+          }
         </div>
-        <br />
-        <br />
-        <br />
+        <br/>
+        <br/>
+        <br/>
         {!!tokensLeft && <button onClick={toggleBuyPanel}>
             <h1>BUY THIS FUCKER</h1>
         </button>}
