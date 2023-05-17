@@ -19,8 +19,8 @@ export class StrapiService {
     try {
       const res = await fetch(`${BASE_STRAPI_URL}/api/events${filerFields(fields)}`, { next: { revalidate: 60 }});
       const resJson = await res.json();
-      return resJson.data?.map(({ attributes, id }: { attributes: Partial<EventInterface>, id: number }) =>
-        ({ ...attributes, id })) || [];
+      return resJson.data.map(({ attributes, id }: { attributes: Partial<EventInterface>, id: number }) =>
+        ({ ...attributes, id }));
     } catch (e) {
       console.error(e);
       throw e;
