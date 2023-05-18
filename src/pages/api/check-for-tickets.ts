@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { recoverPersonalSignature } from '@metamask/eth-sig-util';
 import { BASE_STRAPI_URL, StrapiService } from '@/app/services/strapi.service';
+import { recoverPersonalSignature } from '@metamask/eth-sig-util';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
@@ -12,15 +12,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
 
       if (recoveredAddress.toLowerCase() === address.toLowerCase()) {
-        const response = await StrapiService.getTicketsByEventIdAndHolderAddress(process.env.STRAPI_API_TOKEN, eventId, address);
+        const response = await StrapiService.getTicketsByEventIdAndHolderAddress(
+          process.env.STRAPI_API_TOKEN,
+          eventId,
+          address
+        );
         const { data } = response;
 
-        const tickets = await Promise.all(data.map(async ticketWrapper => {
-          const { url } = ticketWrapper.attributes.ticket.data.attributes;
-          return {
-            url: `${BASE_STRAPI_URL}${url}`
-          }
-        }));
+        const tickets = await Promise.all(
+          data.map(async ticketWrapper => {
+            const { url } = ticketWrapper.attributes.ticket.data.attributes;
+            return {
+              url: `${BASE_STRAPI_URL}${url}`
+            };
+          })
+        );
 
         return res.status(201).json(tickets);
       } else {

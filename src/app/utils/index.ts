@@ -1,5 +1,5 @@
-import detectEthereumProvider from '@metamask/detect-provider';
 import { ChainsEnum } from '@/app/typings/chains.enum';
+import detectEthereumProvider from '@metamask/detect-provider';
 
 export const formatBalance = (rawBalance: string) => {
   const balance = (parseInt(rawBalance) / 1000000000000000000).toFixed(2);
@@ -51,7 +51,11 @@ export const getChainIdFromString = (chainString: string): string => {
   return '';
 };
 
-export const createOpenSeaLink = ({ contractAddress, tokenId, chainId }: {
+export const createOpenSeaLink = ({
+  contractAddress,
+  tokenId,
+  chainId
+}: {
   contractAddress: string;
   tokenId: number;
   chainId: string;

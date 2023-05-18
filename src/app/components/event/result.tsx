@@ -1,13 +1,16 @@
-'use client'; // this is a client component 👈🏽
+'use client';
 
-import React, { ReactElement, useEffect, useState } from 'react';
-import axios from 'axios';
-import { EndpointsEnum } from '@/app/typings/endpoints.enum';
+// this is a client component 👈🏽
 import { useRedirectWhenNoProvider } from '@/app/hooks/useRedirectWhenNoProvider';
+import { EndpointsEnum } from '@/app/typings/endpoints.enum';
+import React, { ReactElement, useEffect, useState } from 'react';
 
-export default function Result({ eventId }: { eventId: string; }): ReactElement {
+import axios from 'axios';
+
+export default function Result({ eventId }: { eventId: string }): ReactElement {
   const hasProvider = useRedirectWhenNoProvider();
   const [files, setFiles] = useState<{ url: string }[]>([]);
+  const [isResultLoading, setIsResultLoading] = useState(false);
 
   useEffect((): void => {
     if (!window?.ethereum) {
@@ -15,6 +18,7 @@ export default function Result({ eventId }: { eventId: string; }): ReactElement 
     }
     const init = async (): Promise<void> => {
       try {
+        setIsResultLoading(true);
         const message = 'Please verify your address ownership';
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const address = accounts[0];
@@ -33,6 +37,8 @@ export default function Result({ eventId }: { eventId: string; }): ReactElement 
         setFiles(res.data);
       } catch (e) {
         console.error(e);
+      } finally {
+        setIsResultLoading(false);
       }
     };
     init().finally();
@@ -42,15 +48,19 @@ export default function Result({ eventId }: { eventId: string; }): ReactElement 
     return <></>;
   }
 
-  return <>
-    <h1>Result</h1>
-    {files?.map(({ url }, idx) => <div key={idx}>
-        <h2>Ticket #{idx + 1}</h2>
-        <a href={url} target='_blank'>
-          Open ticket
-        </a>
-      </div>
-    )}
-    {files?.length === 0 && <h2>No luck</h2>}
-  </>;
+  return (
+    <>
+      <h1>Result</h1>
+      {files?.map(({ url }, idx) => (
+        <div key={idx}>
+          <h2>Ticket #{idx + 1}</h2>
+          <a href={url} target="_blank">
+            Open ticket
+          </a>
+        </div>
+      ))}
+      {isResultLoading && <h2>Loading...</h2>}
+      {!isResultLoading && files?.length === 0 && <h2>No luck</h2>}
+    </>
+  );
 }

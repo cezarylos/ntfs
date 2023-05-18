@@ -7,7 +7,7 @@ export interface TicketInterface {
         name: string;
         url: string;
         mime: string;
-      }
-    }
+      };
+    };
   };
 }

@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import { StrapiService } from '@/app/services/strapi.service';
 import { TicketInterface } from '@/app/typings/ticket.interface';
 import { shuffleArray } from '@/app/utils';
+import { NextApiRequest, NextApiResponse } from 'next';
 import Web3 from 'web3';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -25,21 +25,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         holders.push(ownerAddress);
       }
 
-      const mappedTickets = tickets.data.map(({ id, attributes }: {
-        id: number;
-        attributes: TicketInterface
-      }) => ({ id, ...attributes }));
+      const mappedTickets = tickets.data.map(({ id, attributes }: { id: number; attributes: TicketInterface }) => ({
+        id,
+        ...attributes
+      }));
 
       const shuffledHolders = shuffleArray(holders);
 
-      await Promise.all(mappedTickets.map(async (ticket: TicketInterface, index: number) => {
-        if (ticket.holderAddress) {
-          return;
-        }
-        if (shuffledHolders[index]) {
-          StrapiService.assignHolderAddressToTicket(jwt, ticket.id, shuffledHolders[index]).finally();
-        }
-      }));
+      await Promise.all(
+        mappedTickets.map(async (ticket: TicketInterface, index: number) => {
+          if (ticket.holderAddress) {
+            return;
+          }
+          if (shuffledHolders[index]) {
+            StrapiService.assignHolderAddressToTicket(jwt, ticket.id, shuffledHolders[index]).finally();
+          }
+        })
+      );
 
       return res.status(200).json({ message: `${eventName}: Lottery finished!` });
     } catch (e) {

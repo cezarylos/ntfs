@@ -1,1 +1,1 @@
-export * from './MetaMaskError'
+export * from './MetaMaskError';

@@ -1,15 +1,17 @@
-'use client'; // this is a client component 👈🏽
+'use client';
 
-import { EventInterface } from '@/app/typings/event.interface';
-import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import axios from 'axios';
-import { EndpointsEnum } from '@/app/typings/endpoints.enum';
-import { marked } from 'marked';
+// this is a client component 👈🏽
 import Checkout from '@/app/components/checkout';
-import { getChainIdFromString, getMaticProvider } from '@/app/utils';
-import Link from 'next/link';
-import { useMetaMask } from '@/app/hooks/useMetaMask';
 import MetaMaskLinks from '@/app/components/metamaskLinks';
+import { useMetaMask } from '@/app/hooks/useMetaMask';
+import { EndpointsEnum } from '@/app/typings/endpoints.enum';
+import { EventInterface } from '@/app/typings/event.interface';
+import { getChainIdFromString, getMaticProvider } from '@/app/utils';
+import { marked } from 'marked';
+import Link from 'next/link';
+import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+
+import axios from 'axios';
 
 export default function Event({ id, winterProjectId, chainId }: EventInterface): ReactElement {
   const { hasProvider } = useMetaMask();
@@ -33,17 +35,19 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
       }
       await window.ethereum.request({
         method: 'wallet_addEthereumChain',
-        params: [{
-          chainId: eventChainId,
-          rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
-          chainName: 'Mumbai Testnet',
-          nativeCurrency: {
-            name: 'MATIC',
-            symbol: 'MATIC',
-            decimals: 18
-          },
-          blockExplorerUrls: ['https://polygonscan.com/']
-        }]
+        params: [
+          {
+            chainId: eventChainId,
+            rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
+            chainName: 'Mumbai Testnet',
+            nativeCurrency: {
+              name: 'MATIC',
+              symbol: 'MATIC',
+              decimals: 18
+            },
+            blockExplorerUrls: ['https://polygonscan.com/']
+          }
+        ]
       });
       window.location.reload();
     } catch (error) {
@@ -116,57 +120,75 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
         params: [{ chainId: eventChainId }]
       });
       toggleBuyPanel();
-      setIsTokensLoading(true)
+      setIsTokensLoading(true);
     } catch (e) {
       console.error(e);
     }
   }, [eventChainId, toggleBuyPanel]);
 
-  return <>
-    {address && <Checkout
-        address={address}
-        projectId={winterProjectId}
-        isBuyPanelOpen={isBuyPanelOpen}
-        setIsBuyPanelOpen={setIsBuyPanelOpen}
-        onSuccess={onSuccess}
-    />}
-    {hasProvider ?
-      <>
-        <h1>Tokens left: {tokensLeft}</h1>
-        <div>
-          <h2>MY TOKENS:</h2>
-          {isTokensLoading && <p>Loading...</p>}
-          {myTokens?.length ? myTokens.map((token: any, id: number) => {
-              return <div key={`${token.tokenId}_${id}`} style={{ marginBottom: '24px' }}>
-                <div>{token.name}</div>
-                <div
-                  dangerouslySetInnerHTML={{ __html: marked.parse(token.description).replace('<a ', '<a target="_blank" ') }}/>
-                <div>{token.tokenId}</div>
-                <p><a href={token.openseaUrl} target='_blank'>View on OpenSea</a></p>
-                <img style={{ width: '100px' }} src={token.image} alt={token.name}/>
-              </div>;
-            }) :
-            <p>{`You don't have any tokens yet`}</p>
-          }
-        </div>
-        <br/>
-        <br/>
-        <br/>
-        {!!tokensLeft && <button onClick={openWidget}>
-            <h1>BUY THIS FUCKER</h1>
-        </button>}
-        <br/>
-        <Link href={`event/${id}/result`}>
-          <button>
-            <h3>Check for tickets</h3>
-          </button>
-        </Link>
-        <br/>
-      </> :
-      <>
-        <p>Log in to MetaMask to interact with tokens</p>
-        <MetaMaskLinks/>
-      </>
-    }
-  </>;
+  return (
+    <>
+      {address && (
+        <Checkout
+          address={address}
+          projectId={winterProjectId}
+          isBuyPanelOpen={isBuyPanelOpen}
+          setIsBuyPanelOpen={setIsBuyPanelOpen}
+          onSuccess={onSuccess}
+        />
+      )}
+      {hasProvider ? (
+        <>
+          <h1>Tokens left: {tokensLeft}</h1>
+          <div>
+            <h2>MY TOKENS:</h2>
+            {isTokensLoading && <p>Loading...</p>}
+            {myTokens?.length ? (
+              myTokens.map((token: any, id: number) => {
+                return (
+                  <div key={`${token.tokenId}_${id}`} style={{ marginBottom: '24px' }}>
+                    <div>{token.name}</div>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: marked.parse(token.description).replace('<a ', '<a target="_blank" ')
+                      }}
+                    />
+                    <div>{token.tokenId}</div>
+                    <p>
+                      <a href={token.openseaUrl} target="_blank">
+                        View on OpenSea
+                      </a>
+                    </p>
+                    <img style={{ width: '100px' }} src={token.image} alt={token.name} />
+                  </div>
+                );
+              })
+            ) : (
+              <p>{`You don't have any tokens yet`}</p>
+            )}
+          </div>
+          <br />
+          <br />
+          <br />
+          {!!tokensLeft && (
+            <button onClick={openWidget}>
+              <h1>BUY THIS FUCKER</h1>
+            </button>
+          )}
+          <br />
+          <Link href={`event/${id}/result`}>
+            <button>
+              <h3>Check for tickets</h3>
+            </button>
+          </Link>
+          <br />
+        </>
+      ) : (
+        <>
+          <p>Log in to MetaMask to interact with tokens</p>
+          <MetaMaskLinks />
+        </>
+      )}
+    </>
+  );
 }

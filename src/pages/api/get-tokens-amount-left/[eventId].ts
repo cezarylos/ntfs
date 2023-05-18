@@ -1,10 +1,10 @@
+import { StrapiService } from '@/app/services/strapi.service';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Web3 from 'web3';
-import { StrapiService } from '@/app/services/strapi.service';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const { eventId, providerUrl } = req.query as { eventId: string; providerUrl: string; };
+    const { eventId, providerUrl } = req.query as { eventId: string; providerUrl: string };
     try {
       const web3 = new Web3(providerUrl);
       const eventResponse = await StrapiService.getEventById(eventId, ['contractAddress', 'ABI', 'eventName']);

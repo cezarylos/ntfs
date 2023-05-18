@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import Web3 from 'web3';
 import { StrapiService } from '@/app/services/strapi.service';
 import { createOpenSeaLink, getChainIdFromString } from '@/app/utils';
+import { NextApiRequest, NextApiResponse } from 'next';
+import Web3 from 'web3';
 
 const ipfsGateways = [
   'https://ipfs.io/ipfs/',
@@ -28,11 +28,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const myTokenIds = await contract.methods.getTokensByOwner?.(address).call();
 
-      const tokens = await Promise.all(myTokenIds.map(async (tokenId: string) => {
-        const link = (await contract.methods.tokenURI(tokenId).call()).split('ipfs://')[1];
-        const res = await fetch(`${ipfsGateways[0]}${link}`);
-        return { ...(await res.json()), id: tokenId };
-      }));
+      const tokens = await Promise.all(
+        myTokenIds.map(async (tokenId: string) => {
+          const link = (await contract.methods.tokenURI(tokenId).call()).split('ipfs://')[1];
+          const res = await fetch(`${ipfsGateways[0]}${link}`);
+          return { ...(await res.json()), id: tokenId };
+        })
+      );
 
       const mappedTokens = tokens.map((token: any) => ({
         ...token,
