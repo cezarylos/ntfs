@@ -5,6 +5,7 @@ import { useMetaMask } from '@/app/hooks/useMetaMask';
 const MetamaskLinks = (): ReactElement => {
   const { hasProvider } = useMetaMask();
   const isMobile = isMobileDevice();
+
   const connectMetamaskMobile = (): void => {
     const dappUrl = window.location.href.split('//')[1].split('/')[0];
     const metamaskAppDeepLink = 'https://metamask.app.link/dapp/' + dappUrl;

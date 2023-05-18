@@ -1,4 +1,5 @@
 import detectEthereumProvider from '@metamask/detect-provider';
+import { ChainsEnum } from '@/app/typings/chains.enum';
 
 export const formatBalance = (rawBalance: string) => {
   const balance = (parseInt(rawBalance) / 1000000000000000000).toFixed(2);
@@ -33,9 +34,13 @@ export const getMaticProvider = async (window: Window): Promise<string | null> =
   const provider = await detectEthereumProvider();
   const chainId = await provider.request({ method: 'eth_chainId' });
   return chainId === '0x89' ? 'https://rpc-mainnet.matic.network' : 'https://rpc-mumbai.maticvigil.com';
-}
+};
 
-export const getChainIdFromString = (chainString: string): string | void => {
+export const getChainIdFromString = (chainString: string): string => {
+  if (!chainString) {
+    console.error('No chainId provided');
+    return '';
+  }
   const input = chainString;
   const regex = /\[\w+\]:\s(0x[a-fA-F0-9]+)/;
   const match = input.match(regex);
@@ -43,4 +48,15 @@ export const getChainIdFromString = (chainString: string): string | void => {
   if (match) {
     return match[1];
   }
-}
+  return '';
+};
+
+export const createOpenSeaLink = ({ contractAddress, tokenId, chainId }: {
+  contractAddress: string;
+  tokenId: number;
+  chainId: string;
+}): string => {
+  const testnetPrefix = chainId === ChainsEnum.MUMBAI ? 'testnets.' : '';
+  const chainName = chainId === ChainsEnum.MUMBAI ? 'mumbai' : 'matic';
+  return `https://${testnetPrefix}opensea.io/assets/${chainName}/${contractAddress}/${tokenId}`;
+};

@@ -1,7 +1,7 @@
 'use client'; // this is a client component 👈🏽
 
 import { EventInterface } from '@/app/typings/event.interface';
-import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { marked } from 'marked';
@@ -10,7 +10,6 @@ import { getChainIdFromString, getMaticProvider } from '@/app/utils';
 import Link from 'next/link';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
 import MetaMaskLinks from '@/app/components/metamaskLinks';
-import { ChainsEnum } from '@/app/typings/chains.enum';
 
 export default function Event({ id, winterProjectId, chainId }: EventInterface): ReactElement {
   const { hasProvider } = useMetaMask();
@@ -20,20 +19,22 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
   const [tokensLeft, setTokensLeft] = useState(0);
   const [isTokensLoading, setIsTokensLoading] = useState(false);
 
+  const eventChainId = useMemo((): string => getChainIdFromString(chainId), [chainId]);
+
   const toggleBuyPanel = useCallback((): void => {
     setIsBuyPanelOpen(!isBuyPanelOpen);
   }, [isBuyPanelOpen]);
 
-  const addMumbaiNetwork = useCallback(async (): Promise<void> => {
+  const addEventNetwork = useCallback(async (): Promise<void> => {
     try {
-      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-      if (chainId === ChainsEnum.MUMBAI) {
+      const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+      if (currentChainId === eventChainId) {
         return;
       }
       await window.ethereum.request({
         method: 'wallet_addEthereumChain',
         params: [{
-          chainId: ChainsEnum.MUMBAI, //todo - change in prod
+          chainId: eventChainId,
           rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
           chainName: 'Mumbai Testnet',
           nativeCurrency: {
@@ -48,14 +49,14 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [eventChainId]);
 
   const getMyTokens = useCallback(async () => {
     try {
       setIsTokensLoading(true);
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: getChainIdFromString(chainId) }]
+        params: [{ chainId: eventChainId }]
       });
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       const currentAccount = accounts[0];
@@ -76,7 +77,7 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
     } finally {
       setIsTokensLoading(false);
     }
-  }, [chainId, id]);
+  }, [eventChainId, id]);
 
   const getTokensLeft = useCallback(async () => {
     const providerUrl = await getMaticProvider(window);
@@ -102,19 +103,24 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
       return;
     }
     const init = async () => {
-      await addMumbaiNetwork();
+      await addEventNetwork();
       await Promise.all([getMyTokens(), getTokensLeft()]);
     };
     init().finally();
-  }, [getMyTokens, getTokensLeft, hasProvider, addMumbaiNetwork]);
+  }, [getMyTokens, getTokensLeft, hasProvider, addEventNetwork]);
 
   const openWidget = useCallback(async (): Promise<void> => {
-    await window.ethereum.request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: getChainIdFromString(chainId) }]
-    });
-    toggleBuyPanel();
-  }, [toggleBuyPanel, chainId]);
+    try {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: eventChainId }]
+      });
+      toggleBuyPanel();
+      setIsTokensLoading(true)
+    } catch (e) {
+      console.error(e);
+    }
+  }, [eventChainId, toggleBuyPanel]);
 
   return <>
     {address && <Checkout
@@ -136,6 +142,7 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
                 <div
                   dangerouslySetInnerHTML={{ __html: marked.parse(token.description).replace('<a ', '<a target="_blank" ') }}/>
                 <div>{token.tokenId}</div>
+                <p><a href={token.openseaUrl} target='_blank'>View on OpenSea</a></p>
                 <img style={{ width: '100px' }} src={token.image} alt={token.name}/>
               </div>;
             }) :
