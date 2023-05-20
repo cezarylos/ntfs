@@ -3,7 +3,6 @@
 // this is a client component 👈🏽
 import Checkout from '@/app/components/checkout';
 import MetaMaskLinks from '@/app/components/metamaskLinks';
-import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { EventInterface } from '@/app/typings/event.interface';
 import { getChainIdFromString, getMaticProvider } from '@/app/utils';
@@ -12,9 +11,10 @@ import Link from 'next/link';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 
 import axios from 'axios';
+import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
+import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 
 export default function Event({ id, winterProjectId, chainId }: EventInterface): ReactElement {
-  const { hasProvider } = useMetaMask();
   const [myTokens, setMyTokens] = useState([]);
   const [address, setAddress] = useState(null);
   const [isBuyPanelOpen, setIsBuyPanelOpen] = useState(false);
@@ -22,15 +22,22 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
   const [isTokensLoading, setIsTokensLoading] = useState(false);
 
   const eventChainId = useMemo((): string => getChainIdFromString(chainId), [chainId]);
+  const isCurrentChainIdSameAsEventChainId = useIsCurrentChainIdSameAsEventChainId(eventChainId);
+
+  const switchChain = useSwitchChain(eventChainId);
+
 
   const toggleBuyPanel = useCallback((): void => {
     setIsBuyPanelOpen(!isBuyPanelOpen);
   }, [isBuyPanelOpen]);
 
+
   const addEventNetwork = useCallback(async (): Promise<void> => {
+    if (!window?.ethereum) {
+      return;
+    }
     try {
-      const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
-      if (currentChainId === eventChainId) {
+      if (isCurrentChainIdSameAsEventChainId) {
         return;
       }
       await window.ethereum.request({
@@ -49,23 +56,19 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
           }
         ]
       });
-      window.location.reload();
     } catch (error) {
       console.log(error);
     }
-  }, [eventChainId]);
+  }, [eventChainId, isCurrentChainIdSameAsEventChainId]);
 
   const getMyTokens = useCallback(async () => {
     try {
       setIsTokensLoading(true);
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: eventChainId }]
-      });
+      await switchChain();
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       const currentAccount = accounts[0];
       setAddress(currentAccount);
-      const providerUrl = await getMaticProvider(window);
+      const providerUrl = getMaticProvider(eventChainId);
 
       const myTokensResponse = await axios.get(`/api/${EndpointsEnum.GET_MY_TOKENS}`, {
         params: {
@@ -81,10 +84,10 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
     } finally {
       setIsTokensLoading(false);
     }
-  }, [eventChainId, id]);
+  }, [switchChain, eventChainId, id]);
 
   const getTokensLeft = useCallback(async () => {
-    const providerUrl = await getMaticProvider(window);
+    const providerUrl = getMaticProvider(eventChainId);
     try {
       const response = await axios.get(`/api/${EndpointsEnum.GET_TOKENS_AMOUNT_LEFT}/${id}`, {
         params: {
@@ -95,40 +98,35 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
     } catch (e) {
       console.error(e);
     }
-  }, [id]);
+  }, [eventChainId, id]);
 
   const onSuccess = useCallback(async (): Promise<void> => {
     toggleBuyPanel();
     await Promise.all([getMyTokens(), getTokensLeft()]);
   }, [getMyTokens, getTokensLeft, toggleBuyPanel]);
 
-  useEffect(() => {
-    if (!window?.ethereum) {
-      return;
+  useEffect((): void => {
+    addEventNetwork().finally();
+  }, [addEventNetwork]);
+
+  useEffect((): void => {
+    if (isCurrentChainIdSameAsEventChainId) {
+      Promise.all([getMyTokens(), getTokensLeft()]).finally();
     }
-    const init = async () => {
-      await addEventNetwork();
-      await Promise.all([getMyTokens(), getTokensLeft()]);
-    };
-    init().finally();
-  }, [getMyTokens, getTokensLeft, hasProvider, addEventNetwork]);
+  }, [getMyTokens, getTokensLeft, isCurrentChainIdSameAsEventChainId]);
 
   const openWidget = useCallback(async (): Promise<void> => {
     try {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: eventChainId }]
-      });
+      await switchChain();
       toggleBuyPanel();
-      setIsTokensLoading(true);
     } catch (e) {
       console.error(e);
     }
-  }, [eventChainId, toggleBuyPanel]);
+  }, [switchChain, toggleBuyPanel]);
 
   return (
     <>
-      {address && (
+      {address && isCurrentChainIdSameAsEventChainId && (
         <Checkout
           address={address}
           projectId={winterProjectId}
@@ -137,9 +135,9 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
           onSuccess={onSuccess}
         />
       )}
-      {hasProvider ? (
+      <h1>Tokens left: {tokensLeft}</h1>
+      {isCurrentChainIdSameAsEventChainId ? (
         <>
-          <h1>Tokens left: {tokensLeft}</h1>
           <div>
             <h2>MY TOKENS:</h2>
             {isTokensLoading && <p>Loading...</p>}
@@ -155,11 +153,11 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
                     />
                     <div>{token.tokenId}</div>
                     <p>
-                      <a href={token.openseaUrl} target="_blank">
+                      <a href={token.openseaUrl} target='_blank'>
                         View on OpenSea
                       </a>
                     </p>
-                    <img style={{ width: '100px' }} src={token.image} alt={token.name} />
+                    <img style={{ width: '100px' }} src={token.image} alt={token.name}/>
                   </div>
                 );
               })
@@ -167,26 +165,28 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
               <p>{`You don't have any tokens yet`}</p>
             )}
           </div>
-          <br />
-          <br />
-          <br />
-          {!!tokensLeft && (
-            <button onClick={openWidget}>
-              <h1>BUY THIS FUCKER</h1>
-            </button>
-          )}
-          <br />
+          <br/>
+          <br/>
+          <br/>
+          {tokensLeft ? (
+              <button onClick={openWidget}>
+                <h1>BUY THIS FUCKER</h1>
+              </button>
+            ) :
+            <p>NO TOKENS LEFT, SORRY, TRY ANOTHER EVENT</p>
+          }
+          <br/>
           <Link href={`event/${id}/result`}>
             <button>
               <h3>Check for tickets</h3>
             </button>
           </Link>
-          <br />
+          <br/>
         </>
       ) : (
         <>
           <p>Log in to MetaMask to interact with tokens</p>
-          <MetaMaskLinks />
+          <MetaMaskLinks/>
         </>
       )}
     </>

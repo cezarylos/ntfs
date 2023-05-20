@@ -27,12 +27,12 @@ export const shuffleArray = (array: any[]): any[] => {
   return array;
 };
 
-export const getMaticProvider = async (window: Window): Promise<string | null> => {
-  if (!window?.ethereum) {
-    return null;
-  }
-  const provider = await detectEthereumProvider();
-  const chainId = await provider.request({ method: 'eth_chainId' });
+export const getMaticProvider = (chainId: string): string => {
+  // if (!window?.ethereum) {
+  //   return null;
+  // }
+  // const provider = await detectEthereumProvider();
+  // const chainId = await provider.request({ method: 'eth_chainId' });
   return chainId === '0x89' ? 'https://rpc-mainnet.matic.network' : 'https://rpc-mumbai.maticvigil.com';
 };
 

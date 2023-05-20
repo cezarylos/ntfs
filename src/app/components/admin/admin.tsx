@@ -47,7 +47,7 @@ export default function Admin({ events }: AdminProps): ReactElement {
             method: 'wallet_switchEthereumChain',
             params: [{ chainId: getChainIdFromString(chainId) }]
           });
-          const providerUrl = await getMaticProvider(window);
+          const providerUrl = getMaticProvider(chainId);
           const res = await axios.get(`/api/${EndpointsEnum.START_LOTTERY}/${eventId}`, {
             params: {
               jwt: adminUser.jwt,
