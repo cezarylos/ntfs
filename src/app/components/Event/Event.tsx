@@ -150,7 +150,9 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
                     <div>{token.name}</div>
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: marked.parse(token.description).replace('<a ', '<a target="_blank" ')
+                        __html: marked
+                          .parse(token.description, { mangle: false, headerIds: false })
+                          .replace('<a ', '<a target="_blank" ')
                       }}
                     />
                     <div>{token.tokenId}</div>
@@ -176,7 +178,7 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
             </button>
           )}
           <br />
-          <Link href={`event/${id}/result`}>
+          <Link href={`app/event/${id}/result`}>
             <button>
               <h3>Check for tickets</h3>
             </button>

@@ -3,7 +3,7 @@
 // this is a client component 👈🏽
 import MetaMaskLinks from '@/app/components/metamaskLinks';
 import { EventInterface } from '@/app/typings/event.interface';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import React, { ReactElement } from 'react';
 
 interface HomeInterface {
@@ -11,17 +11,17 @@ interface HomeInterface {
 }
 
 export default function Homepage({ events }: HomeInterface): ReactElement {
-  const router = useRouter();
-
   return (
     <>
       <MetaMaskLinks />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        {events.map((event: EventInterface) => (
-          <button key={event.id} onClick={() => router.push(`/event/${event.id}`)}>
-            <h1>{event.eventName}</h1>
-            <h4>{event.eventDescription}</h4>
-          </button>
+        {events.map(({ id, description, name }: EventInterface, idx) => (
+          <Link href={`/app/event/${id}`} key={`${id}_${idx}`}>
+            <button key={id}>
+              <h1>{name}</h1>
+              <h4>{description}</h4>
+            </button>
+          </Link>
         ))}
       </div>
     </>

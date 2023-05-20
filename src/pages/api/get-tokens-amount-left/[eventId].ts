@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { eventId, providerUrl } = req.query as { eventId: string; providerUrl: string };
     try {
       const web3 = new Web3(providerUrl);
-      const eventResponse = await StrapiService.getEventById(eventId, ['contractAddress', 'ABI', 'eventName']);
+      const eventResponse = await StrapiService.getEventById(eventId, ['contractAddress', 'ABI', 'name']);
       const { contractAddress, ABI } = eventResponse.data.attributes;
       const contract = new web3.eth.Contract(ABI, contractAddress);
 

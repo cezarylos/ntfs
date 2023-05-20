@@ -1,6 +1,6 @@
 'use client';
 
-import { useRedirectWhenNoProvider } from '@/app/hooks/useRedirectWhenNoProvider';
+import { useHasProvider } from '@/app/hooks/useHasProvider';
 import { StrapiService } from '@/app/services/strapi.service';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { EventInterface } from '@/app/typings/event.interface';
@@ -14,7 +14,7 @@ interface AdminProps {
 }
 
 export default function Admin({ events }: AdminProps): ReactElement {
-  const hasProvider = useRedirectWhenNoProvider();
+  const hasProvider = useHasProvider();
   const [password, setPassword] = useState('');
   const [adminUser, setAdminUser] = useState<{ jwt: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -85,7 +85,7 @@ export default function Admin({ events }: AdminProps): ReactElement {
       {adminUser &&
         events?.map((event: EventInterface) => (
           <div key={event.id} style={{ display: 'flex', marginBottom: '24px' }}>
-            <p>{event.eventName}</p>
+            <p>{event.name}</p>
             <button onClick={startLottery(event.id, event.chainId)}>Start lottery</button>
           </div>
         ))}

@@ -67,15 +67,17 @@ export class StrapiService {
     }
   }
 
-  public static async getTicketsByEventIdAndHolderAddress(
+  public static async getTicketsByHolderAddress(
     jwt: string,
-    eventId: string,
-    holderAddress: string
+    holderAddress: string,
+    eventId?: string
   ): Promise<StrapiArrayResponseInterface<TicketInterface>> {
     try {
+      const hasEventId = eventId ? `&filters[event][id][$eq]=${eventId}` : '';
+      const isPopulateEvent = eventId ? '' : '&populate[event][fields][0]=name';
       const headers = getHeaders(jwt);
       const res = await fetch(
-        `${BASE_STRAPI_URL}/api/tickets?filters[holderAddress][$eq]=${holderAddress.toLowerCase()}&filters[event][id][$eq]=${eventId}${noLimitPagination}&populate=ticket`,
+        `${BASE_STRAPI_URL}/api/tickets?filters[holderAddress][$eq]=${holderAddress.toLowerCase()}${hasEventId}${noLimitPagination}&populate[ticket][fields][0]=url${isPopulateEvent}`,
         { headers }
       );
       return res.json();
