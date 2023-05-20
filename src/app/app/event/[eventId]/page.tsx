@@ -1,4 +1,4 @@
-import Event from '@/app/components/event/event';
+import Event from '@/app/components/Event/Event';
 import { StrapiService } from '@/app/services/strapi.service';
 import { ReactElement } from 'react';
 

@@ -5,19 +5,18 @@ import React, { ReactElement } from 'react';
 
 import { useMetaMask } from '../../hooks/useMetaMask';
 import { formatAddress, isMobileDevice } from '../../utils';
-import styles from './Navigation.module.css';
 
 const Navigation = (): ReactElement => {
   const isMobile = isMobileDevice();
   const { wallet, hasProvider, isConnecting, connectMetaMask } = useMetaMask();
 
   return (
-    <div className={styles.navigation}>
-      <div className={styles.flexContainer}>
-        <Link className={styles.leftNav} href={'/'}>
+    <div>
+      <div>
+        <Link className="text-3xl font-bold underline" href={'/'}>
           TOKENY YEYEYEYYEYE
         </Link>
-        <div className={styles.rightNav}>
+        <div>
           {!hasProvider && !isMobile && (
             <a href="https://metamask.io" target="_blank" rel="noreferrer">
               Install MetaMask

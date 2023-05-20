@@ -1,9 +1,9 @@
 'use client';
 
-import { useCallback } from 'react';
 import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
+import { useCallback } from 'react';
 
-export const useSwitchChain = (eventChainId: string): () => Promise<void> => {
+export const useSwitchChain = (eventChainId: string): (() => Promise<void>) => {
   const isCurrentChainIdSameAsEventChainId = useIsCurrentChainIdSameAsEventChainId(eventChainId);
 
   return useCallback(async (): Promise<void> => {

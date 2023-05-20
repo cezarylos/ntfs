@@ -10,8 +10,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
       const web3 = new Web3(providerUrl);
-      const eventResponse = await StrapiService.getEventById(eventId, ['contractAddress', 'ABI', 'eventName']);
-      const { contractAddress, ABI, eventName } = eventResponse.data.attributes;
+      const eventResponse = await StrapiService.getEventById(eventId, ['contractAddress', 'ABI', 'name']);
+      const { contractAddress, ABI, name } = eventResponse.data.attributes;
       const contract = new web3.eth.Contract(ABI, contractAddress);
 
       const [tickets, totalSupply] = await Promise.all([
@@ -43,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         })
       );
 
-      return res.status(200).json({ message: `${eventName}: Lottery finished!` });
+      return res.status(200).json({ message: `${name}: Lottery finished!` });
     } catch (e) {
       console.error(e);
       return res.status(500).json({ message: 'Something went wrong' });

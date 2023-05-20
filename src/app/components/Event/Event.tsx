@@ -3,6 +3,8 @@
 // this is a client component 👈🏽
 import Checkout from '@/app/components/checkout';
 import MetaMaskLinks from '@/app/components/metamaskLinks';
+import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
+import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { EventInterface } from '@/app/typings/event.interface';
 import { getChainIdFromString, getMaticProvider } from '@/app/utils';
@@ -11,8 +13,6 @@ import Link from 'next/link';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 
 import axios from 'axios';
-import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
-import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 
 export default function Event({ id, winterProjectId, chainId }: EventInterface): ReactElement {
   const [myTokens, setMyTokens] = useState([]);
@@ -26,11 +26,9 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
 
   const switchChain = useSwitchChain(eventChainId);
 
-
   const toggleBuyPanel = useCallback((): void => {
     setIsBuyPanelOpen(!isBuyPanelOpen);
   }, [isBuyPanelOpen]);
-
 
   const addEventNetwork = useCallback(async (): Promise<void> => {
     if (!window?.ethereum) {
@@ -148,16 +146,18 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
                     <div>{token.name}</div>
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: marked.parse(token.description).replace('<a ', '<a target="_blank" ')
+                        __html: marked
+                          .parse(token.description, { mangle: false, headerIds: false })
+                          .replace('<a ', '<a target="_blank" ')
                       }}
                     />
                     <div>{token.tokenId}</div>
                     <p>
-                      <a href={token.openseaUrl} target='_blank'>
+                      <a href={token.openseaUrl} target="_blank">
                         View on OpenSea
                       </a>
                     </p>
-                    <img style={{ width: '100px' }} src={token.image} alt={token.name}/>
+                    <img style={{ width: '100px' }} src={token.image} alt={token.name} />
                   </div>
                 );
               })
@@ -165,28 +165,28 @@ export default function Event({ id, winterProjectId, chainId }: EventInterface):
               <p>{`You don't have any tokens yet`}</p>
             )}
           </div>
-          <br/>
-          <br/>
-          <br/>
+          <br />
+          <br />
+          <br />
           {tokensLeft ? (
-              <button onClick={openWidget}>
-                <h1>BUY THIS FUCKER</h1>
-              </button>
-            ) :
+            <button onClick={openWidget}>
+              <h1>BUY THIS FUCKER</h1>
+            </button>
+          ) : (
             <p>NO TOKENS LEFT, SORRY, TRY ANOTHER EVENT</p>
-          }
-          <br/>
-          <Link href={`event/${id}/result`}>
+          )}
+          <br />
+          <Link href={`app/event/${id}/result`}>
             <button>
               <h3>Check for tickets</h3>
             </button>
           </Link>
-          <br/>
+          <br />
         </>
       ) : (
         <>
           <p>Log in to MetaMask to interact with tokens</p>
-          <MetaMaskLinks/>
+          <MetaMaskLinks />
         </>
       )}
     </>

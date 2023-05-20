@@ -64,3 +64,13 @@ export const createOpenSeaLink = ({
   const chainName = chainId === ChainsEnum.MUMBAI ? 'mumbai' : 'matic';
   return `https://${testnetPrefix}opensea.io/assets/${chainName}/${contractAddress}/${tokenId}`;
 };
+
+export function classNames(...classes: string[]): string {
+  return classes.filter(Boolean).join(' ');
+}
+
+export const connectMetamaskMobile = (): void => {
+  const dappUrl = window.location.href.split('//')[1];
+  const metamaskAppDeepLink = 'https://metamask.app.link/dapp/' + dappUrl;
+  window.open(metamaskAppDeepLink, '_self');
+};

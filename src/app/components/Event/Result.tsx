@@ -1,14 +1,14 @@
 'use client';
 
 // this is a client component 👈🏽
-import { useRedirectWhenNoProvider } from '@/app/hooks/useRedirectWhenNoProvider';
+import { useHasProvider } from '@/app/hooks/useHasProvider';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import React, { ReactElement, useEffect, useState } from 'react';
 
 import axios from 'axios';
 
 export default function Result({ eventId }: { eventId: string }): ReactElement {
-  const hasProvider = useRedirectWhenNoProvider();
+  const hasProvider = useHasProvider();
   const [files, setFiles] = useState<{ url: string }[]>([]);
   const [isResultLoading, setIsResultLoading] = useState(false);
 
@@ -28,7 +28,7 @@ export default function Result({ eventId }: { eventId: string }): ReactElement {
           params: [message, address]
         });
 
-        const res = await axios.post('/api/' + EndpointsEnum.CHECK_FOR_TICKETS, {
+        const res = await axios.post('/api/' + EndpointsEnum.GET_MY_TICKETS, {
           signature,
           message,
           address,
