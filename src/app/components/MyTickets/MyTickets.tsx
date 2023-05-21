@@ -7,8 +7,9 @@ import { EventInterface } from '@/app/typings/event.interface';
 import React, { ReactElement, useEffect, useState } from 'react';
 
 import axios from 'axios';
+import EventName from '@/app/components/Event/EventName';
 
-export default function MyTickets(): ReactElement {
+export default function MyTickets({ id: eventId, name }: Partial<EventInterface>): ReactElement {
   const hasProvider = useHasProvider();
   const [files, setFiles] = useState<{ url: string; event?: EventInterface }[]>([]);
   const [isResultLoading, setIsResultLoading] = useState(false);
@@ -32,7 +33,8 @@ export default function MyTickets(): ReactElement {
         const res = await axios.post('/api/' + EndpointsEnum.GET_MY_TICKETS, {
           signature,
           message,
-          address
+          address,
+          eventId
         });
         setFiles(res.data);
       } catch (e) {
@@ -50,6 +52,7 @@ export default function MyTickets(): ReactElement {
 
   return (
     <>
+      {name && <EventName name={name}/>}
       <h1>Result</h1>
       {files?.map(({ url, event }, idx) => (
         <div key={idx}>

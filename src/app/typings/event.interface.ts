@@ -5,6 +5,9 @@ export interface EventInterface {
   name: string;
   description: string;
   startDate: Date;
+  endDate: Date;
+  picture: any;
   id: number;
   chainId: string;
+  slug: string;
 }

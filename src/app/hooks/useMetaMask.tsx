@@ -5,7 +5,6 @@ import { formatBalance } from '../utils';
 
 interface WalletState {
   accounts: any[];
-  balance: string;
   chainId: string;
 }
 
@@ -19,7 +18,7 @@ interface MetaMaskContextData {
   clearError: () => void;
 }
 
-const disconnectedState: WalletState = { accounts: [], balance: '', chainId: '' };
+const disconnectedState: WalletState = { accounts: [], chainId: '' };
 
 const MetaMaskContext = createContext<MetaMaskContextData>({} as MetaMaskContextData);
 
@@ -42,17 +41,11 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
       return;
     }
 
-    const balance = formatBalance(
-      await window.ethereum.request({
-        method: 'eth_getBalance',
-        params: [accounts[0], 'latest']
-      })
-    );
-    const chainId = await window.ethereum.request({
+    const chainId = (await window.ethereum.request({
       method: 'eth_chainId'
-    });
+    })) as string;
 
-    setWallet({ accounts, balance, chainId });
+    setWallet({ accounts, chainId });
   }, []);
 
   const updateWalletAndAccounts = useCallback(() => _updateWallet(), [_updateWallet]);
@@ -76,7 +69,7 @@ export const MetaMaskContextProvider = ({ children }: PropsWithChildren) => {
       }
     };
 
-    getProvider();
+    getProvider().finally();
 
     return () => {
       window.ethereum?.removeListener('accountsChanged', updateWallet);

@@ -1,13 +1,11 @@
 'use client';
 
+import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { useMemo } from 'react';
 
 export const useIsCurrentChainIdSameAsEventChainId = (eventChainId: string): boolean => {
-  const ethereumChainId = window?.ethereum?.chainId;
-  return useMemo((): boolean => {
-    if (!window?.ethereum) {
-      return false;
-    }
-    return eventChainId === ethereumChainId;
-  }, [ethereumChainId, eventChainId]);
+  const {
+    wallet: { chainId: currentChainId }
+  } = useMetaMask();
+  return useMemo(() => eventChainId === currentChainId, [eventChainId, currentChainId]);
 };

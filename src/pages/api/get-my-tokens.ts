@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const tokens = await Promise.all(
         myTokenIds.map(async (tokenId: string) => {
           const link = (await contract.methods.tokenURI(tokenId).call()).split('ipfs://')[1];
-          const res = await fetch(`${ipfsGateways[0]}${link}`);
+          const res = await fetch(`${ipfsGateways[1]}${link}`);
           return { ...(await res.json()), id: tokenId };
         })
       );

@@ -21,7 +21,9 @@ const getHeaders = (jwt: string): Headers =>
 export class StrapiService {
   public static async getAllEvents(fields?: string[]): Promise<EventInterface[]> {
     try {
-      const res = await fetch(`${BASE_STRAPI_URL}/api/events${filerFields(fields)}`, { next: { revalidate: 60 } });
+      const res = await fetch(`${BASE_STRAPI_URL}/api/events${filerFields(fields)}&populate[picture][fields][0]=url`, {
+        next: { revalidate: 60 }
+      });
       const resJson = await res.json();
       return resJson.data.map(({ attributes, id }: { attributes: Partial<EventInterface>; id: number }) => ({
         ...attributes,
@@ -39,6 +41,24 @@ export class StrapiService {
   ): Promise<StrapiResponseInterface<EventInterface>> {
     try {
       const res = await fetch(`${BASE_STRAPI_URL}/api/events/${eventId}${filerFields(fields)}`);
+      return res.json();
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  public static async getEventBySlug(
+    slug: string,
+    fields?: string[]
+  ): Promise<StrapiArrayResponseInterface<EventInterface>> {
+    try {
+      const res = await fetch(
+        `${BASE_STRAPI_URL}/api/events?filters[slug][$eq]=${slug}&populate[picture][fields][0]=url${filerFields(
+          fields,
+          false
+        )}`
+      );
       return res.json();
     } catch (e) {
       console.error(e);
