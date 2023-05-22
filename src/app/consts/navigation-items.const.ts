@@ -10,7 +10,7 @@ export const navigationItems = [
   { label: 'EVENTY', href: NavigationRoutes.EVENTS },
   { label: 'JAK TO DZIAŁA', href: NavigationRoutes.HOW_TO },
   { label: 'MOJE TOKENY', href: NavigationRoutes.MY_TOKENS },
-  { label: 'MOJE BILETY', href: NavigationRoutes.MY_TICKETS }
+  { label: 'MOJE NAGRODY', href: NavigationRoutes.MY_TICKETS }
 ];
 
 export enum EventNavigationRoutes {
@@ -20,7 +20,7 @@ export enum EventNavigationRoutes {
 }
 
 export const eventNavigationItems = [
-  { label: 'O EVENCIE', href: EventNavigationRoutes.ABOUT },
   { label: 'TOKENY', href: EventNavigationRoutes.TOKENS },
-  { label: 'MOJE BILETY', href: EventNavigationRoutes.TICKETS }
+  { label: 'MOJE NAGRODY', href: EventNavigationRoutes.TICKETS },
+  { label: 'O EVENCIE', href: EventNavigationRoutes.ABOUT }
 ];

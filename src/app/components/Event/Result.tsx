@@ -1,16 +1,17 @@
 'use client';
 
-// this is a client component 👈🏽
 import { useHasProvider } from '@/app/hooks/useHasProvider';
+import { setIsLoading } from '@/app/store/global/global.slice';
+import { useAppDispatch } from '@/app/store/store';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import React, { ReactElement, useEffect, useState } from 'react';
 
 import axios from 'axios';
 
 export default function Result({ eventId }: { eventId: string }): ReactElement {
+  const dispatch = useAppDispatch();
   const hasProvider = useHasProvider();
   const [files, setFiles] = useState<{ url: string }[]>([]);
-  const [isResultLoading, setIsResultLoading] = useState(false);
 
   useEffect((): void => {
     if (!window?.ethereum) {
@@ -18,7 +19,7 @@ export default function Result({ eventId }: { eventId: string }): ReactElement {
     }
     const init = async (): Promise<void> => {
       try {
-        setIsResultLoading(true);
+        dispatch(setIsLoading(true));
         const message = 'Please verify your address ownership';
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const address = accounts[0];
@@ -38,11 +39,11 @@ export default function Result({ eventId }: { eventId: string }): ReactElement {
       } catch (e) {
         console.error(e);
       } finally {
-        setIsResultLoading(false);
+        dispatch(setIsLoading(false));
       }
     };
     init().finally();
-  }, [eventId]);
+  }, [dispatch, eventId]);
 
   if (!hasProvider) {
     return <></>;
@@ -59,8 +60,7 @@ export default function Result({ eventId }: { eventId: string }): ReactElement {
           </a>
         </div>
       ))}
-      {isResultLoading && <h2>Loading...</h2>}
-      {!isResultLoading && files?.length === 0 && <h2>No luck</h2>}
+      {files?.length === 0 && <h2>No luck</h2>}
     </>
   );
 }

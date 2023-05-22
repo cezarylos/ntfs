@@ -1,18 +1,24 @@
 'use client';
 
-// this is a client component 👈🏽
+import EventName from '@/app/components/Event/EventName';
 import { useHasProvider } from '@/app/hooks/useHasProvider';
+import { useMetaMask } from '@/app/hooks/useMetaMask';
+import { selectIsLoading, setIsLoading } from '@/app/store/global/global.slice';
+import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { EventInterface } from '@/app/typings/event.interface';
 import React, { ReactElement, useEffect, useState } from 'react';
 
 import axios from 'axios';
-import EventName from '@/app/components/Event/EventName';
 
 export default function MyTickets({ id: eventId, name }: Partial<EventInterface>): ReactElement {
+  const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(selectIsLoading);
+  const {
+    wallet: { accounts }
+  } = useMetaMask();
   const hasProvider = useHasProvider();
   const [files, setFiles] = useState<{ url: string; event?: EventInterface }[]>([]);
-  const [isResultLoading, setIsResultLoading] = useState(false);
 
   useEffect((): void => {
     if (!window?.ethereum) {
@@ -20,9 +26,8 @@ export default function MyTickets({ id: eventId, name }: Partial<EventInterface>
     }
     const init = async (): Promise<void> => {
       try {
-        setIsResultLoading(true);
+        dispatch(setIsLoading(true));
         const message = 'Please verify your address ownership';
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const address = accounts[0];
 
         const signature = await window.ethereum.request({
@@ -40,11 +45,11 @@ export default function MyTickets({ id: eventId, name }: Partial<EventInterface>
       } catch (e) {
         console.error(e);
       } finally {
-        setIsResultLoading(false);
+        dispatch(setIsLoading(false));
       }
     };
     init().finally();
-  }, []);
+  }, [accounts, dispatch, eventId]);
 
   if (!hasProvider) {
     return <></>;
@@ -52,7 +57,7 @@ export default function MyTickets({ id: eventId, name }: Partial<EventInterface>
 
   return (
     <>
-      {name && <EventName name={name}/>}
+      {name && <EventName name={name} />}
       <h1>Result</h1>
       {files?.map(({ url, event }, idx) => (
         <div key={idx}>
@@ -63,8 +68,7 @@ export default function MyTickets({ id: eventId, name }: Partial<EventInterface>
           </a>
         </div>
       ))}
-      {isResultLoading && <h2>Loading...</h2>}
-      {!isResultLoading && files?.length === 0 && <h2>No luck</h2>}
+      {!isLoading && files?.length === 0 && <h2>No luck</h2>}
     </>
   );
 }

@@ -7,7 +7,8 @@ export interface EventInterface {
   startDate: Date;
   endDate: Date;
   picture: any;
-  id: number;
+  id: any;
   chainId: string;
   slug: string;
+  collectionImage: any;
 }

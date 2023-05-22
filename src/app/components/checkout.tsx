@@ -1,3 +1,5 @@
+import { setIsLoading } from '@/app/store/global/global.slice';
+import { useAppDispatch } from '@/app/store/store';
 import WinterCheckout from '@usewinter/checkout/dist/components/WinterCheckout';
 import React from 'react';
 
@@ -16,13 +18,21 @@ export default function Checkout({
   setIsBuyPanelOpen,
   onSuccess
 }: CheckoutPropsInterface) {
+  const dispatch = useAppDispatch();
+
+  const onClose = (): void => {
+    setIsBuyPanelOpen(false);
+    dispatch(setIsLoading(false));
+  };
+
   if (!address) {
     return <></>;
   }
+
   return (
     <WinterCheckout
       showModal={isBuyPanelOpen}
-      onClose={() => setIsBuyPanelOpen(false)}
+      onClose={onClose}
       projectId={projectId}
       extraMintParams={{ _amount: 1 }}
       priceFunctionParams={{ _amount: 1 }}

@@ -1,5 +1,7 @@
+import { StrapiService } from '@/app/services/strapi.service';
+import { Web3Service } from '@/app/services/web3.service';
 import { ChainsEnum } from '@/app/typings/chains.enum';
-import detectEthereumProvider from '@metamask/detect-provider';
+import { EventInterface } from '@/app/typings/event.interface';
 
 export const formatBalance = (rawBalance: string) => {
   const balance = (parseInt(rawBalance) / 1000000000000000000).toFixed(2);
@@ -31,11 +33,6 @@ export const shuffleArray = (array: any[]): any[] => {
 };
 
 export const getMaticProvider = (chainId: string): string => {
-  // if (!window?.ethereum) {
-  //   return null;
-  // }
-  // const provider = await detectEthereumProvider();
-  // const chainId = await provider.request({ method: 'eth_chainId' });
   return chainId === '0x89' ? 'https://rpc-mainnet.matic.network' : 'https://rpc-mumbai.maticvigil.com';
 };
 
@@ -76,4 +73,17 @@ export const connectMetamaskMobile = (): void => {
   const dappUrl = window.location.href.split('//')[1];
   const metamaskAppDeepLink = 'https://metamask.app.link/dapp/' + dappUrl;
   window.open(metamaskAppDeepLink, '_self');
+};
+
+export const getEventBySlug = async (
+  slug: string,
+  fields: string[],
+  hasCollectionImage = false
+): Promise<EventInterface> => {
+  const eventResponse = await StrapiService.getEventBySlug(slug, fields, hasCollectionImage);
+  let collectionImage = null;
+  if (hasCollectionImage) {
+    collectionImage = `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${eventResponse.data[0].attributes.collectionImage.data.attributes.url}`;
+  }
+  return { ...eventResponse.data[0].attributes, id: eventResponse.data[0].id, collectionImage };
 };

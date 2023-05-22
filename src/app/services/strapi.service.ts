@@ -50,11 +50,13 @@ export class StrapiService {
 
   public static async getEventBySlug(
     slug: string,
-    fields?: string[]
+    fields?: string[],
+    hasCollectionImage = false
   ): Promise<StrapiArrayResponseInterface<EventInterface>> {
     try {
+      const collectionImage = hasCollectionImage ? '&populate[collectionImage][fields][0]=url' : '';
       const res = await fetch(
-        `${BASE_STRAPI_URL}/api/events?filters[slug][$eq]=${slug}&populate[picture][fields][0]=url${filerFields(
+        `${BASE_STRAPI_URL}/api/events?filters[slug][$eq]=${slug}&populate[picture][fields][0]=url${collectionImage}${filerFields(
           fields,
           false
         )}`
