@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           const metadataURI = await contract.methods.tokenURI(tokenId).call();
           const link = metadataURI.split('ipfs://')[1];
           try {
-            const res = await fetch(`${ipfsGateways[1]}${link}`);
+            const res = await fetch(`${ipfsGateways[1]}${link}`, { cache: 'no-store' });
             const data = await res.json();
             return { ...data, id: tokenId };
           } catch (e) {
