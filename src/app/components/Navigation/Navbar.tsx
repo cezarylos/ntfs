@@ -73,7 +73,7 @@ export default function Navbar() {
       };
 
   return (
-    <Disclosure as="nav" className="bg-gray-800 sticky top-0 z-50">
+    <Disclosure as="nav" className="bg-gray-800 sticky top-0 z-10">
       {({ open, close }) => (
         <div className="w-full">
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -94,7 +94,7 @@ export default function Navbar() {
               </div>
               <div className="flex flex-1 items-center justify-center h-full sm:justify-start">
                 <Link
-                  className="h-8 w-auto flex items-center"
+                  className="h-8 w-auto flex items-center relative top-[1px]"
                   onClick={onLinkClick(NavigationRoutes.HOME, close)}
                   href="#"
                 >
@@ -121,7 +121,7 @@ export default function Navbar() {
                             current
                               ? 'bg-gray-900 text-white'
                               : 'text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer',
-                            'rounded-md px-3 py-2 text-sm font-medium flex items-center'
+                            'rounded-md px-3 py-2 text-sm leading-none font-medium flex items-center'
                           )}
                           aria-current={current ? 'page' : undefined}
                         >

@@ -11,8 +11,8 @@ import { ReactNode, useMemo } from 'react';
 import { Provider } from 'react-redux';
 
 export default function AppLayout({
-  children // will be a page or nested layout
-}: {
+                                    children // will be a page or nested layout
+                                  }: {
   children: ReactNode;
 }) {
   const pathname = usePathname();
@@ -33,11 +33,13 @@ export default function AppLayout({
       `}</style>
       <Provider store={store}>
         <MetaMaskContextProvider>
-          <GlobalLoader />
-          <Navbar />
-          <div className="container max-w-md mx-auto p-4 h-[calc(100%-4rem)] relative">
-            {sectionName && <h1 className="text-5xl font-bold mb-2 text-pink-400">{sectionName}</h1>}
-            {children}
+          <GlobalLoader/>
+          <Navbar/>
+          <div className="overflow-auto pt-[5rem] left-0 right-0 absolute">
+            <div className="container max-w-md mx-auto p-4 h-full">
+              {sectionName && <h1 className="text-5xl font-bold mb-2 text-pink-400">{sectionName}</h1>}
+              {children}
+            </div>
           </div>
         </MetaMaskContextProvider>
       </Provider>

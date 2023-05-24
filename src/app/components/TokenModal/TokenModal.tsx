@@ -57,7 +57,7 @@ export default function TokenModal({
                     {tokenName} #{id}
                   </Dialog.Title>
                   <div className="mt-2">
-                    <img src={tokenUrl} alt={tokenName} className="max-w-[60%] mx-auto mt-2 rounded-md shadow-lg shadow-cyan-500/50" />
+                    <img src={tokenUrl} alt={tokenName} className="max-w-[60%] xl:max-w-[50%] mx-auto mt-2 rounded-md shadow-lg shadow-cyan-500/50" />
                     <div
                       className="text-sm text-gray-500 mt-4"
                       dangerouslySetInnerHTML={{

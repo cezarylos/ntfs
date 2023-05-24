@@ -22,7 +22,7 @@ export const mogra = Mogra({
 export default function RootLayout({ children }: { children: ReactNode }): ReactElement {
   return (
     <html lang="en" className="bg-violet-500 xl:text-[150%]">
-      <body className={classNames(mogra.className, 'h-screen overflow-auto flex flex-col')}>
+      <body className={classNames(mogra.className, ' relative h-screen overflow-hidden flex flex-col')}>
         <AppLayout>{children}</AppLayout>
       </body>
     </html>
