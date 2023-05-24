@@ -65,7 +65,7 @@ export const createOpenSeaLink = ({
   return `https://${testnetPrefix}opensea.io/assets/${chainName}/${contractAddress}/${tokenId}`;
 };
 
-export function classNames(...classes: string[]): string {
+export function classNames(...classes: Array<string | undefined | boolean>): string {
   return classes.filter(Boolean).join(' ');
 }
 

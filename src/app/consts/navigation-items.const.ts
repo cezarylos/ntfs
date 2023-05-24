@@ -16,7 +16,7 @@ export const navigationItems = [
 export enum EventNavigationRoutes {
   ABOUT = '/about',
   TOKENS = '/tokens',
-  REWARDS = '/my-rewards'F
+  REWARDS = '/my-rewards'
 }
 
 export const eventNavigationItems = [

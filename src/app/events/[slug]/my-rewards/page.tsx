@@ -9,5 +9,5 @@ export default async function MyTickets({ params: { slug } }: { params: { slug: 
   const { id, name } = eventResponse
     ? { id: eventResponse.data[0].id, ...eventResponse.data[0].attributes }
     : ({} as any);
-  return <MyTicketsComponent id={id} name={name} />;
+  return <MyTicketsComponent id={id} name={name} slug={slug} />;
 }

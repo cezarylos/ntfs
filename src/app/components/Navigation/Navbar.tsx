@@ -9,6 +9,7 @@ import { Bars3Icon, ChevronDoubleLeftIcon, XMarkIcon } from '@heroicons/react/24
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { ReactElement, useCallback, useMemo } from 'react';
+import Image from 'next/image';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -43,10 +44,10 @@ export default function Navbar() {
 
   const onGoBack =
     (close: () => void): (() => void) =>
-    (): void => {
-      close();
-      router.back();
-    };
+      (): void => {
+        close();
+        router.back();
+      };
 
   const renderBackButton = (close: () => void): ReactElement =>
     pathname !== NavigationRoutes.HOME ? (
@@ -57,7 +58,7 @@ export default function Navbar() {
           !isMobile ? 'hover:bg-gray-700 hover:text-white' : ''
         )}
       >
-        <ChevronDoubleLeftIcon className="block h-6 w-6" aria-hidden="true" />
+        <ChevronDoubleLeftIcon className="block h-6 w-6" aria-hidden="true"/>
         <span className="ml-2">Wstecz</span>
       </button>
     ) : (
@@ -66,10 +67,10 @@ export default function Navbar() {
 
   const onLinkClick =
     (href: string, close: () => void): (() => void) =>
-    (): void => {
-      close();
-      router.push(href);
-    };
+      (): void => {
+        close();
+        router.push(href);
+      };
 
   return (
     <Disclosure as="nav" className="bg-gray-800 sticky top-0 z-50">
@@ -80,26 +81,32 @@ export default function Navbar() {
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
                 {!!navigation.length && (
-                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                  <Disclosure.Button
+                    className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
-                      <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                      <XMarkIcon className="block h-6 w-6" aria-hidden="true"/>
                     ) : (
-                      <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                      <Bars3Icon className="block h-6 w-6" aria-hidden="true"/>
                     )}
                   </Disclosure.Button>
                 )}
               </div>
-              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+              <div className="flex flex-1 items-center justify-center h-full sm:justify-start">
                 <Link
-                  className="flex flex-shrink-0 items-center"
+                  className="h-8 w-auto flex items-center"
                   onClick={onLinkClick(NavigationRoutes.HOME, close)}
                   href="#"
                 >
-                  <img
-                    className="h-8 w-auto lg:block"
-                    src="https://w7.pngwing.com/pngs/50/202/png-transparent-cannabis-smoking-drawing-cartoon-weed-leaf-plant-stem-grass.png"
-                    alt="Your Company"
+                  <Image
+                    src={'/logo.gif'}
+                    width={0}
+                    height={0}
+                    alt={'Logo'}
+                    fill={false}
+                    priority
+                    sizes={'100vw'}
+                    style={{ width: 'auto', height: '3rem' }}
                   />
                 </Link>
                 {!!navigation.length && (
@@ -125,15 +132,16 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+              <div
+                className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 {wallet.accounts.length > 0 ? (
                   <p className={'text-white text-sm font-medium font-inter'}>{formatAddress(wallet.accounts[0])}</p>
                 ) : (
                   <button
-                    className="rounded-md text-white bg-green-800 p-1 text-sm hover:brightness-110 font-inter w-36"
+                    className="rounded-md text-white bg-green-800 p-1 text-sm hover:brightness-110 font-inter w-32"
                     onClick={onMetaMaskConnect}
                   >
-                    {isConnecting ? <span className="animate-pulse">Connecting...</span> : 'Connect MetaMask'}
+                    {isConnecting ? <span className="animate-pulse">Łączenie...</span> : 'Podłącz Portfel'}
                   </button>
                 )}
               </div>

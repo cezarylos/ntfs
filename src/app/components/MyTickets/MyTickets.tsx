@@ -11,7 +11,7 @@ import React, { ReactElement, useEffect, useState } from 'react';
 
 import axios from 'axios';
 
-export default function MyTickets({ id: eventId, name }: Partial<EventInterface>): ReactElement {
+export default function MyTickets({ id: eventId, name, slug }: Partial<EventInterface>): ReactElement {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectIsLoading);
   const {
@@ -57,7 +57,7 @@ export default function MyTickets({ id: eventId, name }: Partial<EventInterface>
 
   return (
     <>
-      {name && <EventName name={name} />}
+      {name && <EventName name={name} slug={slug} />}
       <h1>Result</h1>
       {files?.map(({ url, event }, idx) => (
         <div key={idx}>
