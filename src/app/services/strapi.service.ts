@@ -40,7 +40,7 @@ export class StrapiService {
     fields?: string[]
   ): Promise<StrapiResponseInterface<EventInterface>> {
     try {
-      const res = await fetch(`${BASE_STRAPI_URL}/api/events/${eventId}${filerFields(fields)}`);
+      const res = await fetch(`${BASE_STRAPI_URL}/api/events/${eventId}${filerFields(fields)}`, {next: { revalidate: 10 }});
       return res.json();
     } catch (e) {
       console.error(e);
