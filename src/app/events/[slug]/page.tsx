@@ -13,7 +13,7 @@ export default async function Page({ params: { slug } }: { params: { slug: strin
   return (
     <>
       <EventName name={name} />
-      <div className="grid grid-rows-4 h-full gap-4">
+      <div className="grid grid-rows-3 flex-1 gap-4 pb-4">
         {eventNavigationItems.map(({ label, href }, idx) => (
           <Link
             href={`/events/${slug}${href}`}

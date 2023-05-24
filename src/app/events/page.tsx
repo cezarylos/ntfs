@@ -11,7 +11,7 @@ export default async function App(): Promise<ReactElement> {
   return (
     <>
       {!!events?.length && (
-        <div className="grid grid-rows-4 h-full gap-4">
+        <div className="grid grid-rows-3 h-full gap-4 min-h-[26rem]">
           {events.map(({ id, startDate, endDate, name, slug }: EventInterface, idx) => (
             <Link
               href={`/events/${slug}`}

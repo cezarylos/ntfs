@@ -7,8 +7,8 @@ export default async function About({ params: { slug } }: { params: { slug: stri
   const eventResponse = await StrapiService.getEventBySlug(slug, ['description', 'picture']);
   const { picture, description } = eventResponse.data[0].attributes;
   return (
-    <>
-      <div className="relative w-full h-auto rounded-md overflow-clip">
+    <div>
+      <div className="relative w-full h-auto rounded-md overflow-clip mb-4">
         <Image
           src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${picture?.data.attributes.url}`}
           width={0}
@@ -20,12 +20,12 @@ export default async function About({ params: { slug } }: { params: { slug: stri
           style={{ width: '100%', height: 'auto' }}
         />
       </div>
-      <h4
-        className="font-inter mt-4 text-[1.2rem] text-left pb-10"
+      <span
+        className="font-inter mt-4 text-[1.2rem] text-left pb-4"
         dangerouslySetInnerHTML={{
           __html: marked.parse(description, { mangle: false, headerIds: false })
         }}
       />
-    </>
+    </div>
   );
 }

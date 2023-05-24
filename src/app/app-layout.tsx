@@ -35,8 +35,8 @@ export default function AppLayout({
         <MetaMaskContextProvider>
           <GlobalLoader/>
           <Navbar/>
-          <div className="overflow-auto pt-[5rem] left-0 right-0 absolute">
-            <div className="container max-w-md mx-auto p-4 h-full">
+          <div className="overflow-auto left-0 right-0 absolute h-screen">
+            <div className="container max-w-md mx-auto pt-[5rem] p-4 h-full flex flex-col">
               {sectionName && <h1 className="text-5xl font-bold mb-2 text-pink-400">{sectionName}</h1>}
               {children}
             </div>
