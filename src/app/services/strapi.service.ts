@@ -18,10 +18,16 @@ const getHeaders = (jwt: string): Headers =>
     'Content-Type': 'application/json'
   });
 
+const cacheOptions = {
+  next: {
+    revalidate: 60
+  }
+}
+
 export class StrapiService {
   public static async getAllEvents(fields?: string[]): Promise<EventInterface[]> {
     try {
-      const res = await fetch(`${BASE_STRAPI_URL}/api/events${filerFields(fields)}&populate[picture][fields][0]=url`, { cache: 'no-store' });
+      const res = await fetch(`${BASE_STRAPI_URL}/api/events${filerFields(fields)}&populate[picture][fields][0]=url`, { ...cacheOptions });
       const resJson = await res.json();
       return resJson.data.map(({ attributes, id }: { attributes: Partial<EventInterface>; id: number }) => ({
         ...attributes,
@@ -38,7 +44,7 @@ export class StrapiService {
     fields?: string[]
   ): Promise<StrapiResponseInterface<EventInterface>> {
     try {
-      const res = await fetch(`${BASE_STRAPI_URL}/api/events/${eventId}${filerFields(fields)}`, { cache: 'no-store' });
+      const res = await fetch(`${BASE_STRAPI_URL}/api/events/${eventId}${filerFields(fields)}`, { ...cacheOptions });
       return res.json();
     } catch (e) {
       console.error(e);
@@ -57,7 +63,7 @@ export class StrapiService {
         `${BASE_STRAPI_URL}/api/events?filters[slug][$eq]=${slug}&populate[picture][fields][0]=url${collectionImage}${filerFields(
           fields,
           false
-        )}`, { cache: 'no-store' }
+        )}`, { ...cacheOptions }
       );
       return res.json();
     } catch (e) {
@@ -78,7 +84,7 @@ export class StrapiService {
           fields,
           false
         )}`,
-        { headers, cache: 'no-store' }
+        { headers, ...cacheOptions}
       );
       return res.json();
     } catch (e) {
@@ -98,7 +104,7 @@ export class StrapiService {
       const headers = getHeaders(jwt);
       const res = await fetch(
         `${BASE_STRAPI_URL}/api/tickets?filters[holderAddress][$eq]=${holderAddress.toLowerCase()}${hasEventId}${noLimitPagination}&populate[ticket][fields][0]=url${isPopulateEvent}`,
-        { headers, cache: 'no-store' }
+        { headers, ...cacheOptions }
       );
       return res.json();
     } catch (e) {
