@@ -8,8 +8,12 @@ const AcquireToken = dynamic(() => import('@/app/components/AcquireToken/Acquire
 const TokensLeft = dynamic(() => import('@/app/components/TokensLeft/TokensLeft'), { ssr: false });
 
 export default async function Tokens({ params: { slug } }: { params: { slug: string } }): Promise<ReactElement> {
-  const event = await getEventBySlug(slug, ['name', 'chainId', 'winterProjectId', 'collectionImageUrl'], true);
-  const { id, chainId, winterProjectId, collectionImage } = event;
+  const event = await getEventBySlug(
+    slug,
+    ['name', 'chainId', 'winterProjectId', 'collectionImageUrl', 'amountOfTokensToGetReward'],
+    true
+  );
+  const { id, chainId, winterProjectId, collectionImage, amountOfTokensToGetReward } = event;
 
   return (
     <>
@@ -31,6 +35,7 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
         chainId={chainId as string}
         winterProjectId={winterProjectId}
         collectionImage={collectionImage}
+        amountOfTokensToGetReward={amountOfTokensToGetReward}
       />
       <EventTokens {...event} />
     </>

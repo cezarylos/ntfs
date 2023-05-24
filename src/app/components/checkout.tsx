@@ -1,5 +1,3 @@
-import { setIsLoading } from '@/app/store/global/global.slice';
-import { useAppDispatch } from '@/app/store/store';
 import WinterCheckout from '@usewinter/checkout/dist/components/WinterCheckout';
 import React from 'react';
 
@@ -7,24 +5,19 @@ interface CheckoutPropsInterface {
   address: string;
   projectId: string;
   isBuyPanelOpen: boolean;
-  setIsBuyPanelOpen: (isBuyPanelOpen: boolean) => void;
   onSuccess: () => void;
+  onClose: () => void;
+  mintQuantity: number;
 }
 
 export default function Checkout({
   address,
   projectId,
   isBuyPanelOpen,
-  setIsBuyPanelOpen,
-  onSuccess
+  onSuccess,
+  onClose,
+  mintQuantity
 }: CheckoutPropsInterface) {
-  const dispatch = useAppDispatch();
-
-  const onClose = (): void => {
-    setIsBuyPanelOpen(false);
-    dispatch(setIsLoading(false));
-  };
-
   if (!address) {
     return <></>;
   }
@@ -34,7 +27,6 @@ export default function Checkout({
       showModal={isBuyPanelOpen}
       onClose={onClose}
       projectId={projectId}
-      extraMintParams={{ _amount: 1 }}
       priceFunctionParams={{ _amount: 1 }}
       walletAddress={address}
       orderSource={'opensea.io'}
@@ -42,6 +34,7 @@ export default function Checkout({
       production={false}
       language={'english'}
       onSuccess={onSuccess}
+      mintQuantity={mintQuantity}
       appearance={{
         leftBackgroundColor: '#131317',
         rightBackgroundColor: '#22222d',

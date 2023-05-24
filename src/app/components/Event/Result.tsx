@@ -20,7 +20,7 @@ export default function Result({ eventId }: { eventId: string }): ReactElement {
     const init = async (): Promise<void> => {
       try {
         dispatch(setIsLoading(true));
-        const message = 'Please verify your address ownership';
+        const message = 'Zweryfikuj swój adres';
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const address = accounts[0];
 

@@ -30,15 +30,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const tokens = await Promise.all(
         myTokenIds.map(async (tokenId: string) => {
-          const link = (await contract.methods.tokenURI(tokenId).call()).split('ipfs://')[1];
-          const res = await fetch(`${ipfsGateways[1]}${link}`);
-          return { ...(await res.json()), id: tokenId };
+          const metadataURI = await contract.methods.tokenURI(tokenId).call();
+          const link = metadataURI.split('ipfs://')[1];
+          try {
+            const res = await fetch(`${ipfsGateways[1]}${link}`);
+            const data = await res.json();
+            return { ...data, id: tokenId };
+          } catch (e) {
+            console.error(e, `error fetching metadata from tokenId: ${tokenId}`);
+            return { id: tokenId };
+          }
         })
       );
 
       const mappedTokens = tokens.map((token: any) => ({
         ...token,
-        image: `${ipfsGateways[0]}${token.image.split('ipfs://')[1]}`,
+        image: `${ipfsGateways[0]}${token.image?.split('ipfs://')[1]}`,
         openseaUrl: createOpenSeaLink({
           contractAddress,
           tokenId: token.id,

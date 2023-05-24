@@ -6,8 +6,7 @@ import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
 import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { useSwitchChain } from '@/app/hooks/useSwitchChain';
-import { getEventMyTokens } from '@/app/store/global/global.actions';
-import { selectIsMyEventTokensLoading, selectMyEventTokens } from '@/app/store/global/global.slice';
+import { selectIsMyEventTokensLoading, selectMyEventTokens, getMyEventTokens } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
 import { getChainIdFromString } from '@/app/utils';
@@ -32,7 +31,7 @@ export default function EventTokens({ id, chainId }: EventInterface): ReactEleme
   const getMyTokens = useCallback(async () => {
     try {
       await switchChain();
-      dispatch(await getEventMyTokens({ eventId: id, address, eventChainId }));
+      dispatch(await getMyEventTokens({ eventId: id, address, eventChainId }));
     } catch (e) {
       console.error(e);
     }
@@ -57,8 +56,8 @@ export default function EventTokens({ id, chainId }: EventInterface): ReactEleme
     <>
       {isCurrentChainIdSameAsEventChainId ? (
         <>
-          <div className="my-2">
-            <h2 className="text-md mb-2">MOJE TOKENY:</h2>
+          <div className="my-8">
+            <h2 className="text-xl mb-2 text-yellow-300">MOJE TOKENY:</h2>
             {selectedToken && (
               <TokenModal
                 id={selectedToken.id}
@@ -72,7 +71,7 @@ export default function EventTokens({ id, chainId }: EventInterface): ReactEleme
             )}
             {isMyEventTokensLoading && <p className="animate-pulse">ładowanie...</p>}
             {!isMyEventTokensLoading && myEventTokens?.length ? (
-              <div className="flex flex-wrap gap-[0.75rem]">
+              <div className="flex flex-wrap gap-[0.75rem] pb-8">
                 {myEventTokens.map((token: any, id: number) => {
                   return (
                     <img
@@ -80,13 +79,13 @@ export default function EventTokens({ id, chainId }: EventInterface): ReactEleme
                       key={`${token.tokenId}_${id}`}
                       src={token.image}
                       alt={token.name}
-                      className="max-w-[calc(33.33%-0.75rem)] cursor-pointer hover:brightness-110 hover:animate-pulse rounded-md"
+                      className="max-w-[calc(33.33%-0.75rem)] cursor-pointer hover:brightness-110 rounded-md drop-shadow-xl shadow-red-500"
                     />
                   );
                 })}
               </div>
             ) : (
-              !isMyEventTokensLoading && <p>{`You don't have any tokens yet`}</p>
+              !isMyEventTokensLoading && <p>Nie masz w tym momencie żadnych tokenów</p>
             )}
           </div>
         </>

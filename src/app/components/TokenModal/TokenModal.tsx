@@ -21,7 +21,6 @@ export default function TokenModal({
   tokenUrl,
   tokenDescription
 }: Props): ReactElement {
-
   function closeModal() {
     setIsOpen(false);
   }
@@ -42,7 +41,7 @@ export default function TokenModal({
             <div className="fixed inset-0 bg-black bg-opacity-25" />
           </Transition.Child>
 
-          <div className="fixed inset-0 overflow-y-auto">
+          <div className="fixed inset-0 overflow-y-auto bg-black/50">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
               <Transition.Child
                 as={Fragment}
@@ -53,12 +52,12 @@ export default function TokenModal({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full h-auto max-w-md transform overflow-hidden rounded-2xl bg-orange-200 border-2 border-red-600 border-solid p-6 text-left align-middle shadow-3xl transition-all">
                   <Dialog.Title as="h3" className="text-3xl text-center font-medium leading-6 text-gray-900">
                     {tokenName} #{id}
                   </Dialog.Title>
                   <div className="mt-2">
-                    <img src={tokenUrl} alt={tokenName} className="max-w-[75%] mx-auto mt-2 rounded-md" />
+                    <img src={tokenUrl} alt={tokenName} className="max-w-[60%] mx-auto mt-2 rounded-md shadow-lg shadow-cyan-500/50" />
                     <div
                       className="text-sm text-gray-500 mt-4"
                       dangerouslySetInnerHTML={{
@@ -72,9 +71,9 @@ export default function TokenModal({
                     <a
                       href={openSeaUrl}
                       target="_blank"
-                      className="w-full inline-flex mx-auto font-inter justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-md font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="w-full inline-flex mx-auto font-inter justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     >
-                      Zobacz na OpenSea
+                      Obczaj na OpenSea
                     </a>
                   </div>
                 </Dialog.Panel>

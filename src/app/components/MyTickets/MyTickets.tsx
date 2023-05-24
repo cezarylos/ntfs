@@ -21,13 +21,13 @@ export default function MyTickets({ id: eventId, name }: Partial<EventInterface>
   const [files, setFiles] = useState<{ url: string; event?: EventInterface }[]>([]);
 
   useEffect((): void => {
-    if (!window?.ethereum) {
+    if (!hasProvider || !accounts?.length) {
       return;
     }
     const init = async (): Promise<void> => {
       try {
         dispatch(setIsLoading(true));
-        const message = 'Please verify your address ownership';
+        const message = 'Zweryfikuj swój adres';
         const address = accounts[0];
 
         const signature = await window.ethereum.request({
@@ -35,7 +35,7 @@ export default function MyTickets({ id: eventId, name }: Partial<EventInterface>
           params: [message, address]
         });
 
-        const res = await axios.post('/api/' + EndpointsEnum.GET_MY_TICKETS, {
+        const res = await axios.post('/api/' + EndpointsEnum.GET_MY_REWARDS, {
           signature,
           message,
           address,
@@ -49,7 +49,7 @@ export default function MyTickets({ id: eventId, name }: Partial<EventInterface>
       }
     };
     init().finally();
-  }, [accounts, dispatch, eventId]);
+  }, [accounts, dispatch, eventId, hasProvider]);
 
   if (!hasProvider) {
     return <></>;

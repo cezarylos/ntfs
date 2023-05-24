@@ -1,7 +1,10 @@
 'use client';
 
-import { getEventTokensSupplyData } from '@/app/store/global/global.actions';
-import { EventTokensSupplyData, selectEventSupplyData } from '@/app/store/global/global.slice';
+import {
+  EventTokensSupplyData,
+  selectEventSupplyData,
+  getEventTokensSupplyData
+} from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
 import { ReactElement, useEffect, useMemo, useState } from 'react';

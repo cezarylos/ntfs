@@ -2,6 +2,8 @@
 
 import { useHasProvider } from '@/app/hooks/useHasProvider';
 import { StrapiService } from '@/app/services/strapi.service';
+import { setIsLoading } from '@/app/store/global/global.slice';
+import { useAppDispatch } from '@/app/store/store';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { EventInterface } from '@/app/typings/event.interface';
 import { getChainIdFromString, getMaticProvider } from '@/app/utils';
@@ -14,6 +16,7 @@ interface AdminProps {
 }
 
 export default function Admin({ events }: AdminProps): ReactElement {
+  const dispatch = useAppDispatch();
   const hasProvider = useHasProvider();
   const [password, setPassword] = useState('');
   const [adminUser, setAdminUser] = useState<{ jwt: string } | null>(null);
@@ -33,8 +36,9 @@ export default function Admin({ events }: AdminProps): ReactElement {
   };
 
   const startLottery = useCallback(
-    (eventId: number, chainId: string): (() => void) =>
-      async (): Promise<void> => {
+    (eventId: number, chainId: string) =>
+      async (event: React.FormEvent): Promise<void> => {
+        event.preventDefault();
         if (!adminUser || !window) {
           return;
         }
@@ -42,10 +46,28 @@ export default function Admin({ events }: AdminProps): ReactElement {
           setError('No jwt. Refresh page');
           return;
         }
+        const eventChainId = getChainIdFromString(chainId);
         try {
+          dispatch(setIsLoading(true));
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: eventChainId,
+                rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
+                chainName: 'Mumbai Testnet',
+                nativeCurrency: {
+                  name: 'MATIC',
+                  symbol: 'MATIC',
+                  decimals: 18
+                },
+                blockExplorerUrls: ['https://polygonscan.com/']
+              }
+            ]
+          });
           await window.ethereum.request({
             method: 'wallet_switchEthereumChain',
-            params: [{ chainId: getChainIdFromString(chainId) }]
+            params: [{ chainId: eventChainId }]
           });
           const providerUrl = getMaticProvider(chainId);
           const res = await axios.get(`/api/${EndpointsEnum.START_LOTTERY}/${eventId}`, {
@@ -58,9 +80,11 @@ export default function Admin({ events }: AdminProps): ReactElement {
           setLog([res.data.message, ...log]);
         } catch (e) {
           console.error(e);
+        } finally {
+          dispatch(setIsLoading(false));
         }
       },
-    [adminUser, setLog, log]
+    [adminUser, dispatch, log]
   );
 
   if (!hasProvider) {
@@ -84,9 +108,14 @@ export default function Admin({ events }: AdminProps): ReactElement {
       {error && <p>{error}</p>}
       {adminUser &&
         events?.map((event: EventInterface) => (
-          <div key={event.id} style={{ display: 'flex', marginBottom: '24px' }}>
+          <div key={event.id} className="flex flex-col items-center">
             <p>{event.name}</p>
-            <button onClick={startLottery(event.id, event.chainId)}>Start lottery</button>
+            <button
+              className="text-white text-2xl p-4 rounded-2xl bg-green-400 mt-2 hover:brightness-110"
+              onClick={startLottery(event.id, event.chainId)}
+            >
+              Start lottery
+            </button>
           </div>
         ))}
       <br />

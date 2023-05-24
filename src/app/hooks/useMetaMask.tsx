@@ -1,8 +1,6 @@
 import detectEthereumProvider from '@metamask/detect-provider';
 import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useState } from 'react';
 
-import { formatBalance } from '../utils';
-
 interface WalletState {
   accounts: any[];
   chainId: string;

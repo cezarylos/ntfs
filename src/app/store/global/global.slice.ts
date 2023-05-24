@@ -1,8 +1,71 @@
-import { getEventMyTokens, getEventTokensSupplyData } from '@/app/store/global/global.actions';
+import { Web3Service } from '@/app/services/web3.service';
+import { EndpointsEnum } from '@/app/typings/endpoints.enum';
+import { EventInterface } from '@/app/typings/event.interface';
 import { Slices } from '@/app/typings/slices';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { getChainIdFromString, getMaticProvider } from '@/app/utils';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import axios from 'axios';
 
 import { AppState } from '../store';
+
+export const getMyEventTokens = createAsyncThunk(
+  `${Slices.GLOBAL}/getMyEventTokens`,
+  async (
+    {
+      address,
+      eventId,
+      eventChainId,
+      skipLoading = false
+    }: {
+      eventChainId: string;
+      address: string;
+      eventId: string | number;
+      skipLoading?: boolean;
+    },
+    { dispatch }
+  ): Promise<any[]> => {
+    const providerUrl = getMaticProvider(eventChainId);
+    try {
+      if (!skipLoading) {
+        await dispatch(setIsMyEventTokensLoading(true));
+      }
+      const myTokensResponse = await axios.get(`/api/${EndpointsEnum.GET_MY_TOKENS}`, {
+        params: {
+          providerUrl,
+          address,
+          eventId
+        }
+      });
+      return myTokensResponse.data;
+    } catch (e) {
+      console.error(e);
+      return [];
+    } finally {
+      if (!skipLoading) {
+        await dispatch(setIsMyEventTokensLoading(false));
+      }
+    }
+  }
+);
+
+export const getEventTokensSupplyData = createAsyncThunk(
+  `${Slices.GLOBAL}/getEventTokensSupplyData`,
+  async ({ id: eventId, chainId }: EventInterface): Promise<EventTokensSupplyData | void> => {
+    try {
+      const eventChainId = getChainIdFromString(chainId);
+      const { tokensLeft, maxSupply } = (await Web3Service.getTokensLeft({ eventChainId, eventId })) || {};
+      return {
+        tokensLeft,
+        maxSupply,
+        eventId
+      };
+    } catch (e) {
+      console.error(e);
+      return;
+    }
+  }
+);
 
 export interface EventTokensSupplyData {
   maxSupply: number | undefined;
@@ -36,7 +99,7 @@ export const globalSlice = createSlice({
     }
   },
   extraReducers: {
-    [getEventMyTokens.fulfilled.type]: (state: SliceState, { payload }: PayloadAction<any[]>): void => {
+    [getMyEventTokens.fulfilled.type]: (state: SliceState, { payload }: PayloadAction<any[]>): void => {
       state.myEventTokens = payload;
     },
     [getEventTokensSupplyData.fulfilled.type]: (

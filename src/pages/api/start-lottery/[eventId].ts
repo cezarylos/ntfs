@@ -10,8 +10,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
       const web3 = new Web3(providerUrl);
-      const eventResponse = await StrapiService.getEventById(eventId, ['contractAddress', 'ABI', 'name']);
-      const { contractAddress, ABI, name } = eventResponse.data.attributes;
+      const eventResponse = await StrapiService.getEventById(eventId, [
+        'contractAddress',
+        'ABI',
+        'name',
+        'amountOfTokensToGetReward',
+        'excludedAddressesFromRewards'
+      ]);
+      const { contractAddress, ABI, name, amountOfTokensToGetReward, excludedAddressesFromRewards } =
+        eventResponse.data.attributes;
       const contract = new web3.eth.Contract(ABI, contractAddress);
 
       const [tickets, totalSupply] = await Promise.all([
@@ -19,10 +26,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         contract.methods.totalSupply().call()
       ]);
 
-      const holders = [];
+      const addressCounts = new Map();
+      const excludedAddressesSet = new Set(excludedAddressesFromRewards.map(address => address.toLowerCase()));
+      const uniqueAddresses = new Set();
+
       for (let i = 1; i <= totalSupply; i++) {
         const ownerAddress = await contract.methods.ownerOf(i).call();
-        holders.push(ownerAddress);
+        const count = (addressCounts.get(ownerAddress) || 0) + 1;
+        addressCounts.set(ownerAddress, count);
+
+        if (count >= amountOfTokensToGetReward && !excludedAddressesSet.has(ownerAddress.toLowerCase())) {
+          uniqueAddresses.add(ownerAddress);
+        }
       }
 
       const mappedTickets = tickets.data.map(({ id, attributes }: { id: number; attributes: TicketInterface }) => ({
@@ -30,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         ...attributes
       }));
 
-      const shuffledHolders = shuffleArray(holders);
+      const shuffledHolders = shuffleArray([...uniqueAddresses]);
 
       await Promise.all(
         mappedTickets.map(async (ticket: TicketInterface, index: number) => {

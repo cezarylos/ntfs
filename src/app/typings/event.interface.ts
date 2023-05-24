@@ -11,4 +11,6 @@ export interface EventInterface {
   chainId: string;
   slug: string;
   collectionImage: any;
+  amountOfTokensToGetReward: number;
+  excludedAddressesFromRewards: string[];
 }

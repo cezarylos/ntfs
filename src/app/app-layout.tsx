@@ -5,8 +5,8 @@ import Navbar from '@/app/components/Navigation/Navbar';
 import { navigationItems, NavigationRoutes } from '@/app/consts/navigation-items.const';
 import { MetaMaskContextProvider } from '@/app/hooks/useMetaMask';
 import { inter, mogra } from '@/app/layout';
-import store, { useAppSelector } from '@/app/store/store';
-import { usePathname } from 'next/dist/client/components/navigation';
+import store from '@/app/store/store';
+import { usePathname } from 'next/navigation';
 import { ReactNode, useMemo } from 'react';
 import { Provider } from 'react-redux';
 
@@ -35,7 +35,7 @@ export default function AppLayout({
         <MetaMaskContextProvider>
           <GlobalLoader />
           <Navbar />
-          <div className="container max-w-md mx-auto p-4 h-[calc(100%-7rem)] relative">
+          <div className="container max-w-md mx-auto p-4 h-[calc(100%-4rem)] relative">
             {sectionName && <h1 className="text-5xl font-bold mb-2 text-pink-400">{sectionName}</h1>}
             {children}
           </div>
