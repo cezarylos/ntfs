@@ -10,7 +10,7 @@ export default async function About({ params: { slug } }: { params: { slug: stri
     <div>
       <div className="relative w-full h-auto rounded-md overflow-clip mb-4">
         <Image
-          src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${picture?.data.attributes.url}`}
+          src={picture?.data.attributes.url}
           width={0}
           height={0}
           alt={'tło'}

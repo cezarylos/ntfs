@@ -36,6 +36,7 @@ export default function Checkout({
       onSuccess={onSuccess}
       mintQuantity={mintQuantity}
       appearance={{
+        zIndex: 100,
         leftBackgroundColor: '#131317',
         rightBackgroundColor: '#22222d',
         buttonTextColor: 'black',

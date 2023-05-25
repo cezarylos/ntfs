@@ -6,15 +6,15 @@ import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentC
 import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import {
+  getEventTokensSupplyData,
+  getMyEventTokens,
   selectEventSupplyData,
   selectMyEventTokens,
-  setIsLoading,
-  getMyEventTokens,
-  getEventTokensSupplyData
+  setIsLoading
 } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
-import { getChainIdFromString } from '@/app/utils';
+import { classNames, getChainIdFromString } from '@/app/utils';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 
 interface Props {
@@ -94,7 +94,12 @@ export default function AcquireToken({
       {address && isCurrentChainIdSameAsEventChainId && isTokensLeftMoreThenZero && (
         <div className="flex flex-col mb-4">
           {isPreviewImgShown && (
-            <img src={collectionImage} alt={'collectionImage'} className="max-w-[calc(33.33%)] h-auto m-auto" />
+            <img
+              onClick={openWidget}
+              src={collectionImage}
+              alt={'collectionImage'}
+              className={classNames('max-w-[calc(33.33%)] h-auto m-auto rounded-md drop-shadow-xl shadow-red-500', isAllowMintMore && 'hover:brightness-110 cursor-pointer')}
+            />
           )}
           <button
             onClick={openWidget}
@@ -103,7 +108,9 @@ export default function AcquireToken({
           >
             <h1>{buttonContent || 'ZGARNIJ TOKEN'}</h1>
           </button>
-          {!isAllowMintMore && <p className='text-white text-center mt-4'>Ziomek, limit {amountOfTokensToGetReward} tokenów na portfel</p>}
+          {!isAllowMintMore &&
+              <p className="text-white text-center mt-4">Ziomek, limit {amountOfTokensToGetReward} tokenów na
+                  portfel</p>}
         </div>
       )}
     </>

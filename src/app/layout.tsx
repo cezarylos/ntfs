@@ -21,7 +21,7 @@ export const mogra = Mogra({
 
 export default function RootLayout({ children }: { children: ReactNode }): ReactElement {
   return (
-    <html lang="en" className="bg-gray-800 xl:text-[150%]  relative h-full overflow-hidden">
+    <html lang="en" className="bg-gray-800 xl:text-[150%] relative h-full overflow-hidden">
       <body className={classNames(mogra.className, 'relative h-screen overflow-hidden top-0')}>
         <AppLayout>{children}</AppLayout>
       </body>

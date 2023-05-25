@@ -11,8 +11,9 @@ import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
 import { getChainIdFromString } from '@/app/utils';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import ProgressBar from '@/app/components/ProgressBar/ProgressBar';
 
-export default function EventTokens({ id, chainId }: EventInterface): ReactElement {
+export default function EventTokens({ id, chainId, amountOfTokensToGetReward }: EventInterface): ReactElement {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedToken, setSelectedToken] = useState<any>(null);
   const dispatch = useAppDispatch();
@@ -58,6 +59,7 @@ export default function EventTokens({ id, chainId }: EventInterface): ReactEleme
         <>
           <div className="my-8">
             <h2 className="text-xl mb-2 text-yellow-300">MOJE TOKENY:</h2>
+            <ProgressBar max={amountOfTokensToGetReward} current={myEventTokens.length} isLoading={isMyEventTokensLoading} />
             {selectedToken && (
               <TokenModal
                 id={selectedToken.id}
@@ -69,9 +71,8 @@ export default function EventTokens({ id, chainId }: EventInterface): ReactEleme
                 tokenDescription={selectedToken?.description}
               />
             )}
-            {isMyEventTokensLoading && <p className="animate-pulse">ładowanie...</p>}
             {!isMyEventTokensLoading && myEventTokens?.length ? (
-              <div className="flex flex-wrap gap-[0.75rem] pb-8">
+              <div className="flex flex-wrap gap-[0.75rem] pb-8 mt-4 justify-center">
                 {myEventTokens.map((token: any, id: number) => {
                   return (
                     <img

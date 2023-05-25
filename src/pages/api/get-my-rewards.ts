@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 const { attributes, id } = ticketWrapper.attributes.event?.data || {};
                 res.event = { ...attributes, id };
               }
-              res.url = `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${ticketWrapper.attributes.ticket.data.attributes.url}`;
+              res.url = ticketWrapper.attributes.ticket.data.attributes.url;
               return res;
             })
           )

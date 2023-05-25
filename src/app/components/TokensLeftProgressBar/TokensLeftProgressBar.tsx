@@ -2,14 +2,15 @@
 
 import {
   EventTokensSupplyData,
-  selectEventSupplyData,
-  getEventTokensSupplyData
+  getEventTokensSupplyData,
+  selectEventSupplyData
 } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
 import { ReactElement, useEffect, useMemo, useState } from 'react';
+import ProgressBar from '@/app/components/ProgressBar/ProgressBar';
 
-export default function TokensLeft({ id, chainId }: Partial<EventInterface>): ReactElement {
+export default function TokensLeftProgressBar({ id, chainId }: Partial<EventInterface>): ReactElement {
   const dispatch = useAppDispatch();
   const eventSupplyData = useAppSelector(selectEventSupplyData);
 
@@ -39,14 +40,10 @@ export default function TokensLeft({ id, chainId }: Partial<EventInterface>): Re
   }
 
   return (
-    <>
-      {tokensLeft ? (
-        <>
-          {tokensLeft}/{maxSupply}
-        </>
-      ) : (
-        !isLoading && 'Sorki, brak dostępnych tokenów'
-      )}
-    </>
+    maxSupply && tokensLeft ?
+      <div>
+        <p className="text-white text-2xl">Wymintowano Tokenów :</p>
+        <ProgressBar max={maxSupply} current={tokensLeft} isLoading={isLoading}/>
+      </div> : <></>
   );
 }

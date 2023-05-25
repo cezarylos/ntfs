@@ -24,7 +24,7 @@ export default async function Page({ params: { slug } }: { params: { slug: strin
               <h1 className="font-mogra text-green-700 text-3xl w-full">{label}</h1>
               {href === EventNavigationRoutes.TOKENS && (
                 <span className="absolute w-full left-0 right-0 m-auto">
-                  <TokensLeft id={id} chainId={chainId} />
+                  Pozostało: <TokensLeft id={id} chainId={chainId} />
                 </span>
               )}
             </div>

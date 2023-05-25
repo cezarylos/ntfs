@@ -83,7 +83,7 @@ export const getEventBySlug = async (
   const eventResponse = await StrapiService.getEventBySlug(slug, fields, hasCollectionImage);
   let collectionImage = null;
   if (hasCollectionImage) {
-    collectionImage = `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${eventResponse.data[0].attributes.collectionImage.data.attributes.url}`;
+    collectionImage = eventResponse.data[0].attributes.collectionImage.data.attributes.url;
   }
   return { ...eventResponse.data[0].attributes, id: eventResponse.data[0].id, collectionImage };
 };
