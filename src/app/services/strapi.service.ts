@@ -12,11 +12,10 @@ const filerFields = (fields: string[] = [], isFirstParam = true): string =>
     ? `${isFirstParam ? '?' : '&'}${fields.map((field: string, idx: number) => `fields[${idx}]=${field}`).join('&')}`
     : '';
 
-const getHeaders = (jwt: string): Headers =>
-  new Headers({
+const getHeaders = (jwt: string) => ({
     Authorization: `Bearer ${jwt}`,
     'Content-Type': 'application/json'
-  });
+  })
 
 const cacheOptions = {
   next: {
@@ -116,7 +115,7 @@ export class StrapiService {
   public static async assignHolderAddressToTicket(jwt: string, ticketId: number, holderAddress: string): Promise<void> {
     try {
       const headers = getHeaders(jwt);
-      const res = await axios.put(`${BASE_STRAPI_URL}/api/tickets/${ticketId}`, { data: { holderAddress: holderAddress.toLowerCase() }, headers });
+      const res = await axios.put(`${BASE_STRAPI_URL}/api/tickets/${ticketId}`, { data: { holderAddress: holderAddress.toLowerCase() } }, { headers });
       return res.data;
     } catch (e) {
       console.error(e);
