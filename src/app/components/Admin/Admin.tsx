@@ -6,10 +6,12 @@ import { setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch } from '@/app/store/store';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { EventInterface } from '@/app/typings/event.interface';
-import { getChainIdFromString, getMaticProvider } from '@/app/utils';
+import { getChainIdFromString, getMaticProvider, shuffleArray } from '@/app/utils';
 import React, { ReactElement, useCallback, useState } from 'react';
 
 import axios from 'axios';
+import Web3 from 'web3';
+import { TicketInterface } from '@/app/typings/ticket.interface';
 
 interface AdminProps {
   events: EventInterface[];
@@ -35,10 +37,59 @@ export default function Admin({ events }: AdminProps): ReactElement {
     }
   };
 
-  const test = async (e) => {
-    e.preventDefault();
-    await StrapiService.assignHolderAddressToTicket('', 1, '123123123');
-  }
+  const runLottery = useCallback(async (eventId, chainId): Promise<void> => {
+    if (!adminUser || !window) {
+      return;
+    }
+    const providerUrl = getMaticProvider(chainId);
+    const web3 = new Web3(providerUrl);
+    const eventResponse = await StrapiService.getEventById(eventId, [
+      'contractAddress',
+      'ABI',
+      'name',
+      'amountOfTokensToGetReward',
+      'excludedAddressesFromRewards'
+    ]);
+    const { contractAddress, ABI, name, amountOfTokensToGetReward, excludedAddressesFromRewards } =
+      eventResponse.data.attributes;
+    const contract = new web3.eth.Contract(ABI, contractAddress);
+
+    const [tickets, totalSupply] = await Promise.all([
+      StrapiService.getTicketsByEventId(adminUser?.jwt as string, eventId),
+      contract.methods.totalSupply().call()
+    ]);
+    const addressCounts = new Map();
+    const excludedAddressesSet = new Set(excludedAddressesFromRewards.map(address => address.toLowerCase()));
+    const uniqueAddresses = new Set();
+
+    for (let i = 1; i <= totalSupply; i++) {
+      const ownerAddress = await contract.methods.ownerOf(i).call();
+      const count = (addressCounts.get(ownerAddress) || 0) + 1;
+      addressCounts.set(ownerAddress, count);
+
+      if (count >= amountOfTokensToGetReward && !excludedAddressesSet.has(ownerAddress.toLowerCase())) {
+        uniqueAddresses.add(ownerAddress);
+      }
+    }
+
+    const mappedTickets = tickets.data.map(({ id, attributes }: { id: number; attributes: TicketInterface }) => ({
+      id,
+      ...attributes
+    }));
+
+    const shuffledHolders = shuffleArray([...uniqueAddresses]);
+
+    await Promise.all(
+      mappedTickets.map(async (ticket: TicketInterface, index: number) => {
+        if (ticket.holderAddress) {
+          return;
+        }
+        if (shuffledHolders[index]) {
+          StrapiService.assignHolderAddressToTicket(adminUser?.jwt as string, ticket.id, shuffledHolders[index]).finally();
+        }
+      })
+    );
+  }, [adminUser]);
 
   const startLottery = useCallback(
     (eventId: number, chainId: string) =>
@@ -74,22 +125,16 @@ export default function Admin({ events }: AdminProps): ReactElement {
             method: 'wallet_switchEthereumChain',
             params: [{ chainId: eventChainId }]
           });
-          const providerUrl = getMaticProvider(chainId);
-          const res = await axios.get(`/api/${EndpointsEnum.START_LOTTERY}/${eventId}`, {
-            params: {
-              jwt: adminUser.jwt,
-              providerUrl,
-              eventId
-            }
-          });
-          setLog([res.data.message, ...log]);
+          await runLottery(eventId, chainId);
+          setLog(['Success', ...log]);
         } catch (e) {
+          setLog(['Fail', ...log]);
           console.error(e);
         } finally {
           dispatch(setIsLoading(false));
         }
       },
-    [adminUser, dispatch, log]
+    [adminUser, dispatch, log, runLottery]
   );
 
   if (!hasProvider) {
@@ -101,7 +146,6 @@ export default function Admin({ events }: AdminProps): ReactElement {
       <h1>Admin</h1>
       <br />
       <br />
-      <button onClick={test}>TEST</button>
       {!adminUser && (
         <>
           <label>Admin password:</label>

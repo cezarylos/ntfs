@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const excludedAddressesSet = new Set(excludedAddressesFromRewards.map(address => address.toLowerCase()));
       const uniqueAddresses = new Set();
 
-      for (const i of Array.from({ length: totalSupply }, (_, i) => i + 1)) {
+      for (let i = 1; i <= totalSupply; i++) {
         const ownerAddress = await contract.methods.ownerOf(i).call();
         const count = (addressCounts.get(ownerAddress) || 0) + 1;
         addressCounts.set(ownerAddress, count);
@@ -46,19 +46,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }));
 
       const shuffledHolders = shuffleArray([...uniqueAddresses]);
-      const assignHolderPromises = [];
 
-      for (let i = 0; i < mappedTickets.length; i++) {
-        const ticket = mappedTickets[i];
-        if (!ticket.holderAddress && shuffledHolders[i]) {
-          const assignPromise = StrapiService.assignHolderAddressToTicket(jwt, ticket.id, shuffledHolders[i])
-          .catch(() => {}) // Handle errors here
-          .finally(() => {}); // Perform any necessary cleanup here
-          assignHolderPromises.push(assignPromise);
-        }
-      }
-
-      await Promise.allSettled(assignHolderPromises);
+      await Promise.all(
+        mappedTickets.map(async (ticket: TicketInterface, index: number) => {
+          if (ticket.holderAddress) {
+            return;
+          }
+          if (shuffledHolders[index]) {
+            StrapiService.assignHolderAddressToTicket(jwt, ticket.id, shuffledHolders[index]).finally();
+          }
+        })
+      );
 
       return res.status(200).json({ message: `${name}: Lottery finished!` });
     } catch (e) {
