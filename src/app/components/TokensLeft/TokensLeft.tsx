@@ -42,7 +42,7 @@ export default function TokensLeft({ id, chainId }: Partial<EventInterface>): Re
     <>
       {tokensLeft ? (
         <>
-          {tokensLeft}/{maxSupply}
+          Pozostało: {tokensLeft}/{maxSupply}
         </>
       ) : (
         !isLoading && 'Sorki, brak dostępnych tokenów'

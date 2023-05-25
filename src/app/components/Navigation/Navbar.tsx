@@ -26,7 +26,7 @@ export default function Navbar() {
     }
     return navigationItems.map(item => ({
       ...item,
-      current: pathname?.startsWith(item.href)
+      current: pathname === item.href
     }));
   }, [pathname, isHomePage]);
 

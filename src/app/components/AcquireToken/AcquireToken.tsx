@@ -91,7 +91,7 @@ export default function AcquireToken({
         onClose={onClose}
         mintQuantity={amountOfTokensToGetReward - myEventTokens.length}
       />
-      {address && isCurrentChainIdSameAsEventChainId && isTokensLeftMoreThenZero && (
+      {isTokensLeftMoreThenZero && (
         <div className="flex flex-col mb-4">
           {isPreviewImgShown && (
             <img

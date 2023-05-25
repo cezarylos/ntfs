@@ -7,6 +7,8 @@ const EventTokens = dynamic(() => import('@/app/components/Event/EventTokens'), 
 const AcquireToken = dynamic(() => import('@/app/components/AcquireToken/AcquireToken'), { ssr: false });
 const TokensLeft = dynamic(() => import('@/app/components/TokensLeft/TokensLeft'), { ssr: false });
 
+export const revalidate = 0;
+
 export default async function Tokens({ params: { slug } }: { params: { slug: string } }): Promise<ReactElement> {
   const event = await getEventBySlug(
     slug,
@@ -19,7 +21,6 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
     <>
       <EventName name={event.name} slug={slug} />
       <h1 className="text-xl text-white mb-2">
-        <span className='mr-1'>Pozostało tokenów:</span>
         <TokensLeft
           id={id}
           chainId={chainId}
