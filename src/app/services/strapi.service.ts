@@ -116,6 +116,7 @@ export class StrapiService {
   public static async assignHolderAddressToTicket(jwt: string, ticketId: number, holderAddress: string): Promise<void> {
     try {
       const headers = getHeaders(jwt);
+      console.log(`${BASE_STRAPI_URL}/api/tickets/${ticketId}`);
       const res = await fetch(`${BASE_STRAPI_URL}/api/tickets/${ticketId}`, {
         method: 'PUT',
         headers,
