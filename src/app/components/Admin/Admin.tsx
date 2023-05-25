@@ -35,6 +35,11 @@ export default function Admin({ events }: AdminProps): ReactElement {
     }
   };
 
+  const test = async (e) => {
+    e.preventDefault();
+    await StrapiService.assignHolderAddressToTicket('', 1, '123123123');
+  }
+
   const startLottery = useCallback(
     (eventId: number, chainId: string) =>
       async (event: React.FormEvent): Promise<void> => {
@@ -96,6 +101,7 @@ export default function Admin({ events }: AdminProps): ReactElement {
       <h1>Admin</h1>
       <br />
       <br />
+      <button onClick={test}>TEST</button>
       {!adminUser && (
         <>
           <label>Admin password:</label>
