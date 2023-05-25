@@ -54,7 +54,7 @@ export default function TokenModal({
               >
                 <Dialog.Panel className="w-full h-auto max-w-md transform overflow-hidden rounded-2xl bg-orange-200 border-2 border-red-600 border-solid p-6 text-left align-middle shadow-3xl transition-all">
                   <Dialog.Title as="h3" className="text-3xl text-center font-medium leading-6 text-gray-900">
-                    {tokenName} #{id}
+                    {tokenName}
                   </Dialog.Title>
                   <div className="mt-2">
                     <img src={tokenUrl} alt={tokenName} className="max-w-[60%] xl:max-w-[50%] mx-auto mt-2 rounded-md shadow-lg shadow-cyan-500/50" />

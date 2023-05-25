@@ -4,6 +4,8 @@ import React, { ReactElement } from 'react';
 
 const Admin = dynamic(() => import('@/app/components/Admin/Admin'), { ssr: false });
 
+export const revalidate = 0;
+
 export default async function Page(): Promise<ReactElement> {
   const events = await StrapiService.getAllEvents(['chainId', 'name']);
   return <Admin events={events} />;

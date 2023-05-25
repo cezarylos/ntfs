@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Directory where the JSON files are located
-const directoryPath = '../../../../../Downloads/wetransfer_5-motylson-skrzydla-png_2023-05-23_1723/Spokojtest-export/May 23, 2023, 9-59 PM/metadata/';
+const directoryPath = '../../../../../Downloads/motylsontoken/metadata/';
 
 // Iterate over the files in the directory
 fs.readdir(directoryPath, (err, files) => {
@@ -26,11 +26,12 @@ fs.readdir(directoryPath, (err, files) => {
                 try {
                     // Parse the JSON data
                     let jsonData = JSON.parse(data);
-                    const { external_url, attributes, compiler, seller_fee_basis_points, ...rest } = jsonData;
+                    const { external_url, compiler, seller_fee_basis_points, ...rest } = jsonData;
                     jsonData = rest;
 
                     // Update the description field
-                    jsonData.description = 'New description';
+                    jsonData.description = 'Experience [Spokój Festiwal](https://instagram.com/spokojfestiwal) and get benefits from this exclusive NFT Token.';
+                    jsonData.image = `ipfs://bafybeibrlvmsn6nyx2dgyeldn333mv2dfwmcgk7n7b5gpze2z5kzhrtdtu/${jsonData.image}`
 
                     // Convert the updated data back to JSON string
                     const updatedData = JSON.stringify(jsonData, null, 2);
