@@ -47,12 +47,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const shuffledHolders = shuffleArray([...uniqueAddresses]);
 
+      console.log('shuffledHolders', shuffledHolders);
+
       await Promise.all(
         mappedTickets.map(async (ticket: TicketInterface, index: number) => {
           if (ticket.holderAddress) {
             return;
           }
           if (shuffledHolders[index]) {
+            console.log('assigning');
             StrapiService.assignHolderAddressToTicket(jwt, ticket.id, shuffledHolders[index]).finally();
           }
         })
