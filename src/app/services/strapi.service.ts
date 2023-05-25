@@ -86,7 +86,7 @@ export class StrapiService {
         )}`,
         { headers, cache: 'no-cache' }
       );
-      return res.json();
+      return await res.json();
     } catch (e) {
       console.error(e);
       throw e;
@@ -116,13 +116,9 @@ export class StrapiService {
   public static async assignHolderAddressToTicket(jwt: string, ticketId: number, holderAddress: string): Promise<void> {
     try {
       const headers = getHeaders(jwt);
-      console.log(holderAddress);
       const res = await axios.put(`${BASE_STRAPI_URL}/api/tickets/${ticketId}`, { data: { holderAddress: holderAddress.toLowerCase() }, headers });
-      console.log(holderAddress);
-      console.log(res.data);
       return res.data;
     } catch (e) {
-      console.log(e);
       console.error(e);
     }
   }
