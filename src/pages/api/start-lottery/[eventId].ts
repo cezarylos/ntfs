@@ -46,17 +46,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }));
 
       const shuffledHolders = shuffleArray([...uniqueAddresses]);
+      await StrapiService.assignHolderAddressToTicket(jwt, 1, shuffledHolders[0]).finally()
 
-      await Promise.all(
-        mappedTickets.map(async (ticket: TicketInterface, index: number) => {
-          if (ticket.holderAddress) {
-            return;
-          }
-          if (shuffledHolders[index]) {
-            StrapiService.assignHolderAddressToTicket(jwt, ticket.id, shuffledHolders[index]).finally();
-          }
-        })
-      );
+      // await Promise.all(
+      //   mappedTickets.map(async (ticket: TicketInterface, index: number) => {
+      //     if (ticket.holderAddress) {
+      //       return;
+      //     }
+      //     if (shuffledHolders[index]) {
+      //       ;
+      //     }
+      //   })
+      // );
 
       return res.status(200).json({ message: `${name}: Lottery finished!` });
     } catch (e) {
