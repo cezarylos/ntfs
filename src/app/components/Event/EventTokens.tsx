@@ -86,7 +86,7 @@ export default function EventTokens({ id, chainId, amountOfTokensToGetReward }: 
                 })}
               </div>
             ) : (
-              !isMyEventTokensLoading && <p>Nie masz w tym momencie żadnych tokenów</p>
+              !isMyEventTokensLoading && <p className='text-white text-md mt-4'>Nie masz w tym momencie żadnych tokenów</p>
             )}
           </div>
         </>
