@@ -2,8 +2,6 @@ import { ChainsEnum } from '@/app/typings/chains.enum';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { getMaticProvider } from '@/app/utils';
 
-import axios from 'axios';
-
 export class Web3Service {
   static async getTokensLeft({
     eventChainId,
@@ -14,10 +12,10 @@ export class Web3Service {
   }): Promise<{ tokensLeft: number; maxSupply: number } | void> {
     const providerUrl = getMaticProvider(eventChainId);
     try {
-      const response = await axios.get(
-        `/api/${EndpointsEnum.GET_TOKENS_AMOUNT_LEFT}/${eventId}?providerUrl=${providerUrl}`
+      const response = await fetch(
+        `/api/${EndpointsEnum.GET_TOKENS_AMOUNT_LEFT}/${eventId}?providerUrl=${providerUrl}`, { next: { revalidate: 60 }}
       );
-      const { tokensLeft, maxSupply } = response.data;
+      const { tokensLeft, maxSupply } = await response.json();
       return {
         tokensLeft: parseInt(tokensLeft),
         maxSupply: parseInt(maxSupply)

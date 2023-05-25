@@ -5,8 +5,6 @@ import { Slices } from '@/app/typings/slices';
 import { getChainIdFromString, getMaticProvider } from '@/app/utils';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import axios from 'axios';
-
 import { AppState } from '../store';
 
 export const getMyEventTokens = createAsyncThunk(
@@ -30,14 +28,15 @@ export const getMyEventTokens = createAsyncThunk(
       if (!skipLoading) {
         await dispatch(setIsMyEventTokensLoading(true));
       }
-      const myTokensResponse = await axios.get(`/api/${EndpointsEnum.GET_MY_TOKENS}`, {
-        params: {
-          providerUrl,
-          address,
-          eventId
-        }
-      });
-      return myTokensResponse.data;
+
+      const params = {
+        providerUrl,
+        address,
+        eventId
+      } as Record<any, string>;
+      const queryString = new URLSearchParams(params).toString();
+      const myTokensResponse = await fetch(`/api/${EndpointsEnum.GET_MY_TOKENS}?${queryString}`, { next: { revalidate: 60 } })
+      return await myTokensResponse.json();
     } catch (e) {
       console.error(e);
       return [];

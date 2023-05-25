@@ -7,7 +7,7 @@ import { MetaMaskContextProvider } from '@/app/hooks/useMetaMask';
 import { inter, mogra } from '@/app/layout';
 import store from '@/app/store/store';
 import { usePathname } from 'next/navigation';
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useEffect, useMemo } from 'react';
 import { Provider } from 'react-redux';
 
 export default function AppLayout({
@@ -35,8 +35,8 @@ export default function AppLayout({
         <MetaMaskContextProvider>
           <GlobalLoader/>
           <Navbar/>
-          <div className="overflow-auto left-0 right-0 absolute h-screen">
-            <div className="container max-w-md mx-auto pt-[5rem] p-4 h-full flex flex-col">
+          <div className="overflow-auto left-0 right-0 top-0 fixed h-full bg-violet-500">
+            <div className="container max-w-md mx-auto h-full p-4 pt-[5rem] bg-violet-500">
               {sectionName && <h1 className="text-5xl font-bold mb-2 text-pink-400">{sectionName}</h1>}
               {children}
             </div>

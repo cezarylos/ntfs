@@ -11,9 +11,9 @@ export default async function Page({ params: { slug } }: { params: { slug: strin
   const { id, name, chainId } = await getEventBySlug(slug, ['name', 'chainId']);
 
   return (
-    <>
+    <div className="h-full flex flex-col">
       <EventName name={name} />
-      <div className="grid grid-rows-3 flex-1 gap-4 pb-4">
+        <div className="grid grid-rows-4 flex-grow gap-4">
         {eventNavigationItems.map(({ label, href }, idx) => (
           <Link
             href={`/events/${slug}${href}`}
@@ -31,6 +31,6 @@ export default async function Page({ params: { slug } }: { params: { slug: strin
           </Link>
         ))}
       </div>
-    </>
+    </div>
   );
 }
