@@ -1,22 +1,22 @@
 'use client';
 
 import { navigationItems, NavigationRoutes } from '@/app/consts/navigation-items.const';
-import { useHasProvider } from '@/app/hooks/useHasProvider';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
-import { classNames, connectMetamaskMobile, formatAddress, isMobileDevice } from '@/app/utils';
+import { useMetaMaskConnect } from '@/app/hooks/useMetaMaskConnect';
+import { classNames, formatAddress, isMobileDevice } from '@/app/utils';
 import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, ChevronDoubleLeftIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import React, { ReactElement, useCallback, useMemo } from 'react';
-import Image from 'next/image';
+import React, { ReactElement, useMemo } from 'react';
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const hasProvider = useHasProvider();
-  const { wallet, connectMetaMask, isConnecting } = useMetaMask();
+  const { wallet, isConnecting } = useMetaMask();
   const isMobile = isMobileDevice();
+  const onMetaMaskConnect = useMetaMaskConnect();
 
   const isHomePage = useMemo(() => pathname === NavigationRoutes.HOME, [pathname]);
 
@@ -30,36 +30,24 @@ export default function Navbar() {
     }));
   }, [pathname, isHomePage]);
 
-  const onMetaMaskConnect = useCallback((): void => {
-    if (hasProvider) {
-      connectMetaMask();
-      return;
-    }
-    if (isMobile) {
-      connectMetamaskMobile();
-      return;
-    }
-    window.open('https://metamask.io', '_blank', 'noopener,noreferrer');
-  }, [connectMetaMask, hasProvider, isMobile]);
-
   const onGoBack =
     (close: () => void): (() => void) =>
-      (): void => {
-        close();
-        router.back();
-      };
+    (): void => {
+      close();
+      router.back();
+    };
 
   const renderBackButton = (close: () => void): ReactElement =>
     pathname !== NavigationRoutes.HOME ? (
       <button
         onClick={onGoBack(close)}
         className={classNames(
-          'text-yellow-300 rounded-md px-3 py-2 text-base font-medium flex items-center mb-2 sm:mb-0',
-          !isMobile ? 'hover:bg-gray-700 hover:text-white' : ''
+          'text-yellow-300 rounded-md px-1 py-2 text-base font-medium flex items-center',
+          !isMobile ? 'hover:bg-pink-400 hover:text-white' : ''
         )}
       >
-        <ChevronDoubleLeftIcon className="block h-6 w-6" aria-hidden="true"/>
-        <span className="ml-2">Wstecz</span>
+        <ChevronDoubleLeftIcon className="block h-6 w-6" aria-hidden="true" />
+        <span className="ml-2 relative top-[1px] sm:top-0">Wstecz</span>
       </button>
     ) : (
       <></>
@@ -67,13 +55,13 @@ export default function Navbar() {
 
   const onLinkClick =
     (href: string, close: () => void): (() => void) =>
-      (): void => {
-        close();
-        router.push(href);
-      };
+    (): void => {
+      close();
+      router.push(href);
+    };
 
   return (
-    <Disclosure as="nav" className="bg-gray-800 sticky top-0 z-10">
+    <Disclosure as="nav" className="sticky top-0 z-10 bg-violet-900 drop-shadow-lg">
       {({ open, close }) => (
         <div className="w-full">
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -81,20 +69,19 @@ export default function Navbar() {
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
                 {!!navigation.length && (
-                  <Disclosure.Button
-                    className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
-                      <XMarkIcon className="block h-6 w-6" aria-hidden="true"/>
+                      <XMarkIcon className="block h-6 w-6 text-white" aria-hidden="true" />
                     ) : (
-                      <Bars3Icon className="block h-6 w-6" aria-hidden="true"/>
+                      <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                     )}
                   </Disclosure.Button>
                 )}
               </div>
               <div className="flex flex-1 items-center justify-center h-full sm:justify-start">
                 <Link
-                  className="h-8 w-auto flex items-center relative top-[1px]"
+                  className="h-8 w-auto flex items-center relative top-[1px] hover:brightness-150 hover:saturate-200"
                   onClick={onLinkClick(NavigationRoutes.HOME, close)}
                   href="#"
                 >
@@ -119,8 +106,8 @@ export default function Navbar() {
                           key={label}
                           className={classNames(
                             current
-                              ? 'bg-gray-900 text-white'
-                              : 'text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer',
+                              ? 'bg-violet-950 text-white'
+                              : 'text-gray-300 hover:bg-pink-400 hover:text-white cursor-pointer',
                             'rounded-md px-3 py-2 text-sm leading-none font-medium flex items-center'
                           )}
                           aria-current={current ? 'page' : undefined}
@@ -132,8 +119,7 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
-              <div
-                className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 {wallet.accounts.length > 0 ? (
                   <p className={'text-white text-sm font-medium font-inter'}>{formatAddress(wallet.accounts[0])}</p>
                 ) : (
@@ -148,14 +134,14 @@ export default function Navbar() {
             </div>
           </div>
 
-          <Disclosure.Panel className="sm:hidden absolute w-full bg-gray-800">
+          <Disclosure.Panel className="sm:hidden absolute w-full bg-violet-900 p-1">
             {renderBackButton(close)}
             {navigation.map(({ label, href, current }) => (
               <a key={label} href="#" onClick={onLinkClick(href, close)}>
                 <Disclosure.Button
                   as="a"
                   className={classNames(
-                    current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                    current ? 'bg-violet-950 text-white' : 'text-gray-300 hover:bg-pink-400 hover:text-white',
                     'block rounded-md px-3 py-2 text-base font-medium'
                   )}
                   aria-current={current ? 'page' : undefined}

@@ -1,11 +1,10 @@
+import { ModalInterface } from '@/app/typings/common.typings';
 import { Dialog, Transition } from '@headlessui/react';
 import { marked } from 'marked';
 import React, { Fragment, ReactElement } from 'react';
 
-interface Props {
+interface Props extends ModalInterface {
   id: string;
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
   openSeaUrl: string;
   tokenName: string;
   tokenUrl: string;
@@ -57,7 +56,11 @@ export default function TokenModal({
                     {tokenName}
                   </Dialog.Title>
                   <div className="mt-2">
-                    <img src={tokenUrl} alt={tokenName} className="max-w-[60%] xl:max-w-[50%] mx-auto mt-2 rounded-md shadow-lg shadow-cyan-500/50" />
+                    <img
+                      src={tokenUrl}
+                      alt={tokenName}
+                      className="max-w-[60%] xl:max-w-[50%] mx-auto mt-2 rounded-md shadow-lg shadow-cyan-500/50"
+                    />
                     <div
                       className="text-sm text-gray-500 mt-4"
                       dangerouslySetInnerHTML={{

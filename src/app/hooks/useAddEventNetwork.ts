@@ -31,7 +31,7 @@ export const useAddEventNetwork = (eventChainId: string): (() => Promise<void>) 
         ]
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, [eventChainId, isCurrentChainIdSameAsEventChainId]);
 };

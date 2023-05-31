@@ -2,7 +2,6 @@
 
 import Checkout from '@/app/components/checkout';
 import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
-import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import {
@@ -10,7 +9,8 @@ import {
   getMyEventTokens,
   selectEventSupplyData,
   selectMyEventTokens,
-  setIsLoading
+  setIsLoading,
+  setIsShowWeb3BlockerModal
 } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
@@ -48,11 +48,14 @@ export default function AcquireToken({
   const eventChainId = useMemo((): string => getChainIdFromString(chainId), [chainId]);
   const address = useMemo((): string => wallet.accounts?.[0], [wallet.accounts]);
 
-  const isCurrentChainIdSameAsEventChainId = useIsCurrentChainIdSameAsEventChainId(eventChainId);
   const switchChain = useSwitchChain(eventChainId);
   const addEventNetwork = useAddEventNetwork(eventChainId);
 
   const openWidget = useCallback(async (): Promise<void> => {
+    if (!address) {
+      dispatch(setIsShowWeb3BlockerModal(true));
+      return;
+    }
     try {
       await switchChain();
       dispatch(setIsLoading(true));
@@ -60,7 +63,7 @@ export default function AcquireToken({
     } catch (e) {
       console.error(e);
     }
-  }, [dispatch, switchChain, setIsBuyPanelOpen]);
+  }, [dispatch, switchChain, setIsBuyPanelOpen, address]);
 
   const onWidgetSuccess = useCallback(async (): Promise<void> => {
     onSuccess?.();
@@ -79,7 +82,10 @@ export default function AcquireToken({
   }, [addEventNetwork]);
 
   const isTokensLeftMoreThenZero = useMemo((): boolean => (tokensLeft || 0) > 0, [tokensLeft]);
-  const isAllowMintMore = useMemo((): boolean => (myEventTokens.length || 0) < amountOfTokensToGetReward, [myEventTokens.length, amountOfTokensToGetReward]);
+  const isAllowMintMore = useMemo(
+    (): boolean => (myEventTokens.length || 0) < amountOfTokensToGetReward,
+    [myEventTokens.length, amountOfTokensToGetReward]
+  );
 
   return (
     <>
@@ -98,19 +104,22 @@ export default function AcquireToken({
               onClick={openWidget}
               src={collectionImage}
               alt={'collectionImage'}
-              className={classNames('max-w-[calc(33.33%)] h-auto m-auto rounded-md drop-shadow-xl shadow-red-500', isAllowMintMore && 'hover:brightness-110 cursor-pointer')}
+              className={classNames(
+                'max-w-[calc(33.33%)] h-auto m-auto rounded-md drop-shadow-xl shadow-red-500',
+                isAllowMintMore && 'hover:brightness-110 cursor-pointer'
+              )}
             />
           )}
           <button
             onClick={openWidget}
             disabled={!isAllowMintMore}
-            className="m-auto mt-2 p-4 w-3/4 justify-center bg-pink-500 flex item-center rounded-md hover:brightness-110 disabled:cursor-auto disabled:hover:brightness-100 disabled:bg-gray-500/50"
+            className="m-auto mt-2 p-4 w-3/4 justify-center bg-pink-400 flex item-center rounded-md hover:brightness-110 disabled:cursor-auto disabled:hover:brightness-100 disabled:bg-gray-500/50"
           >
             <h1>{buttonContent || 'ZGARNIJ TOKEN'}</h1>
           </button>
-          {!isAllowMintMore &&
-              <p className="text-white text-center mt-4">Ziomek, limit {amountOfTokensToGetReward} tokenów na
-                  portfel</p>}
+          {!isAllowMintMore && (
+            <p className="text-white text-center mt-4">Ziomek, limit {amountOfTokensToGetReward} tokenów na portfel</p>
+          )}
         </div>
       )}
     </>

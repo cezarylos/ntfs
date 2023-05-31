@@ -4,14 +4,11 @@ import { useHasProvider } from '@/app/hooks/useHasProvider';
 import { StrapiService } from '@/app/services/strapi.service';
 import { setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch } from '@/app/store/store';
-import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { EventInterface } from '@/app/typings/event.interface';
+import { TicketInterface } from '@/app/typings/ticket.interface';
 import { getChainIdFromString, getMaticProvider, shuffleArray } from '@/app/utils';
 import React, { ReactElement, useCallback, useState } from 'react';
-
-import axios from 'axios';
 import Web3 from 'web3';
-import { TicketInterface } from '@/app/typings/ticket.interface';
 
 interface AdminProps {
   events: EventInterface[];
@@ -37,59 +34,70 @@ export default function Admin({ events }: AdminProps): ReactElement {
     }
   };
 
-  const runLottery = useCallback(async (eventId, chainId): Promise<void> => {
-    if (!adminUser || !window) {
-      return;
-    }
-    const providerUrl = getMaticProvider(chainId);
-    const web3 = new Web3(providerUrl);
-    const eventResponse = await StrapiService.getEventById(eventId, [
-      'contractAddress',
-      'ABI',
-      'name',
-      'amountOfTokensToGetReward',
-      'excludedAddressesFromRewards'
-    ]);
-    const { contractAddress, ABI, name, amountOfTokensToGetReward, excludedAddressesFromRewards } =
-      eventResponse.data.attributes;
-    const contract = new web3.eth.Contract(ABI, contractAddress);
-
-    const [tickets, totalSupply] = await Promise.all([
-      StrapiService.getTicketsByEventId(adminUser?.jwt as string, eventId),
-      contract.methods.totalSupply().call()
-    ]);
-    const addressCounts = new Map();
-    const excludedAddressesSet = new Set(excludedAddressesFromRewards.map(address => address.toLowerCase()));
-    const uniqueAddresses = new Set();
-
-    for (let i = 1; i <= totalSupply; i++) {
-      const ownerAddress = await contract.methods.ownerOf(i).call();
-      const count = (addressCounts.get(ownerAddress) || 0) + 1;
-      addressCounts.set(ownerAddress, count);
-
-      if (count >= amountOfTokensToGetReward && !excludedAddressesSet.has(ownerAddress.toLowerCase())) {
-        uniqueAddresses.add(ownerAddress);
+  const runLottery = useCallback(
+    async (eventId, chainId): Promise<void> => {
+      if (!adminUser || !window) {
+        return;
       }
-    }
+      try {
+        const providerUrl = getMaticProvider(chainId);
+        const web3 = new Web3(providerUrl);
+        const eventResponse = await StrapiService.getEventById(eventId, [
+          'contractAddress',
+          'ABI',
+          'name',
+          'amountOfTokensToGetReward',
+          'excludedAddressesFromRewards'
+        ]);
+        const { contractAddress, ABI, name, amountOfTokensToGetReward, excludedAddressesFromRewards } =
+          eventResponse.data.attributes;
+        const contract = new web3.eth.Contract(ABI, contractAddress);
 
-    const mappedTickets = tickets.data.map(({ id, attributes }: { id: number; attributes: TicketInterface }) => ({
-      id,
-      ...attributes
-    }));
+        const [tickets, totalSupply] = await Promise.all([
+          StrapiService.getTicketsByEventId(adminUser?.jwt as string, eventId),
+          contract.methods.totalSupply().call()
+        ]);
+        const addressCounts = new Map();
+        const excludedAddressesSet = new Set(excludedAddressesFromRewards.map(address => address.toLowerCase()));
+        const uniqueAddresses = new Set();
 
-    const shuffledHolders = shuffleArray([...uniqueAddresses]);
+        for (let i = 1; i <= totalSupply; i++) {
+          const ownerAddress = await contract.methods.ownerOf(i).call();
+          const count = (addressCounts.get(ownerAddress) || 0) + 1;
+          addressCounts.set(ownerAddress, count);
 
-    await Promise.all(
-      mappedTickets.map(async (ticket: TicketInterface, index: number) => {
-        if (ticket.holderAddress) {
-          return;
+          if (count >= amountOfTokensToGetReward && !excludedAddressesSet.has(ownerAddress.toLowerCase())) {
+            uniqueAddresses.add(ownerAddress);
+          }
         }
-        if (shuffledHolders[index]) {
-          StrapiService.assignHolderAddressToTicket(adminUser?.jwt as string, ticket.id, shuffledHolders[index]).finally();
-        }
-      })
-    );
-  }, [adminUser]);
+
+        const mappedTickets = tickets.data.map(({ id, attributes }: { id: number; attributes: TicketInterface }) => ({
+          id,
+          ...attributes
+        }));
+
+        const shuffledHolders = shuffleArray([...uniqueAddresses]);
+
+        await Promise.all(
+          mappedTickets.map(async (ticket: TicketInterface, index: number) => {
+            if (ticket.holderAddress) {
+              return;
+            }
+            if (shuffledHolders[index]) {
+              StrapiService.assignHolderAddressToTicket(
+                adminUser?.jwt as string,
+                ticket.id,
+                shuffledHolders[index]
+              ).finally();
+            }
+          })
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [adminUser]
+  );
 
   const startLottery = useCallback(
     (eventId: number, chainId: string) =>

@@ -3,6 +3,9 @@ import { EventInterface } from '@/app/typings/event.interface';
 import { DateTime } from 'luxon';
 import Link from 'next/link';
 import React, { Fragment, ReactElement } from 'react';
+import { classNames } from '@/app/utils';
+import { tileClassName } from '@/app/consts/shared-classnames';
+import { styleTileSets } from '@/app/consts/style-tile-sets';
 
 const populateFields = ['name', 'startDate', 'endDate', 'slug'];
 
@@ -15,31 +18,32 @@ export default async function Events(): Promise<ReactElement> {
       <div className="grid grid-rows-3 flex-grow gap-4">
         {[...events, ...soon].map(({ id, startDate, endDate, name, slug }: EventInterface, idx) => (
           <Fragment key={idx}>
-            {slug ? <Link
+            {slug ? (
+              <Link
                 href={`/events/${slug}`}
                 key={`${id}_${idx}`}
-                className="grid-row w-min-full flex flex-col justify-center items-center bg-amber-400 hover:bg-amber-300 rounded-lg"
+                className={classNames("grid-row w-min-full flex flex-col justify-center items-center rounded-lg text-white", styleTileSets[idx].background, tileClassName)}
               >
                 <div className="relative w-full text-center">
-                  <h1 className="font-mogra text-green-700 text-3xl w-full">{name}</h1>
-                  <span className="absolute w-full left-0 right-0 m-auto">
-                  {DateTime.fromISO(startDate as any).toFormat('dd.MM.yyyy')}
+                  <h1 className={classNames("font-mogra text-3xl w-full", styleTileSets[idx].text)}>{name}</h1>
+                  <span className={classNames("absolute w-full left-0 right-0 m-auto text-violet-950", styleTileSets[idx].text)}>
+                    {DateTime.fromISO(startDate as any).toFormat('dd.MM.yyyy')}
                     {endDate && (
                       <>
                         <span className="mx-1">-</span>
                         {DateTime.fromISO(endDate as any).toFormat('dd.MM.yyyy')}
                       </>
                     )}
-                </span>
+                  </span>
                 </div>
-              </Link> :
-              <div
-                className="grid-row w-min-full flex flex-col justify-center items-center bg-amber-400 hover:bg-amber-300 rounded-lg"
-              >
+              </Link>
+            ) : (
+              <div className={classNames("grid-row w-min-full flex flex-col justify-center items-center rounded-lg", 'hover:scale-100', styleTileSets[idx].background, 'opacity-50')}>
                 <div className="relative w-full text-center">
-                  <h1 className="font-mogra text-green-700 text-3xl w-full">WKRÓTCE</h1>
+                  <h1 className={classNames("font-mogra text-3xl w-full", styleTileSets[idx].text)}>WKRÓTCE</h1>
                 </div>
-              </div>}
+              </div>
+            )}
           </Fragment>
         ))}
       </div>

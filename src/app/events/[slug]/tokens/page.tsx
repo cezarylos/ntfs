@@ -10,21 +10,14 @@ const TokensLeft = dynamic(() => import('@/app/components/TokensLeft/TokensLeft'
 export const revalidate = 0;
 
 export default async function Tokens({ params: { slug } }: { params: { slug: string } }): Promise<ReactElement> {
-  const event = await getEventBySlug(
-    slug,
-    ['name', 'chainId', 'winterProjectId', 'amountOfTokensToGetReward'],
-    true
-  );
+  const event = await getEventBySlug(slug, ['name', 'chainId', 'winterProjectId', 'amountOfTokensToGetReward'], true);
   const { id, chainId, winterProjectId, collectionImage, amountOfTokensToGetReward } = event;
 
   return (
     <>
       <EventName name={event.name} slug={slug} />
       <h1 className="text-xl text-white mb-2">
-        <TokensLeft
-          id={id}
-          chainId={chainId}
-        />
+        <TokensLeft id={id} chainId={chainId} />
       </h1>
       <AcquireToken
         eventId={id}

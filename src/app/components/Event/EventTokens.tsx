@@ -1,17 +1,22 @@
 'use client';
 
-import TokenModal from '@/app/components/TokenModal/TokenModal';
-import MetaMaskLinks from '@/app/components/metamaskLinks';
+import TokenModal from '@/app/components/Modals/TokenModal/TokenModal';
+import ProgressBar from '@/app/components/ProgressBar/ProgressBar';
+import MetamaskLinks from '@/app/components/metamaskLinks';
 import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
 import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { useSwitchChain } from '@/app/hooks/useSwitchChain';
-import { selectIsMyEventTokensLoading, selectMyEventTokens, getMyEventTokens } from '@/app/store/global/global.slice';
+import {
+  getMyEventTokens,
+  selectIsMyEventTokensLoading,
+  selectMyEventTokens,
+  setIsShowWeb3BlockerModal
+} from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
 import { getChainIdFromString } from '@/app/utils';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import ProgressBar from '@/app/components/ProgressBar/ProgressBar';
 
 export default function EventTokens({ id, chainId, amountOfTokensToGetReward }: EventInterface): ReactElement {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,8 +44,12 @@ export default function EventTokens({ id, chainId, amountOfTokensToGetReward }: 
   }, [switchChain, eventChainId, dispatch, id, address]);
 
   useEffect((): void => {
+    if (!address) {
+      dispatch(setIsShowWeb3BlockerModal(true));
+      return;
+    }
     addEventNetwork().finally();
-  }, [addEventNetwork]);
+  }, [addEventNetwork, address, dispatch]);
 
   useEffect((): void => {
     if (isCurrentChainIdSameAsEventChainId) {
@@ -59,7 +68,11 @@ export default function EventTokens({ id, chainId, amountOfTokensToGetReward }: 
         <>
           <div className="my-8">
             <h2 className="text-xl mb-2 text-yellow-300">MOJE TOKENY:</h2>
-            <ProgressBar max={amountOfTokensToGetReward} current={myEventTokens.length} isLoading={isMyEventTokensLoading} />
+            <ProgressBar
+              max={amountOfTokensToGetReward}
+              current={myEventTokens.length}
+              isLoading={isMyEventTokensLoading}
+            />
             {selectedToken && (
               <TokenModal
                 id={selectedToken.id}
@@ -86,14 +99,15 @@ export default function EventTokens({ id, chainId, amountOfTokensToGetReward }: 
                 })}
               </div>
             ) : (
-              !isMyEventTokensLoading && <p className='text-white text-md mt-4'>Nie masz w tym momencie żadnych tokenów</p>
+              !isMyEventTokensLoading && (
+                <p className="text-white text-md mt-4">Nie masz w tym momencie żadnych tokenów</p>
+              )
             )}
           </div>
         </>
       ) : (
         <>
-          <p>Log in to MetaMask to interact with tokens</p>
-          <MetaMaskLinks />
+          <MetamaskLinks />
         </>
       )}
     </>

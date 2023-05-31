@@ -13,20 +13,22 @@ const filerFields = (fields: string[] = [], isFirstParam = true): string =>
     : '';
 
 const getHeaders = (jwt: string) => ({
-    Authorization: `Bearer ${jwt}`,
-    'Content-Type': 'application/json'
-  })
+  Authorization: `Bearer ${jwt}`,
+  'Content-Type': 'application/json'
+});
 
 const cacheOptions = {
   next: {
     revalidate: 60
   }
-}
+};
 
 export class StrapiService {
   public static async getAllEvents(fields?: string[]): Promise<EventInterface[]> {
     try {
-      const res = await fetch(`${BASE_STRAPI_URL}/api/events${filerFields(fields)}&populate[picture][fields][0]=url`, { ...cacheOptions });
+      const res = await fetch(`${BASE_STRAPI_URL}/api/events${filerFields(fields)}&populate[picture][fields][0]=url`, {
+        ...cacheOptions
+      });
       const resJson = await res.json();
       return resJson.data.map(({ attributes, id }: { attributes: Partial<EventInterface>; id: number }) => ({
         ...attributes,
@@ -62,7 +64,8 @@ export class StrapiService {
         `${BASE_STRAPI_URL}/api/events?filters[slug][$eq]=${slug}&populate[picture][fields][0]=url${collectionImage}${filerFields(
           fields,
           false
-        )}`, { ...cacheOptions }
+        )}`,
+        { ...cacheOptions }
       );
       return res.json();
     } catch (e) {
@@ -115,7 +118,11 @@ export class StrapiService {
   public static async assignHolderAddressToTicket(jwt: string, ticketId: number, holderAddress: string): Promise<void> {
     try {
       const headers = getHeaders(jwt);
-      const res = await axios.put(`${BASE_STRAPI_URL}/api/tickets/${ticketId}`, { data: { holderAddress: holderAddress.toLowerCase() } }, { headers });
+      const res = await axios.put(
+        `${BASE_STRAPI_URL}/api/tickets/${ticketId}`,
+        { data: { holderAddress: holderAddress.toLowerCase() } },
+        { headers }
+      );
       return res.data;
     } catch (e) {
       console.error(e);
@@ -128,7 +135,6 @@ export class StrapiService {
         identifier: 'admin',
         password
       });
-      console.log(response.data);
       return response.data;
     } catch (e) {
       console.error(e);

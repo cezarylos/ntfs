@@ -4,6 +4,8 @@ import { shuffleArray } from '@/app/utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Web3 from 'web3';
 
+import axios from 'axios';
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     const { eventId, providerUrl, jwt } = req.query as { eventId: string; providerUrl: string; jwt: string };

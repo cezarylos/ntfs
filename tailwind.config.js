@@ -5,7 +5,8 @@ module.exports = {
     extend: {
       fontFamily: {
         inter: ['var(--font-inter)'],
-        mogra: ['var(--font-mogra)']
+        mogra: ['var(--font-mogra)'],
+        'rubik-dirt': ['var(--font-rubik-dirt)'],
       },
     }
   },

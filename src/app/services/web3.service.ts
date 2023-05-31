@@ -13,7 +13,8 @@ export class Web3Service {
     const providerUrl = getMaticProvider(eventChainId);
     try {
       const response = await fetch(
-        `/api/${EndpointsEnum.GET_TOKENS_AMOUNT_LEFT}/${eventId}?providerUrl=${providerUrl}`, { next: { revalidate: 60 }}
+        `/api/${EndpointsEnum.GET_TOKENS_AMOUNT_LEFT}/${eventId}?providerUrl=${providerUrl}`,
+        { next: { revalidate: 60 } }
       );
       const { tokensLeft, maxSupply } = await response.json();
       return {

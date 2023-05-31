@@ -1,5 +1,6 @@
 'use client';
 
+import ProgressBar from '@/app/components/ProgressBar/ProgressBar';
 import {
   EventTokensSupplyData,
   getEventTokensSupplyData,
@@ -8,7 +9,6 @@ import {
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
 import { ReactElement, useEffect, useMemo, useState } from 'react';
-import ProgressBar from '@/app/components/ProgressBar/ProgressBar';
 
 export default function TokensLeftProgressBar({ id, chainId }: Partial<EventInterface>): ReactElement {
   const dispatch = useAppDispatch();
@@ -39,11 +39,12 @@ export default function TokensLeftProgressBar({ id, chainId }: Partial<EventInte
     return <span className="animate-pulse">Ładowanie...</span>;
   }
 
-  return (
-    maxSupply && tokensLeft ?
-      <div>
-        <p className="text-white text-2xl">Wymintowano Tokenów :</p>
-        <ProgressBar max={maxSupply} current={tokensLeft} isLoading={isLoading}/>
-      </div> : <></>
+  return maxSupply && tokensLeft ? (
+    <div>
+      <p className="text-white text-2xl">Wymintowano Tokenów :</p>
+      <ProgressBar max={maxSupply} current={tokensLeft} isLoading={isLoading} />
+    </div>
+  ) : (
+    <></>
   );
 }

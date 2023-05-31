@@ -1,13 +1,13 @@
 import { classNames } from '@/app/utils';
 import dynamic from 'next/dynamic';
-import { Inter, Mogra } from 'next/font/google';
+import { Inter, Mogra, Archivo, Rubik_Dirt } from 'next/font/google';
 import { ReactElement, ReactNode } from 'react';
 
 import './globals.css';
 
 const AppLayout = dynamic(() => import('@/app/app-layout'), { ssr: false });
 
-export const inter = Inter({
+export const inter = Archivo({
   subsets: ['latin'],
   variable: '--font-inter',
   weight: ['400', '500', '600', '700']
@@ -19,9 +19,16 @@ export const mogra = Mogra({
   weight: '400'
 });
 
+export const rubikDirt = Rubik_Dirt({
+  subsets: ['latin'],
+  variable: '--font-rubik-dirt',
+  weight: '400'
+});
+
+
 export default function RootLayout({ children }: { children: ReactNode }): ReactElement {
   return (
-    <html lang="en" className="bg-gray-800 xl:text-[150%] relative h-full overflow-hidden">
+    <html lang="en" className="bg-violet-950 xl:text-[150%] relative h-full overflow-hidden">
       <body className={classNames(mogra.className, 'relative h-screen overflow-hidden top-0')}>
         <AppLayout>{children}</AppLayout>
       </body>

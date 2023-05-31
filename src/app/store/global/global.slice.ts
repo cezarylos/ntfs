@@ -35,7 +35,9 @@ export const getMyEventTokens = createAsyncThunk(
         eventId
       } as Record<any, string>;
       const queryString = new URLSearchParams(params).toString();
-      const myTokensResponse = await fetch(`/api/${EndpointsEnum.GET_MY_TOKENS}?${queryString}`, { next: { revalidate: 60 } })
+      const myTokensResponse = await fetch(`/api/${EndpointsEnum.GET_MY_TOKENS}?${queryString}`, {
+        next: { revalidate: 60 }
+      });
       return await myTokensResponse.json();
     } catch (e) {
       console.error(e);
@@ -77,13 +79,15 @@ type SliceState = {
   eventTokensSupplyData: EventTokensSupplyData;
   myEventTokens: any[];
   isMyEventTokensLoading: boolean;
+  isShowWeb3BlockerModal: boolean;
 };
 
 const initialState = {
   isLoading: false,
   eventTokensSupplyData: {} as EventTokensSupplyData,
   myEventTokens: [],
-  isMyEventTokensLoading: false
+  isMyEventTokensLoading: false,
+  isShowWeb3BlockerModal: false
 } as SliceState;
 
 export const globalSlice = createSlice({
@@ -95,6 +99,9 @@ export const globalSlice = createSlice({
     },
     setIsMyEventTokensLoading: (state: SliceState, { payload }: PayloadAction<boolean>): void => {
       state.isMyEventTokensLoading = payload;
+    },
+    setIsShowWeb3BlockerModal: (state: SliceState, { payload }: PayloadAction<boolean>): void => {
+      state.isShowWeb3BlockerModal = payload;
     }
   },
   extraReducers: {
@@ -110,11 +117,12 @@ export const globalSlice = createSlice({
   }
 });
 
-export const { setIsLoading, setIsMyEventTokensLoading } = globalSlice.actions;
+export const { setIsLoading, setIsMyEventTokensLoading, setIsShowWeb3BlockerModal } = globalSlice.actions;
 
 export const selectIsLoading = (state: AppState) => state.global.isLoading;
 export const selectIsMyEventTokensLoading = (state: AppState) => state.global.isMyEventTokensLoading;
 export const selectEventSupplyData = (state: AppState) => state.global.eventTokensSupplyData;
 export const selectMyEventTokens = (state: AppState) => state.global.myEventTokens;
+export const selectIsShowWeb3BlockerModal = (state: AppState) => state.global.isShowWeb3BlockerModal;
 
 export default globalSlice.reducer;
