@@ -16,6 +16,10 @@ import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
 import { classNames, getChainIdFromString } from '@/app/utils';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { marked } from 'marked';
+import use = marked.use;
+import { useHasProvider } from '@/app/hooks/useHasProvider';
 
 interface Props {
   eventId: number;
@@ -42,6 +46,11 @@ export default function AcquireToken({
   const dispatch = useAppDispatch();
   const { tokensLeft } = useAppSelector(selectEventSupplyData);
   const myEventTokens = useAppSelector(selectMyEventTokens);
+  const hasProvider = useHasProvider();
+
+  const searchParams = useSearchParams();
+
+  const [isOpenAcquire, setIsOpenAcquire] = useState(JSON.parse(searchParams?.get('acquire') || 'false'));
 
   const [isBuyPanelOpen, setIsBuyPanelOpen] = useState(false);
 
@@ -52,7 +61,10 @@ export default function AcquireToken({
   const addEventNetwork = useAddEventNetwork(eventChainId);
 
   const openWidget = useCallback(async (): Promise<void> => {
-    if (!address) {
+    if (isBuyPanelOpen) {
+      return;
+    }
+    if (!address && !hasProvider) {
       dispatch(setIsShowWeb3BlockerModal(true));
       return;
     }
@@ -63,7 +75,7 @@ export default function AcquireToken({
     } catch (e) {
       console.error(e);
     }
-  }, [dispatch, switchChain, setIsBuyPanelOpen, address]);
+  }, [address, hasProvider, dispatch, switchChain, isBuyPanelOpen]);
 
   const onWidgetSuccess = useCallback(async (): Promise<void> => {
     onSuccess?.();
@@ -86,6 +98,17 @@ export default function AcquireToken({
     (): boolean => (myEventTokens.length || 0) < amountOfTokensToGetReward,
     [myEventTokens.length, amountOfTokensToGetReward]
   );
+
+  useEffect((): void => {
+    if (!isOpenAcquire || isBuyPanelOpen) {
+      return;
+    }
+    dispatch(setIsLoading(true));
+    setIsOpenAcquire(false);
+    setTimeout((): void => {
+      openWidget().finally();
+    }, 2000);
+  }, [isOpenAcquire, isBuyPanelOpen, openWidget, dispatch]);
 
   return (
     <>
@@ -113,7 +136,7 @@ export default function AcquireToken({
           <button
             onClick={openWidget}
             disabled={!isAllowMintMore}
-            className="m-auto mt-2 p-4 w-3/4 justify-center bg-pink-400 flex item-center rounded-md hover:brightness-110 disabled:cursor-auto disabled:hover:brightness-100 disabled:bg-gray-500/50"
+            className="m-auto mt-2 p-4 w-3/4 justify-center bg-pink-500 flex item-center text-white text-lg rounded-md hover:brightness-110 disabled:cursor-auto disabled:text-opacity-50 disabled:hover:brightness-100 disabled:bg-gray-500/50"
           >
             <h1>{buttonContent || 'ZGARNIJ TOKEN'}</h1>
           </button>

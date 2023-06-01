@@ -1,6 +1,6 @@
 import { classNames } from '@/app/utils';
 import dynamic from 'next/dynamic';
-import { Inter, Mogra, Archivo, Rubik_Dirt } from 'next/font/google';
+import { Inter, Mogra, Archivo, Rubik_Dirt, Bangers, Archivo_Black, Russo_One } from 'next/font/google';
 import { ReactElement, ReactNode } from 'react';
 
 import './globals.css';
@@ -19,12 +19,11 @@ export const mogra = Mogra({
   weight: '400'
 });
 
-export const rubikDirt = Rubik_Dirt({
+export const bangers = Bangers({
   subsets: ['latin'],
-  variable: '--font-rubik-dirt',
+  variable: '--font-bangers',
   weight: '400'
 });
-
 
 export default function RootLayout({ children }: { children: ReactNode }): ReactElement {
   return (

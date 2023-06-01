@@ -44,12 +44,8 @@ export default function EventTokens({ id, chainId, amountOfTokensToGetReward }: 
   }, [switchChain, eventChainId, dispatch, id, address]);
 
   useEffect((): void => {
-    if (!address) {
-      dispatch(setIsShowWeb3BlockerModal(true));
-      return;
-    }
     addEventNetwork().finally();
-  }, [addEventNetwork, address, dispatch]);
+  }, [addEventNetwork]);
 
   useEffect((): void => {
     if (isCurrentChainIdSameAsEventChainId) {

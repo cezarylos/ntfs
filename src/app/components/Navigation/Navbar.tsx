@@ -43,7 +43,7 @@ export default function Navbar() {
         onClick={onGoBack(close)}
         className={classNames(
           'text-yellow-300 rounded-md px-1 py-2 text-base font-medium flex items-center',
-          !isMobile ? 'hover:bg-pink-400 hover:text-white' : ''
+          !isMobile ? 'hover:bg-pink-500 hover:text-white' : ''
         )}
       >
         <ChevronDoubleLeftIcon className="block h-6 w-6" aria-hidden="true" />
@@ -69,12 +69,12 @@ export default function Navbar() {
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
                 {!!navigation.length && (
-                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
                       <XMarkIcon className="block h-6 w-6 text-white" aria-hidden="true" />
                     ) : (
-                      <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                      <Bars3Icon className="block h-6 w-6 text-white" aria-hidden="true" />
                     )}
                   </Disclosure.Button>
                 )}
@@ -107,7 +107,7 @@ export default function Navbar() {
                           className={classNames(
                             current
                               ? 'bg-violet-950 text-white'
-                              : 'text-gray-300 hover:bg-pink-400 hover:text-white cursor-pointer',
+                              : 'text-white hover:bg-pink-500 hover:text-white cursor-pointer',
                             'rounded-md px-3 py-2 text-sm leading-none font-medium flex items-center'
                           )}
                           aria-current={current ? 'page' : undefined}
@@ -141,7 +141,7 @@ export default function Navbar() {
                 <Disclosure.Button
                   as="a"
                   className={classNames(
-                    current ? 'bg-violet-950 text-white' : 'text-gray-300 hover:bg-pink-400 hover:text-white',
+                    current ? 'bg-violet-950 text-white' : 'text-white hover:bg-pink-500 hover:text-white',
                     'block rounded-md px-3 py-2 text-base font-medium'
                   )}
                   aria-current={current ? 'page' : undefined}

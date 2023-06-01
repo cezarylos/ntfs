@@ -1,9 +1,10 @@
 import { StrapiService } from '@/app/services/strapi.service';
+import { classNames } from '@/app/utils';
 import { marked } from 'marked';
 import Image from 'next/image';
 import React, { ReactElement } from 'react';
+
 import styles from './About.module.scss';
-import { classNames } from '@/app/utils';
 
 export default async function About({ params: { slug } }: { params: { slug: string } }): Promise<ReactElement> {
   const eventResponse = await StrapiService.getEventBySlug(slug, ['description', 'picture']);
@@ -23,7 +24,7 @@ export default async function About({ params: { slug } }: { params: { slug: stri
         />
       </div>
       <div
-        className={classNames("font-inter mt-4 text-[1.2rem] text-left pb-4" , styles.description)}
+        className={classNames('font-inter mt-4 text-[1.2rem] text-left pb-4', styles.description)}
         dangerouslySetInnerHTML={{
           __html: marked.parse(description, { mangle: false, headerIds: false })
         }}
