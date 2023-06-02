@@ -1,10 +1,12 @@
 .description {
-  @apply px-2;
+  @apply px-3;
   @apply sm:text-base;
   @apply md:text-sm;
+  @apply font-inter;
 
   p {
     margin-bottom: 1rem;
+    line-height: 1.5;
   }
 
   ul {
@@ -12,8 +14,8 @@
   }
 
   strong {
-    @apply font-inter;
-    @apply text-pink-950;
+    @apply font-mogra;
+    @apply text-pink-300;
     font-size: 110%;
   }
 }

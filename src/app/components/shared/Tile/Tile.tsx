@@ -1,7 +1,6 @@
-import { tileClassName } from '@/app/consts/shared-classnames';
 import { styleTileSets } from '@/app/consts/style-tile-sets';
 import { classNames } from '@/app/utils';
-import React, { ReactElement } from 'react';
+import React, { Fragment, ReactElement, ReactNode } from 'react';
 
 interface Props {
   alternateWrapper?: {
@@ -12,6 +11,7 @@ interface Props {
   styledTileIdx: number;
   secondaryContent?: ReactElement;
   additionalTileClassName?: string;
+  hasAccent?: boolean;
   isActive?: boolean;
 }
 
@@ -21,32 +21,40 @@ export default function Tile({
   secondaryContent,
   additionalTileClassName,
   alternateWrapper,
+  hasAccent = false,
   isActive = true
 }: Props): ReactElement {
   const mainClassName = classNames(
-    'grid-row w-min-full flex flex-col justify-center items-center rounded-lg text-white',
+    'grid-row w-min-full flex flex-col justify-center items-center rounded-lg text-white shadow-2xl',
     styleTileSets[styledTileIdx].background,
-    isActive && tileClassName,
+    isActive && 'sm:hover:brightness-110',
     additionalTileClassName
   );
 
   const Wrapper = alternateWrapper?.component;
 
-  const renderContent = (): ReactElement => {
-    return (
-      <div className="relative w-full text-center">
-        <h1 className={classNames('font-mogra text-3xl w-full', styleTileSets[styledTileIdx].text)}>{mainText}</h1>
-        <span
-          className={classNames(
-            'absolute w-full left-0 right-0 m-auto text-violet-950',
-            styleTileSets[styledTileIdx].text
-          )}
-        >
-          {secondaryContent}
-        </span>
-      </div>
-    );
-  };
+  const AccentWrapper = ({ children }: { children: ReactNode }): ReactElement => (
+    <span
+      className={classNames(`before:block before:absolute ${styleTileSets[styledTileIdx].accent} relative inline-block`)}>
+    {children}
+  </span>
+  );
+
+  const ContentWrapper = hasAccent ? AccentWrapper : Fragment;
+
+  const renderContent = (): ReactElement => (
+    <div className="relative w-full text-center">
+      <ContentWrapper>
+        <h1 className={classNames('font-mogra text-3xl w-full relative', styleTileSets[styledTileIdx].text)}>
+          {mainText}
+        </h1>
+      </ContentWrapper>
+      <span
+        className={classNames('absolute w-full left-0 right-0 m-auto text-violet-950', styleTileSets[styledTileIdx].text)}>
+      {secondaryContent}
+    </span>
+    </div>
+  );
 
   return Wrapper ? (
     <Wrapper {...alternateWrapper?.props} className={mainClassName}>

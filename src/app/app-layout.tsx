@@ -5,7 +5,7 @@ import ConnectWeb3BlockerModal from '@/app/components/Modals/ConnectWeb3BlockerM
 import Navbar from '@/app/components/Navigation/Navbar';
 import { navigationItems, NavigationRoutes } from '@/app/consts/navigation-items.const';
 import { MetaMaskContextProvider } from '@/app/hooks/useMetaMask';
-import { bangers, inter, mogra } from '@/app/layout';
+import { inter, mogra } from '@/app/layout';
 import store from '@/app/store/store';
 import { usePathname } from 'next/navigation';
 import { ReactNode, useMemo } from 'react';
@@ -30,7 +30,6 @@ export default function AppLayout({
         :root {
           --font-inter: ${inter.style.fontFamily};
           --font-mogra: ${mogra.style.fontFamily};
-          --font-bangers: ${bangers.style.fontFamily};
         }
       `}</style>
       <Provider store={store}>

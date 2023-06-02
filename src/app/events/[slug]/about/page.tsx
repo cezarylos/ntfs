@@ -24,7 +24,7 @@ export default async function About({ params: { slug } }: { params: { slug: stri
         />
       </div>
       <div
-        className={classNames('font-inter mt-4 text-[1.2rem] text-left pb-4', styles.description)}
+        className={classNames('mt-4 text-[1.2rem] text-left pb-4', styles.description)}
         dangerouslySetInnerHTML={{
           __html: marked.parse(description, { mangle: false, headerIds: false })
         }}

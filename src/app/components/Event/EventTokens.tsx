@@ -7,18 +7,17 @@ import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
 import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { useSwitchChain } from '@/app/hooks/useSwitchChain';
-import {
-  getMyEventTokens,
-  selectIsMyEventTokensLoading,
-  selectMyEventTokens,
-  setIsShowWeb3BlockerModal
-} from '@/app/store/global/global.slice';
+import { getMyEventTokens, selectIsMyEventTokensLoading, selectMyEventTokens } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
-import { getChainIdFromString } from '@/app/utils';
+import { classNames, getChainIdFromString } from '@/app/utils';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 
-export default function EventTokens({ id, chainId, amountOfTokensToGetReward }: EventInterface): ReactElement {
+interface Props extends EventInterface {
+  wrapperClassName?: string;
+}
+
+export default function EventTokens({ id, chainId, amountOfTokensToGetReward, wrapperClassName }: Props): ReactElement {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedToken, setSelectedToken] = useState<any>(null);
   const dispatch = useAppDispatch();
@@ -62,7 +61,7 @@ export default function EventTokens({ id, chainId, amountOfTokensToGetReward }: 
     <>
       {isCurrentChainIdSameAsEventChainId ? (
         <>
-          <div className="my-8">
+          <div className={classNames('my-8', wrapperClassName)}>
             <h2 className="text-xl mb-2 text-yellow-300">MOJE TOKENY:</h2>
             <ProgressBar
               max={amountOfTokensToGetReward}

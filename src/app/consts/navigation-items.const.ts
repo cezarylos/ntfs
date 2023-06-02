@@ -20,8 +20,7 @@ export enum EventNavigationRoutes {
 }
 
 export const eventNavigationItems = [
-  { label: 'ZGARNIJ TOKEN', href: `${EventNavigationRoutes.TOKENS}?acquire=true` },
-  { label: 'TOKENY', href: EventNavigationRoutes.TOKENS },
+  { label: 'ZGARNIJ TOKEN', href: EventNavigationRoutes.TOKENS },
   { label: 'MOJE NAGRODY', href: EventNavigationRoutes.REWARDS },
   { label: 'O EVENCIE', href: EventNavigationRoutes.ABOUT }
 ];

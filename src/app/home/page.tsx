@@ -19,6 +19,7 @@ export default async function Home(): Promise<ReactElement> {
             }}
             mainText={label}
             styledTileIdx={index}
+            hasAccent
           />
         ))}
       </div>

@@ -28,7 +28,7 @@ export default function ConnectWeb3BlockerModal(): ReactElement {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
+            <div className="fixed inset-0 bg-black bg-opacity-25"/>
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto bg-black/50">
@@ -42,12 +42,18 @@ export default function ConnectWeb3BlockerModal(): ReactElement {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="flex flex-col w-full h-auto max-w-md transform overflow-hidden rounded-2xl bg-orange-200 border-2 border-red-600 border-solid p-6 text-left align-middle shadow-3xl transition-all">
-                  <Dialog.Title as="h3" className="text-xl text-center font-medium leading-6 text-gray-900">
-                    Ej Ziomek, najpierw podłącz poftfel
-                  </Dialog.Title>
+                <Dialog.Panel
+                  className="flex flex-col w-full h-auto max-w-md transform overflow-hidden rounded-2xl bg-purple-200 border-solid p-6 text-left align-middle shadow-3xl transition-all">
+                  <div
+                    className="flex flex-col w-full h-auto max-w-md transform overflow-hiddenborder-solid p-3 text-left align-middle">
+                    <h3 className="text-xl text-purple-950 font-inter text-center font-medium leading-6">Podłącz Portfel, żeby zobaczyć
+                      swoje <br/>
+                      <span
+                        className="text-transparent bg-gradient-to-r bg-clip-text from-cyan-500 to-yellow-500 text-2xl font-mogra">TOKENY</span>
+                    </h3>
+                  </div>
                   <button
-                    className="text-lg rounded-md text-white bg-green-800 p-2 mt-4 mx-auto w-1/2 hover:brightness-110 font-inter"
+                    className="rounded-md text-purple-950 bg-pink-400 font-semibold text-lg hover:brightness-110 font-inter px-4 py-2 mx-auto w-auto"
                     onClick={onMetaMaskConnect}
                   >
                     {isConnecting ? <span className="animate-pulse">Łączenie...</span> : 'Podłącz Portfel'}

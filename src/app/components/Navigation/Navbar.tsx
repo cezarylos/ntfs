@@ -69,7 +69,7 @@ export default function Navbar() {
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
                 {!!navigation.length && (
-                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-pink-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                     <span className="sr-only">Open main menu</span>
                     {open ? (
                       <XMarkIcon className="block h-6 w-6 text-white" aria-hidden="true" />
@@ -81,12 +81,12 @@ export default function Navbar() {
               </div>
               <div className="flex flex-1 items-center justify-center h-full sm:justify-start">
                 <Link
-                  className="h-8 w-auto flex items-center relative top-[1px] hover:brightness-150 hover:saturate-200"
+                  className="h-8 w-auto flex items-center relative top-[1px] hover:brightness-110"
                   onClick={onLinkClick(NavigationRoutes.HOME, close)}
                   href="#"
                 >
                   <Image
-                    src={'/logo.gif'}
+                    src={'/logo1.gif'}
                     width={0}
                     height={0}
                     alt={'Logo'}
@@ -124,7 +124,7 @@ export default function Navbar() {
                   <p className={'text-white text-sm font-medium font-inter'}>{formatAddress(wallet.accounts[0])}</p>
                 ) : (
                   <button
-                    className="rounded-md text-white bg-green-800 p-1 text-sm hover:brightness-110 font-inter w-32"
+                    className="rounded-md text-purple-950 bg-pink-400 font-semibold p-1 text-sm hover:brightness-110 font-inter w-32 animate-pulse"
                     onClick={onMetaMaskConnect}
                   >
                     {isConnecting ? <span className="animate-pulse">Łączenie...</span> : 'Podłącz Portfel'}

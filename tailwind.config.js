@@ -5,8 +5,7 @@ module.exports = {
     extend: {
       fontFamily: {
         inter: ['var(--font-inter)'],
-        mogra: ['var(--font-mogra)'],
-        bangers: ['var(--font-bangers)']
+        mogra: ['var(--font-mogra)']
       },
     }
   },

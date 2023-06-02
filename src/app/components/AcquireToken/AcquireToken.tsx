@@ -15,11 +15,8 @@ import {
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
 import { classNames, getChainIdFromString } from '@/app/utils';
-import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { marked } from 'marked';
-import use = marked.use;
-import { useHasProvider } from '@/app/hooks/useHasProvider';
+import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 
 interface Props {
   eventId: number;
@@ -46,11 +43,6 @@ export default function AcquireToken({
   const dispatch = useAppDispatch();
   const { tokensLeft } = useAppSelector(selectEventSupplyData);
   const myEventTokens = useAppSelector(selectMyEventTokens);
-  const hasProvider = useHasProvider();
-
-  const searchParams = useSearchParams();
-
-  const [isOpenAcquire, setIsOpenAcquire] = useState(JSON.parse(searchParams?.get('acquire') || 'false'));
 
   const [isBuyPanelOpen, setIsBuyPanelOpen] = useState(false);
 
@@ -64,7 +56,7 @@ export default function AcquireToken({
     if (isBuyPanelOpen) {
       return;
     }
-    if (!address && !hasProvider) {
+    if (!address) {
       dispatch(setIsShowWeb3BlockerModal(true));
       return;
     }
@@ -75,7 +67,7 @@ export default function AcquireToken({
     } catch (e) {
       console.error(e);
     }
-  }, [address, hasProvider, dispatch, switchChain, isBuyPanelOpen]);
+  }, [address, dispatch, switchChain, isBuyPanelOpen]);
 
   const onWidgetSuccess = useCallback(async (): Promise<void> => {
     onSuccess?.();
@@ -99,17 +91,6 @@ export default function AcquireToken({
     [myEventTokens.length, amountOfTokensToGetReward]
   );
 
-  useEffect((): void => {
-    if (!isOpenAcquire || isBuyPanelOpen) {
-      return;
-    }
-    dispatch(setIsLoading(true));
-    setIsOpenAcquire(false);
-    setTimeout((): void => {
-      openWidget().finally();
-    }, 2000);
-  }, [isOpenAcquire, isBuyPanelOpen, openWidget, dispatch]);
-
   return (
     <>
       <Checkout
@@ -121,7 +102,7 @@ export default function AcquireToken({
         mintQuantity={amountOfTokensToGetReward - myEventTokens.length}
       />
       {isTokensLeftMoreThenZero && (
-        <div className="flex flex-col mb-4">
+        <div className="flex flex-col my-4">
           {isPreviewImgShown && (
             <img
               onClick={openWidget}
