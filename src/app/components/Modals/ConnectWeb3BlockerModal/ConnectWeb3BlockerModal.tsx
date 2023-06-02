@@ -53,7 +53,7 @@ export default function ConnectWeb3BlockerModal(): ReactElement {
                     </h3>
                   </div>
                   <button
-                    className="rounded-md text-purple-950 bg-pink-400 font-semibold text-lg hover:brightness-110 font-inter px-4 py-2 mx-auto w-auto"
+                    className="rounded-md text-white bg-pink-500 shadow-lg font-semibold text-lg hover:brightness-110 font-inter px-4 py-2 mx-auto w-auto"
                     onClick={onMetaMaskConnect}
                   >
                     {isConnecting ? <span className="animate-pulse">Łączenie...</span> : 'Podłącz Portfel'}

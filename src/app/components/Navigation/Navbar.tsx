@@ -108,7 +108,7 @@ export default function Navbar() {
                             current
                               ? 'bg-violet-950 text-white'
                               : 'text-white hover:bg-pink-500 hover:text-white cursor-pointer',
-                            'rounded-md px-3 py-2 text-sm leading-none font-medium flex items-center'
+                            'rounded-md px-3 py-2 text-sm leading-none font-medium flex items-center text-center'
                           )}
                           aria-current={current ? 'page' : undefined}
                         >
@@ -124,7 +124,7 @@ export default function Navbar() {
                   <p className={'text-white text-sm font-medium font-inter'}>{formatAddress(wallet.accounts[0])}</p>
                 ) : (
                   <button
-                    className="rounded-md text-purple-950 bg-pink-400 font-semibold p-1 text-sm hover:brightness-110 font-inter w-32 animate-pulse"
+                    className="rounded-md shadow-xl text-white bg-pink-500 font-semibold p-1 text-sm hover:brightness-110 font-inter w-32 animate-pulse"
                     onClick={onMetaMaskConnect}
                   >
                     {isConnecting ? <span className="animate-pulse">Łączenie...</span> : 'Podłącz Portfel'}

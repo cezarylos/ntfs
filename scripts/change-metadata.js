@@ -26,12 +26,15 @@ fs.readdir(directoryPath, (err, files) => {
                 try {
                     // Parse the JSON data
                     let jsonData = JSON.parse(data);
+                    const fileName = path.basename(filePath, path.extname(filePath));
                     const { external_url, compiler, seller_fee_basis_points, ...rest } = jsonData;
                     jsonData = rest;
 
+                    const IMAGES_URL_IMPORTANT_WITH_SLASH = 'bafybeiafdq2xvvreagikyag7jcij6clwu76635fwwim4exmhu6m7ku3f3m/'
+
                     // Update the description field
                     jsonData.description = 'Experience [Spokój Festiwal](https://instagram.com/spokojfestiwal) and get benefits from this exclusive NFT Token.';
-                    jsonData.image = `ipfs://bafybeibrlvmsn6nyx2dgyeldn333mv2dfwmcgk7n7b5gpze2z5kzhrtdtu/${jsonData.image}`
+                    jsonData.image = `ipfs://${IMAGES_URL_IMPORTANT_WITH_SLASH}${fileName}.png`;
 
                     // Convert the updated data back to JSON string
                     const updatedData = JSON.stringify(jsonData, null, 2);

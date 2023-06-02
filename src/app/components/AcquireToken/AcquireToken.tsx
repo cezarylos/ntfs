@@ -117,7 +117,7 @@ export default function AcquireToken({
           <button
             onClick={openWidget}
             disabled={!isAllowMintMore}
-            className="m-auto mt-2 p-4 w-3/4 justify-center bg-pink-500 flex item-center text-white text-lg rounded-md hover:brightness-110 disabled:cursor-auto disabled:text-opacity-50 disabled:hover:brightness-100 disabled:bg-gray-500/50"
+            className="m-auto mt-2 p-4 w-3/4 justify-center bg-pink-500 flex item-center text-white text-lg shadow-xl rounded-md hover:brightness-110 disabled:cursor-auto disabled:text-opacity-50 disabled:hover:brightness-100 disabled:bg-gray-500/50"
           >
             <h1>{buttonContent || 'ZGARNIJ TOKEN'}</h1>
           </button>
