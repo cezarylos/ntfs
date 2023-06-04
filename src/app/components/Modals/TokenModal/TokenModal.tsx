@@ -1,4 +1,6 @@
+import { styleTileSets } from '@/app/consts/style-tile-sets';
 import { ModalInterface } from '@/app/typings/common.typings';
+import { classNames } from '@/app/utils';
 import { Dialog, Transition } from '@headlessui/react';
 import { marked } from 'marked';
 import React, { Fragment, ReactElement } from 'react';
@@ -51,30 +53,41 @@ export default function TokenModal({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full h-auto max-w-md transform overflow-hidden rounded-2xl bg-orange-200 border-2 border-red-600 border-solid p-6 text-left align-middle shadow-3xl transition-all">
-                  <Dialog.Title as="h3" className="text-3xl text-center font-medium leading-6 text-gray-900">
-                    {tokenName}
+                <Dialog.Panel className="flex flex-col w-full h-auto max-w-md lg:max-w-lg transform overflow-hidden rounded-2xl bg-purple-200 border-solid p-6 text-left align-middle shadow-3xl transition-all">
+                  <Dialog.Title as="h3" className="text-3xl text-center font-medium leading-6 text-purple-950">
+                    <span
+                      className={classNames(
+                        `before:block before:absolute ${styleTileSets[0].accent} relative inline-block`
+                      )}
+                    >
+                      <h1 className={classNames('text-3xl font-bold mb-2 text-purple-900 outline-none relative')}>
+                        {tokenName}
+                      </h1>
+                    </span>
                   </Dialog.Title>
-                  <div className="mt-2">
+                  <div>
                     <img
                       src={tokenUrl}
                       alt={tokenName}
-                      className="max-w-[60%] xl:max-w-[50%] mx-auto mt-2 rounded-md shadow-lg shadow-cyan-500/50"
+                      className="max-w-[60%] xl:max-w-[50%] mx-auto mt-2 rounded-md shadow-lg"
                     />
                     <div
-                      className="text-sm text-gray-500 mt-4"
+                      className="text-base mt-4 text-center font-inter md:w-[60%] m-auto"
                       dangerouslySetInnerHTML={{
                         __html: marked
                           .parse(tokenDescription, { mangle: false, headerIds: false })
-                          .replace('<a ', '<a target="_blank" class="text-blue-500 cursor-pointer outline-0" ')
+                          .replace(
+                            '<a ',
+                            '<a target="_blank" class="underline text-purple-900 font-mogra cursor-pointer outline-none" '
+                          )
                       }}
                     />
                   </div>
-                  <div className="mt-4">
+                  <div className="mt-1">
                     <a
                       href={openSeaUrl}
                       target="_blank"
-                      className="w-full inline-flex mx-auto font-inter justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="m-auto mt-2 p-2 w-3/4 font-inter justify-center bg-pink-500 flex item-center text-white px-3 py-2 text-sm font-medium shadow-xl rounded-md hover:brightness-110"
                     >
                       Obczaj na OpenSea
                     </a>

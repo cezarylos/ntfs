@@ -121,7 +121,7 @@ export class StrapiService {
       const res = await axios.put(
         `${BASE_STRAPI_URL}/api/tickets/${ticketId}`,
         { data: { holderAddress: holderAddress.toLowerCase() } },
-        { headers }
+        { headers, ...cacheOptions }
       );
       return res.data;
     } catch (e) {

@@ -77,7 +77,7 @@ export const connectMetamaskMobile = (): void => {
 
 export const getEventBySlug = async (
   slug: string,
-  fields: string[],
+  fields?: string[],
   hasCollectionImage = false
 ): Promise<EventInterface> => {
   const eventResponse = await StrapiService.getEventBySlug(slug, fields, hasCollectionImage);
@@ -86,4 +86,12 @@ export const getEventBySlug = async (
     collectionImage = eventResponse.data[0]?.attributes.collectionImage.data.attributes.url;
   }
   return { ...eventResponse.data[0].attributes, id: eventResponse.data[0].id, collectionImage };
+};
+
+export const replaceS3LinkWithCloudFront = (url: string) => {
+  const regex = /https:\/\/[^/]+\.s3\.eu-north-1\.amazonaws\.com(\/.*)$/;
+  if (regex.test(url) && process.env.NEXT_PUBLIC_CLOUDFRONT_URL) {
+    return url.replace(regex, `${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}$1`);
+  }
+  return url;
 };

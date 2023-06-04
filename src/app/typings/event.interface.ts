@@ -13,4 +13,5 @@ export interface EventInterface {
   collectionImage: any;
   amountOfTokensToGetReward: number;
   excludedAddressesFromRewards: string[];
+  eventLink: string;
 }

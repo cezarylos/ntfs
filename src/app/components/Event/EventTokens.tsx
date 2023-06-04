@@ -61,7 +61,7 @@ export default function EventTokens({ id, chainId, amountOfTokensToGetReward, wr
     <>
       {isCurrentChainIdSameAsEventChainId ? (
         <>
-          <div className={classNames('my-8', wrapperClassName)}>
+          <div className={classNames('my-2', wrapperClassName)}>
             <h2 className="text-xl mb-2 text-yellow-300">MOJE TOKENY:</h2>
             <ProgressBar
               max={amountOfTokensToGetReward}

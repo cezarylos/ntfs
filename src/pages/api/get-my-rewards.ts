@@ -1,4 +1,6 @@
 import { StrapiService } from '@/app/services/strapi.service';
+import { TicketInterface } from '@/app/typings/ticket.interface';
+import { replaceS3LinkWithCloudFront } from '@/app/utils';
 import { recoverPersonalSignature } from '@metamask/eth-sig-util';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -18,12 +20,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const tickets = (
           await Promise.all(
             data.map(async ticketWrapper => {
-              const res = {} as { url: string; event?: { name: string; id: number } };
-              if (!eventId) {
-                const { attributes, id } = ticketWrapper.attributes.event?.data || {};
-                res.event = { ...attributes, id };
-              }
-              res.url = ticketWrapper.attributes.ticket.data.attributes.url;
+              const {
+                attributes: { title, description }
+              } = ticketWrapper;
+              const res = {
+                title,
+                description
+              } as TicketInterface;
+              res.url = replaceS3LinkWithCloudFront(ticketWrapper.attributes.ticket.data.attributes.url);
               return res;
             })
           )

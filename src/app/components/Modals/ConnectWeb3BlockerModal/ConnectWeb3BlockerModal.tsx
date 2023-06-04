@@ -28,7 +28,7 @@ export default function ConnectWeb3BlockerModal(): ReactElement {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25"/>
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto bg-black/50">
@@ -42,14 +42,13 @@ export default function ConnectWeb3BlockerModal(): ReactElement {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel
-                  className="flex flex-col w-full h-auto max-w-md transform overflow-hidden rounded-2xl bg-purple-200 border-solid p-6 text-left align-middle shadow-3xl transition-all">
-                  <div
-                    className="flex flex-col w-full h-auto max-w-md transform overflow-hiddenborder-solid p-3 text-left align-middle">
-                    <h3 className="text-xl text-purple-950 font-inter text-center font-medium leading-6">Podłącz Portfel, żeby zobaczyć
-                      swoje <br/>
-                      <span
-                        className="text-transparent bg-gradient-to-r bg-clip-text from-cyan-500 to-yellow-500 text-2xl font-mogra">TOKENY</span>
+                <Dialog.Panel className="flex flex-col w-full h-auto max-w-md transform overflow-hidden rounded-2xl bg-purple-200 border-solid p-6 text-left align-middle shadow-3xl transition-all">
+                  <div className="flex flex-col w-full h-auto max-w-md transform overflow-hiddenborder-solid p-3 text-left align-middle">
+                    <h3 className="text-xl text-purple-950 font-inter text-center font-medium leading-6">
+                      Podłącz Portfel, żeby zobaczyć swoje <br />
+                      <span className="text-transparent bg-gradient-to-r bg-clip-text from-cyan-500 to-yellow-500 text-2xl font-mogra">
+                        TOKENY
+                      </span>
                     </h3>
                   </div>
                   <button

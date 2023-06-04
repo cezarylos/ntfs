@@ -5,15 +5,21 @@ import React, { ReactElement } from 'react';
 interface Props {
   name: string;
   className?: string;
+  bgClassName?: string;
   slug?: string;
 }
 
-export default function EventName({ name, className, slug }: Props): ReactElement {
+export default function EventName({ name, className, slug, bgClassName }: Props): ReactElement {
   const content = (
-    <span className="before:block before:absolute before:-inset-1 before:-skew-y-3 before:h-[90%] before:bg-pink-500 relative inline-block before:translate-x-[-0.5rem]">
+    <span
+      className={classNames(
+        'before:block before:absolute before:-inset-1 before:-skew-y-3 before:h-[90%] before:bg-pink-500 relative inline-block before:translate-x-[-0.5rem]',
+        bgClassName
+      )}
+    >
       <h1
         className={classNames(
-          'text-3xl font-bold mb-2 text-yellow-300 outline-0 relative',
+          'text-3xl font-bold mb-2 text-yellow-300 relative border-transparent',
           slug && 'hover:brightness-110',
           className || ''
         )}
@@ -24,7 +30,7 @@ export default function EventName({ name, className, slug }: Props): ReactElemen
   );
 
   return slug ? (
-    <Link className="outline-0" href={`/events/${slug}`}>
+    <Link className="outline-none" href={`/events/${slug}`}>
       {content}
     </Link>
   ) : (

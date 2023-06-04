@@ -35,9 +35,12 @@ export default function Tile({
 
   const AccentWrapper = ({ children }: { children: ReactNode }): ReactElement => (
     <span
-      className={classNames(`before:block before:absolute ${styleTileSets[styledTileIdx].accent} relative inline-block`)}>
-    {children}
-  </span>
+      className={classNames(
+        `before:block before:absolute ${styleTileSets[styledTileIdx].accent} relative inline-block`
+      )}
+    >
+      {children}
+    </span>
   );
 
   const ContentWrapper = hasAccent ? AccentWrapper : Fragment;
@@ -50,9 +53,13 @@ export default function Tile({
         </h1>
       </ContentWrapper>
       <span
-        className={classNames('absolute w-full left-0 right-0 m-auto text-violet-950', styleTileSets[styledTileIdx].text)}>
-      {secondaryContent}
-    </span>
+        className={classNames(
+          'absolute w-full left-0 right-0 m-auto text-violet-950',
+          styleTileSets[styledTileIdx].text
+        )}
+      >
+        {secondaryContent}
+      </span>
     </div>
   );
 

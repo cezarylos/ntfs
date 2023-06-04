@@ -15,7 +15,6 @@ import {
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
 import { classNames, getChainIdFromString } from '@/app/utils';
-import { marked } from 'marked';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 
 interface Props {
@@ -48,12 +47,17 @@ export default function AcquireToken({
 
   const eventChainId = useMemo((): string => getChainIdFromString(chainId), [chainId]);
   const address = useMemo((): string => wallet.accounts?.[0], [wallet.accounts]);
+  const isTokensLeftMoreThenZero = useMemo((): boolean => (tokensLeft || 0) > 0, [tokensLeft]);
+  const isAllowMintMore = useMemo(
+    (): boolean => (myEventTokens.length || 0) < amountOfTokensToGetReward,
+    [myEventTokens.length, amountOfTokensToGetReward]
+  );
 
   const switchChain = useSwitchChain(eventChainId);
   const addEventNetwork = useAddEventNetwork(eventChainId);
 
   const openWidget = useCallback(async (): Promise<void> => {
-    if (isBuyPanelOpen) {
+    if (isBuyPanelOpen || !isAllowMintMore) {
       return;
     }
     if (!address) {
@@ -67,7 +71,7 @@ export default function AcquireToken({
     } catch (e) {
       console.error(e);
     }
-  }, [address, dispatch, switchChain, isBuyPanelOpen]);
+  }, [isBuyPanelOpen, isAllowMintMore, address, dispatch, switchChain]);
 
   const onWidgetSuccess = useCallback(async (): Promise<void> => {
     onSuccess?.();
@@ -85,12 +89,6 @@ export default function AcquireToken({
     addEventNetwork().finally();
   }, [addEventNetwork]);
 
-  const isTokensLeftMoreThenZero = useMemo((): boolean => (tokensLeft || 0) > 0, [tokensLeft]);
-  const isAllowMintMore = useMemo(
-    (): boolean => (myEventTokens.length || 0) < amountOfTokensToGetReward,
-    [myEventTokens.length, amountOfTokensToGetReward]
-  );
-
   return (
     <>
       <Checkout
@@ -102,14 +100,14 @@ export default function AcquireToken({
         mintQuantity={amountOfTokensToGetReward - myEventTokens.length}
       />
       {isTokensLeftMoreThenZero && (
-        <div className="flex flex-col my-4">
+        <div className="flex flex-col mt-4 mb-6">
           {isPreviewImgShown && (
             <img
               onClick={openWidget}
               src={collectionImage}
               alt={'collectionImage'}
               className={classNames(
-                'max-w-[calc(33.33%)] h-auto m-auto rounded-md drop-shadow-xl shadow-red-500',
+                'max-w-[calc(33.33%)] h-auto m-auto rounded-md drop-shadow-xl shadow-red-500 outline-none',
                 isAllowMintMore && 'hover:brightness-110 cursor-pointer'
               )}
             />
@@ -117,12 +115,14 @@ export default function AcquireToken({
           <button
             onClick={openWidget}
             disabled={!isAllowMintMore}
-            className="m-auto mt-2 p-4 w-3/4 justify-center bg-pink-500 flex item-center text-white text-lg shadow-xl rounded-md hover:brightness-110 disabled:cursor-auto disabled:text-opacity-50 disabled:hover:brightness-100 disabled:bg-gray-500/50"
+            className="m-auto mt-6 p-4 w-3/4 justify-center bg-pink-500 flex item-center text-white text-lg shadow-xl rounded-md hover:brightness-110 disabled:cursor-auto disabled:text-opacity-50 disabled:hover:brightness-100 disabled:bg-gray-500/50"
           >
             <h1>{buttonContent || 'ZGARNIJ TOKEN'}</h1>
           </button>
           {!isAllowMintMore && (
-            <p className="text-white text-center mt-4">Ziomek, limit {amountOfTokensToGetReward} tokenów na portfel</p>
+            <p className="text-white text-center mt-6">
+              Sorki, limit {amountOfTokensToGetReward} tokenów na portfel :(
+            </p>
           )}
         </div>
       )}

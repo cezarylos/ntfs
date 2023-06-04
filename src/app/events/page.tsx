@@ -1,8 +1,6 @@
 import Tile from '@/app/components/shared/Tile/Tile';
-import { styleTileSets } from '@/app/consts/style-tile-sets';
 import { StrapiService } from '@/app/services/strapi.service';
 import { EventInterface } from '@/app/typings/event.interface';
-import { classNames } from '@/app/utils';
 import { DateTime } from 'luxon';
 import Link from 'next/link';
 import React, { Fragment, ReactElement } from 'react';

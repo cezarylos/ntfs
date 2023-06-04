@@ -14,4 +14,7 @@ export interface TicketInterface {
     };
   };
   event?: StrapiResponseInterface<EventInterface>;
+  url: string;
+  title: string;
+  description: string;
 }

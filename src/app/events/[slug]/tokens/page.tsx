@@ -18,7 +18,7 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
       <EventName name={event.name} slug={slug} />
       <h1 className="text-xl text-white my-2 text-center">
         <TokensLeft id={id} chainId={chainId} />
-        <span className="text-cyan-400 ml-1">TOKENÓW</span>
+        <span className="text-pink-300 ml-1">TOKENÓW</span>
       </h1>
       <AcquireToken
         eventId={id}
