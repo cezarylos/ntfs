@@ -1,5 +1,5 @@
 export enum NavigationRoutes {
-  HOME = '/home',
+  HOME = '/',
   EVENTS = '/events',
   HOW_TO = '/how-to',
   MY_REWARDS = '/my-rewards',

@@ -5,6 +5,10 @@ import { DateTime } from 'luxon';
 import Link from 'next/link';
 import React, { ReactElement } from 'react';
 
+export const metadata = {
+  title: 'RealBrain'
+};
+
 const populateFields = ['name', 'startDate', 'endDate', 'slug'];
 
 export default async function MyTokens(): Promise<ReactElement> {

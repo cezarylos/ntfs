@@ -5,6 +5,10 @@ import { DateTime } from 'luxon';
 import Link from 'next/link';
 import React, { Fragment, ReactElement } from 'react';
 
+export const metadata = {
+  title: 'RealBrain'
+};
+
 const populateFields = ['name', 'startDate', 'endDate', 'slug'];
 
 const soon = Array(2).fill({});
