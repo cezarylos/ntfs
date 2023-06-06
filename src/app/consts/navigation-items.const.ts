@@ -8,9 +8,9 @@ export enum NavigationRoutes {
 
 export const navigationItems = [
   { label: 'EVENTY', href: NavigationRoutes.EVENTS },
-  { label: 'JAK TO DZIAŁA', href: NavigationRoutes.HOW_TO },
   { label: 'MOJE TOKENY', href: NavigationRoutes.MY_TOKENS },
-  { label: 'MOJE NAGRODY', href: NavigationRoutes.MY_REWARDS }
+  { label: 'MOJE NAGRODY', href: NavigationRoutes.MY_REWARDS },
+  { label: 'JAK PODŁĄCZYĆ', href: NavigationRoutes.HOW_TO },
 ];
 
 export enum EventNavigationRoutes {
@@ -21,7 +21,7 @@ export enum EventNavigationRoutes {
 
 export const eventNavigationItems = [
   { label: 'ZGARNIJ TOKEN', href: EventNavigationRoutes.TOKENS },
-  { label: 'ZASADY', href: EventNavigationRoutes.ABOUT },
   { label: 'O EVENCIE', href: EventNavigationRoutes.ABOUT },
-  { label: 'MOJE NAGRODY', href: EventNavigationRoutes.REWARDS }
+  { label: 'MOJE NAGRODY', href: EventNavigationRoutes.REWARDS },
+  { label: 'BONUS', href: EventNavigationRoutes.ABOUT },
 ];

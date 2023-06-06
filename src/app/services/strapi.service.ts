@@ -141,4 +141,15 @@ export class StrapiService {
       throw e;
     }
   }
+
+  public static async getHowTo(): Promise<StrapiResponseInterface<{ description: string }>> {
+    try {
+      const res = await fetch(`${BASE_STRAPI_URL}/api/how-to`, { ...cacheOptions });
+      console.log(res);
+      return await res.json();
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
 }

@@ -8,15 +8,25 @@
   p {
     margin-bottom: 1rem;
     line-height: 1.5;
+    text-align: start;
+
+    button {
+      align-self: center;
+    }
   }
 
   ul {
     list-style: disc;
   }
 
-  strong {
+  strong, em {
     @apply font-mogra;
     @apply text-yellow-400;
     font-size: 110%;
+    @apply mx-1
+  }
+
+  em {
+    @apply text-pink-400;
   }
 }

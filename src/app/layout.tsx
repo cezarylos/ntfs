@@ -1,10 +1,10 @@
 import { classNames } from '@/app/utils';
+import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { Archivo, Mogra } from 'next/font/google';
 import { ReactElement, ReactNode } from 'react';
 
 import './globals.css';
-import { Metadata } from 'next';
 
 const AppLayout = dynamic(() => import('@/app/app-layout'), { ssr: false });
 
@@ -23,9 +23,9 @@ export const mogra = Mogra({
 export default function RootLayout({ children }: { children: ReactNode }): ReactElement {
   return (
     <html lang="en" className="bg-violet-950 xl:text-[150%] relative h-full overflow-hidden">
-    <body className={classNames(mogra.className, 'relative h-screen overflow-hidden top-0')}>
-    <AppLayout>{children}</AppLayout>
-    </body>
+      <body className={classNames(mogra.className, 'relative h-screen overflow-hidden top-0')}>
+        <AppLayout>{children}</AppLayout>
+      </body>
     </html>
   );
 }
