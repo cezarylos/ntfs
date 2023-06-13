@@ -1,3 +1,4 @@
+import { SocialLinksEnum } from '@/app/typings/common.typings';
 import { EventInterface } from '@/app/typings/event.interface';
 import { StrapiArrayResponseInterface, StrapiResponseInterface } from '@/app/typings/strapiResponse.interface';
 import { TicketInterface } from '@/app/typings/ticket.interface';
@@ -142,10 +143,21 @@ export class StrapiService {
     }
   }
 
-  public static async getHowTo(): Promise<StrapiResponseInterface<{ description: string }>> {
+  public static async getHowToConnect(): Promise<StrapiResponseInterface<{ description: string }>> {
     try {
-      const res = await fetch(`${BASE_STRAPI_URL}/api/how-to`, { ...cacheOptions });
-      console.log(res);
+      const res = await fetch(`${BASE_STRAPI_URL}/api/how-to-connect`, { ...cacheOptions });
+      return await res.json();
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  public static async getOurSocialLinks(): Promise<
+    StrapiResponseInterface<{ socialLinks: Record<SocialLinksEnum, string> }>
+  > {
+    try {
+      const res = await fetch(`${BASE_STRAPI_URL}/api/our-social-link`, { ...cacheOptions });
       return await res.json();
     } catch (e) {
       console.error(e);

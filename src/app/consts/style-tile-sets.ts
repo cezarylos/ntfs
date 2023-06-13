@@ -19,9 +19,9 @@ export const styleTileSets = [
   },
   {
     background: 'bg-pink-600',
-    text: 'text-yellow-400',
+    text: 'text-lime-300',
     accent:
-      'before:inset-1 before:-skew-y-3 before:h-[30%] before:w-[calc(100%+0.75rem)] before:bg-purple-500 before:translate-x-[-0.5rem] before:translate-y-[1rem]'
+      'before:inset-1 before:-skew-y-3 before:h-[30%] before:w-[calc(100%+0.75rem)] before:bg-purple-900 before:translate-x-[-0.5rem] before:translate-y-[1rem]'
   },
   {
     background: 'bg-teal-400',

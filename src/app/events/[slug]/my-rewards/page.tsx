@@ -1,6 +1,10 @@
 import { StrapiService } from '@/app/services/strapi.service';
 import dynamic from 'next/dynamic';
-import { ReactElement } from 'react';
+import React, { ReactElement } from 'react';
+
+export const metadata = {
+  title: 'RealBrain'
+};
 
 const MyTicketsComponent = dynamic(() => import('@/app/components/MyTickets/MyTickets'), { ssr: false });
 

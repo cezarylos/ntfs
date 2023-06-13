@@ -1,11 +1,12 @@
 'use client';
 
-import styles from './HowTo.module.scss';
 import { useMetaMaskConnect } from '@/app/hooks/useMetaMaskConnect';
 import { classNames } from '@/app/utils';
 import { marked } from 'marked';
 import React, { useEffect, useMemo } from 'react';
 import ReactDOMServer from 'react-dom/server';
+
+import styles from './HowTo.module.scss';
 
 interface Props {
   description: string;
@@ -15,7 +16,7 @@ const BUTTON_ID = 'connect';
 
 const buttonToRender = (
   <div className="w-full flex justify-center mb-4 mt-[-0.5rem]">
-    <br/>
+    <br />
     <button
       id={BUTTON_ID}
       className="rounded-md shadow-xl text-white bg-pink-500 font-semibold p-2 text-base hover:brightness-110 font-inter w-1/2"

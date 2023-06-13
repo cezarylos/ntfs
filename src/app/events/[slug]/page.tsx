@@ -6,6 +6,10 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import React, { ReactElement } from 'react';
 
+export const metadata = {
+  title: 'RealBrain'
+};
+
 const TokensLeft = dynamic(() => import('@/app/components/TokensLeft/TokensLeft'), { ssr: false });
 
 export default async function Page({ params: { slug } }: { params: { slug: string } }): Promise<ReactElement> {
@@ -22,8 +26,7 @@ export default async function Page({ params: { slug } }: { params: { slug: strin
               component: Link,
               props: {
                 href: `/events/${slug}${href}`,
-                key: `${slug}_${idx}`,
-                params: { acquire: true }
+                key: `${slug}_${idx}`
               }
             }}
             mainText={label}

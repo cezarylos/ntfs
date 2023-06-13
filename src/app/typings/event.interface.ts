@@ -1,3 +1,5 @@
+import { SocialLinksEnum } from '@/app/typings/common.typings';
+
 export interface EventInterface {
   contractAddress: string;
   winterProjectId: string;
@@ -13,5 +15,6 @@ export interface EventInterface {
   collectionImage: any;
   amountOfTokensToGetReward: number;
   excludedAddressesFromRewards: string[];
-  eventLink: string;
+  socialLinks: Record<SocialLinksEnum, string>;
+  rewardTitle: string;
 }

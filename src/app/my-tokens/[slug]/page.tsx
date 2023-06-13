@@ -3,6 +3,10 @@ import { getEventBySlug } from '@/app/utils';
 import dynamic from 'next/dynamic';
 import React, { ReactElement } from 'react';
 
+export const metadata = {
+  title: 'RealBrain'
+};
+
 const EventTokens = dynamic(() => import('@/app/components/Event/EventTokens'), { ssr: false });
 
 export default async function MyEventTokens({ params: { slug } }: { params: { slug: string } }): Promise<ReactElement> {

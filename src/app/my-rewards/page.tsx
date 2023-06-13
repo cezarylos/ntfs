@@ -1,3 +1,4 @@
+import SubheaderUnderlined from '@/app/components/SubheaderUnderlined/SubheaderUnderlined';
 import Tile from '@/app/components/shared/Tile/Tile';
 import { StrapiService } from '@/app/services/strapi.service';
 import { EventInterface } from '@/app/typings/event.interface';
@@ -15,6 +16,7 @@ export default async function MyTokens(): Promise<ReactElement> {
   const events = await StrapiService.getAllEvents(populateFields);
   return (
     <>
+      <SubheaderUnderlined name={'Wybierz Event:'} />
       {!!events?.length && (
         <div className="grid grid-rows-4 h-full gap-4">
           {events.map(({ id, startDate, endDate, name, slug }: EventInterface, idx) => (

@@ -13,6 +13,7 @@ interface Props {
   additionalTileClassName?: string;
   hasAccent?: boolean;
   isActive?: boolean;
+  isTwoLiner?: boolean;
 }
 
 export default function Tile({
@@ -22,7 +23,8 @@ export default function Tile({
   additionalTileClassName,
   alternateWrapper,
   hasAccent = false,
-  isActive = true
+  isActive = true,
+  isTwoLiner = false
 }: Props): ReactElement {
   const mainClassName = classNames(
     'grid-row w-min-full flex flex-col justify-center items-center rounded-lg text-white shadow-2xl',
@@ -36,7 +38,8 @@ export default function Tile({
   const AccentWrapper = ({ children }: { children: ReactNode }): ReactElement => (
     <span
       className={classNames(
-        `before:block before:absolute ${styleTileSets[styledTileIdx].accent} relative inline-block`
+        `before:block before:absolute ${styleTileSets[styledTileIdx].accent} relative inline-block`,
+        isTwoLiner && 'before:mt-9 before:h-[15%]'
       )}
     >
       {children}
@@ -48,7 +51,12 @@ export default function Tile({
   const renderContent = (): ReactElement => (
     <div className="relative w-full text-center">
       <ContentWrapper>
-        <h1 className={classNames('font-mogra text-3xl w-full relative', styleTileSets[styledTileIdx].text)}>
+        <h1
+          className={classNames(
+            'font-mogra text-3xl w-full relative white whitespace-break-spaces uppercase',
+            styleTileSets[styledTileIdx].text
+          )}
+        >
           {mainText}
         </h1>
       </ContentWrapper>

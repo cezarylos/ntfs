@@ -38,7 +38,7 @@ export default function AppLayout({
             <Navbar />
             <GlobalLoader />
             <ConnectWeb3BlockerModal />
-            <div className="container max-w-md mx-auto h-[calc(100%-4rem)] p-4">
+            <div className="container max-w-md mx-auto h-[calc(100%-4rem)] p-4 flex flex-col">
               {sectionName && (
                 <span className="before:block before:absolute before:-inset-1 before:-skew-y-3 before:h-[90%] before:bg-pink-500 relative inline-block before:translate-x-[-0.5rem]">
                   <h1 className="text-5xl mb-2 text-white relative">{sectionName}</h1>

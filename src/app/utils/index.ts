@@ -1,6 +1,7 @@
 import { StrapiService } from '@/app/services/strapi.service';
 import { Web3Service } from '@/app/services/web3.service';
 import { ChainsEnum } from '@/app/typings/chains.enum';
+import { SocialLinksEnum } from '@/app/typings/common.typings';
 import { EventInterface } from '@/app/typings/event.interface';
 
 export const formatBalance = (rawBalance: string) => {
@@ -94,4 +95,17 @@ export const replaceS3LinkWithCloudFront = (url: string) => {
     return url.replace(regex, `${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}$1`);
   }
   return url;
+};
+
+export const getSocialIcon = (socialLink: SocialLinksEnum): string => {
+  switch (socialLink) {
+    case SocialLinksEnum.INSTAGRAM:
+      return '/instagram-logo.svg';
+    case SocialLinksEnum.FACEBOOK:
+      return '/fb-logo.svg';
+    case SocialLinksEnum.DISCORD:
+      return '/discord-logo.svg';
+    default:
+      return '';
+  }
 };

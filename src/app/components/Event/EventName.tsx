@@ -19,7 +19,7 @@ export default function EventName({ name, className, slug, bgClassName }: Props)
     >
       <h1
         className={classNames(
-          'text-3xl font-bold mb-2 text-yellow-300 relative border-transparent',
+          'text-3xl font-bold mb-2 text-white relative border-transparent uppercase',
           slug && 'hover:brightness-110',
           className || ''
         )}

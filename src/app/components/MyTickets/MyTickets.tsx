@@ -1,7 +1,7 @@
 'use client';
 
-import AcquireToken from '@/app/components/AcquireToken/AcquireToken';
 import EventName from '@/app/components/Event/EventName';
+import SubheaderUnderlined from '@/app/components/SubheaderUnderlined/SubheaderUnderlined';
 import { useHasProvider } from '@/app/hooks/useHasProvider';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { selectIsLoading, setIsLoading } from '@/app/store/global/global.slice';
@@ -60,7 +60,12 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
 
   return (
     <div className="pb-2">
-      {name && <EventName name={name} slug={slug} />}
+      {name && (
+        <>
+          <EventName name={name} slug={slug} />
+          <SubheaderUnderlined name={'Moje Nagrody'} />
+        </>
+      )}
       {files?.map(({ title, description, url }, idx) => (
         <div key={idx} className="bg-purple-200 rounded-xl p-4 my-4">
           <h2 className="text-xl text-purple-950">{title}</h2>
