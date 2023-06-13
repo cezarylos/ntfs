@@ -35,7 +35,7 @@ export default function HowTo({ description }: Props) {
     const content = marked.parse(description || '', { mangle: false, headerIds: false });
     const buttonString = ReactDOMServer.renderToString(buttonToRender);
     return content.replace(REPLACE_TEMPLATE, buttonString);
-  }, [description, onMetaMaskConnect]);
+  }, [description]);
 
   useEffect((): (() => void) => {
     const handleClick = (): void => {

@@ -15,9 +15,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         contract.methods.totalSupply().call(),
         contract.methods.MAX_TOKENS().call()
       ]);
-      const tokensLeft = MAX_TOKENS - totalSupply;
 
-      return res.status(200).json({ tokensLeft, maxSupply: MAX_TOKENS });
+      const tokensLeft = Number(MAX_TOKENS) - Number(totalSupply);
+
+      return res.status(200).json({ tokensLeft, maxSupply: Number(MAX_TOKENS) });
     } catch (e) {
       console.error(e);
       return res.status(500).json({ message: 'Something went wrong' });

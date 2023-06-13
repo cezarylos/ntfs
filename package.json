@@ -21,6 +21,7 @@
     "@types/node": "20.1.0",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
+    "@types/web3": "^1.2.2",
     "@usewinter/checkout": "^0.1.46",
     "axios": "^1.4.0",
     "crypto": "^1.0.1",
@@ -34,7 +35,7 @@
     "react-dom": "18.2.0",
     "react-redux": "^8.0.5",
     "typescript": "5.0.4",
-    "web3": "^1.9.0"
+    "web3": "1.9.0"
   },
   "devDependencies": {
     "@metamask/providers": "^11.0.0",
