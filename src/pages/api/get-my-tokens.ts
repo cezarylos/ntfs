@@ -1,7 +1,7 @@
 import { StrapiService } from '@/app/services/strapi.service';
 import { createOpenSeaLink, getChainIdFromString } from '@/app/utils';
 import { NextApiRequest, NextApiResponse } from 'next';
-import Web3, { ContractAbi } from 'web3';
+import Web3 from 'web3';
 
 const ipfsGateways = [
   'https://ipfs.io/ipfs/',
@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const contract = new web3.eth.Contract(ABI, contractAddress);
 
-      const myTokenIds = await contract.methods.getTokensByOwner?.(address).call();
+      const myTokenIds = (await contract.methods.getTokensByOwner?.(address).call())?.map((tokenId: string) => Number(tokenId));
 
       const gateway = ipfsGateways[1];
 
