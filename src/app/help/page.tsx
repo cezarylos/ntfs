@@ -21,16 +21,14 @@ export default async function Help(): Promise<ReactElement> {
 
   return (
     <div className="flex flex-col pb-4">
-      <SubheaderUnderlined name={'Masz pytania?'}/>
+      <SubheaderUnderlined name={'Masz pytania?'} />
       <Link href={`/help/${HelpNavigationRoutes.HOW_TO_CONNECT}`}>
-        <button
-          className="rounded-md shadow-xl text-white bg-pink-500 font-semibold p-2 text-base hover:brightness-110 font-inter w-full my-4"
-        >
+        <button className="rounded-md shadow-xl text-white bg-pink-500 font-semibold p-2 text-base hover:brightness-110 font-inter w-full my-4">
           Dowiedz się jak podłączyć portfel
         </button>
       </Link>
       <div className="mt-4 text-white">
-        <ul className='sm:list-disc'>
+        <ul className="sm:list-disc">
           <li className="items-center text-white mb-4 sm:mb-2 text-center sm:text-left">
             Napisz do nas na
             <a
@@ -38,7 +36,7 @@ export default async function Help(): Promise<ReactElement> {
               className="ml-1 items-center text-yellow-400"
               target="_blank"
             >
-              <br className="sm:hidden"/>
+              <br className="sm:hidden" />
               <span className=" hover:brightness-110">Instagramie</span>
               <Image
                 className="ml-2 mb-0.5 inline-block"
@@ -60,7 +58,7 @@ export default async function Help(): Promise<ReactElement> {
               className="ml-1 items-center text-yellow-400"
               target="_blank"
             >
-              <br className="sm:hidden"/>
+              <br className="sm:hidden" />
               <span className="hover:brightness-110">Discorda</span>
               <Image
                 className="ml-2 inline-block"

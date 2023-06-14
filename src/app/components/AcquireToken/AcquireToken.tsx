@@ -14,7 +14,7 @@ import {
 } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
-import { classNames, getChainIdFromString } from '@/app/utils';
+import { classNames, getChainIdFromString, getTokenWord } from '@/app/utils';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 
 interface Props {
@@ -121,7 +121,7 @@ export default function AcquireToken({
           </button>
           {!isAllowMintMore && (
             <p className="text-white text-center mt-6">
-              Sorki, limit {amountOfTokensToGetReward} tokenów na portfel :(
+              Sorki, limit {amountOfTokensToGetReward} {getTokenWord(amountOfTokensToGetReward)} na portfel :(
             </p>
           )}
         </div>

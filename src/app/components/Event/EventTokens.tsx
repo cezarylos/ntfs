@@ -57,12 +57,16 @@ export default function EventTokens({ id, chainId, amountOfTokensToGetReward, wr
     setIsModalOpen(true);
   };
 
+  const isMoreThenOneTokenToCollect = amountOfTokensToGetReward > 1;
+
   return (
     <>
       {isCurrentChainIdSameAsEventChainId ? (
         <>
           <div className={classNames('my-2', wrapperClassName)}>
-            <h2 className="text-xl mb-2 text-yellow-300">MOJE TOKENY:</h2>
+            <h2 className="text-xl mb-2 text-yellow-300 uppercase text-center">
+              {isMoreThenOneTokenToCollect ? 'MOJE TOKENY' : 'Mój TOKEN'}:
+            </h2>
             <ProgressBar
               max={amountOfTokensToGetReward}
               current={myEventTokens.length}
@@ -88,7 +92,7 @@ export default function EventTokens({ id, chainId, amountOfTokensToGetReward, wr
                       key={`${token.tokenId}_${id}`}
                       src={token.image}
                       alt={token.name}
-                      className="max-w-[calc(33.33%-0.75rem)] cursor-pointer hover:brightness-110 rounded-md drop-shadow-xl shadow-red-500"
+                      className="max-w-[calc(50%-0.75rem)] cursor-pointer hover:brightness-110 rounded-md drop-shadow-xl shadow-red-500"
                     />
                   );
                 })}

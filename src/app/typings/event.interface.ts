@@ -6,8 +6,8 @@ export interface EventInterface {
   ABI: Array<Record<string, any>>;
   name: string;
   description: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   picture: any;
   id: any;
   chainId: string;
@@ -17,5 +17,5 @@ export interface EventInterface {
   excludedAddressesFromRewards: string[];
   socialLinks: Record<SocialLinksEnum, string>;
   rewardTitle: string;
-  giveawayStartDate: Date;
+  giveawayStartDate: string;
 }

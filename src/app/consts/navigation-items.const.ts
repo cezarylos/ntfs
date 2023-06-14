@@ -30,6 +30,4 @@ export const eventNavigationItems = [
   { label: 'BONUS', href: EventNavigationRoutes.ABOUT }
 ];
 
-export const helpNavigationItems = [
-  { label: 'JAK PODŁĄCZYć PORTFEL', href: HelpNavigationRoutes.HOW_TO_CONNECT }
-];
+export const helpNavigationItems = [{ label: 'JAK PODŁĄCZYć PORTFEL', href: HelpNavigationRoutes.HOW_TO_CONNECT }];

@@ -7,9 +7,14 @@ import {
 } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
-import { ReactElement, useEffect, useMemo, useState } from 'react';
+import { getLeftWord, getTokenWord } from '@/app/utils';
+import React, { ReactElement, useEffect, useMemo, useState } from 'react';
 
-export default function TokensLeft({ id, chainId }: Partial<EventInterface>): ReactElement {
+interface Props extends Partial<EventInterface> {
+  hasSuffix?: boolean;
+}
+
+export default function TokensLeft({ id, chainId, hasSuffix = false }: Props): ReactElement {
   const dispatch = useAppDispatch();
   const eventSupplyData = useAppSelector(selectEventSupplyData);
 
@@ -42,7 +47,8 @@ export default function TokensLeft({ id, chainId }: Partial<EventInterface>): Re
     <>
       {tokensLeft ? (
         <>
-          Pozostało: {tokensLeft}/{maxSupply}
+          {getLeftWord(tokensLeft)}: {tokensLeft}/{maxSupply}
+          {hasSuffix && <span className="text-yellow-300 ml-1 uppercase">{getTokenWord(tokensLeft)}</span>}
         </>
       ) : (
         !isLoading && 'Sorki, brak dostępnych tokenów'

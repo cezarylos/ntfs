@@ -109,3 +109,29 @@ export const getSocialIcon = (socialLink: SocialLinksEnum): string => {
       return '';
   }
 };
+
+export const getTokenWord = (amount: number): string => {
+  switch (amount) {
+    case 1:
+      return 'token';
+    case 2:
+    case 3:
+    case 4:
+      return 'tokeny';
+    default:
+      return 'tokenów';
+  }
+};
+
+export const getLeftWord = (amount: number): string => {
+  switch (amount) {
+    case 1:
+      return 'Pozostał';
+    case 2:
+    case 3:
+    case 4:
+      return 'Pozostały';
+    default:
+      return 'Pozostało';
+  }
+};
