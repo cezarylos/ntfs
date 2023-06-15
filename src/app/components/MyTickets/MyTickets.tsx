@@ -70,7 +70,7 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
         <div key={idx} className="bg-purple-200 rounded-xl p-4 my-4">
           <h2 className="text-xl text-purple-950">{title}</h2>
           <div
-            className="text-base mt-1 font-inter m-auto"
+            className="text-sm mt-1 font-inter m-auto"
             dangerouslySetInnerHTML={{
               __html: marked
                 .parse(description, { mangle: false, headerIds: false })
