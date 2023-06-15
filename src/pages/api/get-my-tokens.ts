@@ -13,7 +13,7 @@ const ipfsGateways = [
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const { eventId, providerUrl, address } = req.query as { eventId: string, providerUrl: string, address: string };
+    const { eventId, providerUrl, address } = req.query as { eventId: string; providerUrl: string; address: string };
     try {
       const web3 = new Web3(providerUrl);
 
@@ -22,7 +22,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const contract = new web3.eth.Contract(ABI, contractAddress);
 
-      const myTokenIds = (await contract.methods.getTokensByOwner?.(address).call())?.map((tokenId: string) => Number(tokenId));
+      const myTokenIds = (await contract.methods.getTokensByOwner?.(address).call())?.map((tokenId: string) =>
+        Number(tokenId)
+      );
 
       const gateway = ipfsGateways[1];
 

@@ -21,8 +21,15 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
     ['name', 'chainId', 'crossmintProjectId', 'amountOfTokensToGetReward', 'rewardTitle', 'giveawayStartDate'],
     true
   );
-  const { id, chainId, crossmintProjectId, collectionImage, amountOfTokensToGetReward, rewardTitle, giveawayStartDate } =
-    event;
+  const {
+    id,
+    chainId,
+    crossmintProjectId,
+    collectionImage,
+    amountOfTokensToGetReward,
+    rewardTitle,
+    giveawayStartDate
+  } = event;
 
   return (
     <div className="pb-4">
@@ -36,17 +43,21 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
           </span>{' '}
           i otrzymaj:
         </p>
-        <p className="text-yellow-300 text-xl sm:text-2xl text-center uppercase">
-          {rewardTitle}
-        </p>
+        <p className="text-yellow-300 text-xl sm:text-2xl text-center uppercase">{rewardTitle}</p>
         <h1 className="text-base sm:text-lg text-purple-950 text-center mt-2 uppercase">
-          Rozdanie nagród odbędzię się <br/>
-          <span className='text-pink-800 text-xl sm:text-2xl mb-2'>{DateTime.fromISO(giveawayStartDate).toFormat('dd/MM/yyyy')}</span>
+          Rozdanie nagród odbędzię się <br />
+          <span className="text-pink-800 text-xl sm:text-2xl mb-2">
+            {DateTime.fromISO(giveawayStartDate).toFormat('dd/MM/yyyy')}
+          </span>
         </h1>
-        <Link
-          href={`${NavigationRoutes.EVENTS}/${slug}${EventNavigationRoutes.REWARDS}`}
-        >
-          <span className={'block text-center mt-2 text-yellow-300 text-base uppercase w-full hover:brightness-110 leading-none'}>Sprawdź swoje nagrody</span>
+        <Link href={`${NavigationRoutes.EVENTS}/${slug}${EventNavigationRoutes.REWARDS}`}>
+          <span
+            className={
+              'block text-center mt-2 text-yellow-300 text-base uppercase w-full hover:brightness-110 leading-none'
+            }
+          >
+            Sprawdź swoje nagrody
+          </span>
         </Link>
       </div>
       <h1 className="text-xl text-white my-2 text-center">

@@ -11,6 +11,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const { contractAddress, ABI } = eventResponse.data.attributes;
       const contract = new web3.eth.Contract(ABI, contractAddress);
 
+      console.log(await contract.methods.totalSupply().call());
+
       const [totalSupply, MAX_TOKENS] = await Promise.all([
         contract.methods.totalSupply().call(),
         contract.methods.MAX_TOKENS().call()

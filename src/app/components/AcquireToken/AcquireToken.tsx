@@ -1,5 +1,6 @@
 'use client';
 
+import PaymentModal from '@/app/components/Modals/PaymentModal/PaymentModal';
 import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { useSwitchChain } from '@/app/hooks/useSwitchChain';
@@ -10,10 +11,9 @@ import {
   setIsShowWeb3BlockerModal
 } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
+import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { classNames, getChainIdFromString, getMaticProvider, getTokenWord } from '@/app/utils';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import PaymentModal from '@/app/components/Modals/PaymentModal/PaymentModal';
-import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 
 interface Props {
   slug: string;

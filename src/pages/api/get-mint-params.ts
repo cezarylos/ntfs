@@ -5,7 +5,7 @@ import { toBigInt } from 'web3-utils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const { eventId, providerUrl, address } = req.query as { eventId: string, providerUrl: string, address: string };
+    const { eventId, providerUrl, address } = req.query as { eventId: string; providerUrl: string; address: string };
     try {
       const web3 = new Web3(providerUrl);
 
@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       return res.status(200).json({
         transactionParameters,
-        price: Number(toBigInt(price)) / (10 ** 18)
+        price: Number(toBigInt(price)) / 10 ** 18
       });
     } catch (e) {
       console.error(e);

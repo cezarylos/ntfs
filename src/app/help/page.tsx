@@ -7,20 +7,31 @@ import { getSocialIcon } from '@/app/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { ReactElement } from 'react';
+import dynamic from 'next/dynamic';
 
 export const metadata = {
   title: 'RealBrain'
 };
 
+const HowTo = dynamic(() => import('@/app/components/HowTo/HowTo'), { ssr: false });
+
 export default async function Help(): Promise<ReactElement> {
-  const {
-    data: {
-      attributes: { socialLinks }
+  const [
+    {
+      data: {
+        attributes: { description }
+      }
+    },
+    {
+      data: {
+        attributes: { socialLinks }
+      }
     }
-  } = await StrapiService.getOurSocialLinks();
+  ] = await Promise.all([StrapiService.getHowTo(), StrapiService.getOurSocialLinks()]);
 
   return (
     <div className="flex flex-col pb-4">
+      <HowTo description={description} />
       <SubheaderUnderlined name={'Masz pytania?'} />
       <Link href={`/help/${HelpNavigationRoutes.HOW_TO_CONNECT}`}>
         <button className="rounded-md shadow-xl text-white bg-pink-500 font-semibold p-2 text-base hover:brightness-110 font-inter w-full my-4">

@@ -26,8 +26,8 @@ export enum HelpNavigationRoutes {
 export const eventNavigationItems = [
   { label: 'ZGARNIJ TOKEN', href: EventNavigationRoutes.TOKENS },
   { label: 'O EVENCIE', href: EventNavigationRoutes.ABOUT },
-  { label: 'MOJE NAGRODY', href: EventNavigationRoutes.REWARDS },
-  { label: 'BONUS', href: EventNavigationRoutes.ABOUT }
+  { label: 'MOJE NAGRODY', href: EventNavigationRoutes.REWARDS }
+  // { label: 'BONUS', href: EventNavigationRoutes.ABOUT }
 ];
 
 export const helpNavigationItems = [{ label: 'JAK PODŁĄCZYć PORTFEL', href: HelpNavigationRoutes.HOW_TO_CONNECT }];

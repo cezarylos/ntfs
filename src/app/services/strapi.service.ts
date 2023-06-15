@@ -143,6 +143,16 @@ export class StrapiService {
     }
   }
 
+  public static async getHowTo(): Promise<StrapiResponseInterface<{ description: string }>> {
+    try {
+      const res = await fetch(`${BASE_STRAPI_URL}/api/how-to`, { ...cacheOptions });
+      return await res.json();
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
   public static async getHowToConnect(): Promise<StrapiResponseInterface<{ description: string }>> {
     try {
       const res = await fetch(`${BASE_STRAPI_URL}/api/how-to-connect`, { ...cacheOptions });

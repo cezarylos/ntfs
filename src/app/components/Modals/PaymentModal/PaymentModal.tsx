@@ -1,14 +1,14 @@
+import styles from '@/app/components/AcquireToken/AcquireToken.module.scss';
+import { StrapiService } from '@/app/services/strapi.service';
+import { setIsLoading } from '@/app/store/global/global.slice';
+import { useAppDispatch } from '@/app/store/store';
 import { ModalInterface } from '@/app/typings/common.typings';
+import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { classNames, getMaticProvider } from '@/app/utils';
+import { CrossmintPayButton } from '@crossmint/client-sdk-react-ui';
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import { CrossmintPayButton } from '@crossmint/client-sdk-react-ui';
-import styles from '@/app/components/AcquireToken/AcquireToken.module.scss';
-import { EndpointsEnum } from '@/app/typings/endpoints.enum';
-import { useAppDispatch } from '@/app/store/store';
-import { setIsLoading } from '@/app/store/global/global.slice';
 import Web3 from 'web3';
-import { StrapiService } from '@/app/services/strapi.service';
 
 interface Props extends ModalInterface {
   slug: string;
@@ -50,7 +50,7 @@ export default function PaymentModal({
         const params = {
           providerUrl,
           address,
-          eventId: eventId.toString(),
+          eventId: eventId.toString()
         };
         const queryString = new URLSearchParams(params).toString();
         const mintParamsResponse = await fetch(`/api/${EndpointsEnum.GET_MINT_PARAMS}?${queryString}`, {
@@ -64,16 +64,19 @@ export default function PaymentModal({
       } finally {
         dispatch(setIsLoading(false));
       }
-    }
+    };
     init().finally();
   }, [address, dispatch, eventChainId, eventId]);
 
-  const mintConfig = useMemo(() => ({
-    type: 'erc-721',
-    totalPrice: tokenPrice?.toString(),
-    '_amount': amount,
-    'quantity': amount
-  }), [amount, tokenPrice]);
+  const mintConfig = useMemo(
+    () => ({
+      type: 'erc-721',
+      totalPrice: tokenPrice?.toString(),
+      _amount: amount,
+      quantity: amount
+    }),
+    [amount, tokenPrice]
+  );
 
   const mintWithCrypto = useCallback(async () => {
     if (!mintParams || typeof mintParams !== 'object') {
@@ -90,7 +93,7 @@ export default function PaymentModal({
     });
 
     const waitForTransactionConfirmation = async (transactionHash: string): Promise<void> => {
-        try {
+      try {
         const receipt = await web3.eth.getTransactionReceipt(transactionHash);
         if (receipt) {
           if (receipt.status) {
@@ -127,7 +130,7 @@ export default function PaymentModal({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25"/>
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto bg-black/50">
@@ -141,8 +144,7 @@ export default function PaymentModal({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel
-                  className="flex flex-col w-full h-auto max-w-md lg:max-w-lg transform overflow-hidden rounded-2xl bg-purple-200 border-solid p-6 text-left align-middle shadow-3xl transition-all">
+                <Dialog.Panel className="flex flex-col w-full h-auto max-w-md lg:max-w-lg transform overflow-hidden rounded-2xl bg-purple-200 border-solid p-6 text-left align-middle shadow-3xl transition-all">
                   <Dialog.Title as="h3" className="text-3xl text-center font-medium leading-6 text-purple-950">
                     <h1 className={classNames('text-xl font-bold mb-2 text-purple-900 outline-none relative')}>
                       Wybierz metodę płatności
