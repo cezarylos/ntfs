@@ -2,7 +2,7 @@ import { SocialLinksEnum } from '@/app/typings/common.typings';
 
 export interface EventInterface {
   contractAddress: string;
-  crossmintProjectId: string;
+  checkoutProjectId: string;
   ABI: Array<Record<string, any>>;
   name: string;
   description: string;

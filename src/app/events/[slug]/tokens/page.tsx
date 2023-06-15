@@ -18,13 +18,13 @@ const TokensLeft = dynamic(() => import('@/app/components/TokensLeft/TokensLeft'
 export default async function Tokens({ params: { slug } }: { params: { slug: string } }): Promise<ReactElement> {
   const event = await getEventBySlug(
     slug,
-    ['name', 'chainId', 'crossmintProjectId', 'amountOfTokensToGetReward', 'rewardTitle', 'giveawayStartDate'],
+    ['name', 'chainId', 'checkoutProjectId', 'amountOfTokensToGetReward', 'rewardTitle', 'giveawayStartDate'],
     true
   );
   const {
     id,
     chainId,
-    crossmintProjectId,
+    checkoutProjectId,
     collectionImage,
     amountOfTokensToGetReward,
     rewardTitle,
@@ -67,7 +67,7 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
         slug={slug}
         eventId={id}
         chainId={chainId as string}
-        crossmintProjectId={crossmintProjectId}
+        checkoutProjectId={checkoutProjectId}
         collectionImage={collectionImage}
         amountOfTokensToGetReward={amountOfTokensToGetReward}
       />

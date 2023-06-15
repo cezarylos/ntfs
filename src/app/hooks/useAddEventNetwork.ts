@@ -2,6 +2,7 @@
 
 import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
 import { useCallback } from 'react';
+import { ChainsEnum } from '@/app/typings/chains.enum';
 
 export const useAddEventNetwork = (eventChainId: string): (() => Promise<void>) => {
   const isCurrentChainIdSameAsEventChainId = useIsCurrentChainIdSameAsEventChainId(eventChainId);
@@ -14,21 +15,30 @@ export const useAddEventNetwork = (eventChainId: string): (() => Promise<void>) 
       if (isCurrentChainIdSameAsEventChainId) {
         return;
       }
+      const params = eventChainId === ChainsEnum.POLYGON ? {
+        chainId: eventChainId,
+        rpcUrls: ['https://polygon-rpc.com/'],
+        chainName: 'Matic Mainnet',
+        nativeCurrency: {
+          name: 'MATIC',
+          symbol: 'MATIC',
+          decimals: 18
+        },
+        blockExplorerUrls: ['https://polygonscan.com/']
+      } : {
+        chainId: eventChainId,
+        rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
+        chainName: 'Mumbai Testnet',
+        nativeCurrency: {
+          name: 'MATIC',
+          symbol: 'MATIC',
+          decimals: 18
+        },
+        blockExplorerUrls: ['https://polygonscan.com/']
+      };
       await window.ethereum.request({
         method: 'wallet_addEthereumChain',
-        params: [
-          {
-            chainId: eventChainId,
-            rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
-            chainName: 'Mumbai Testnet',
-            nativeCurrency: {
-              name: 'MATIC',
-              symbol: 'MATIC',
-              decimals: 18
-            },
-            blockExplorerUrls: ['https://polygonscan.com/']
-          }
-        ]
+        params: [params]
       });
     } catch (error) {
       console.error(error);

@@ -2,6 +2,7 @@
 
 import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
 import { useCallback } from 'react';
+import { toHex } from 'web3-utils';
 
 export const useSwitchChain = (eventChainId: string): (() => Promise<void>) => {
   const isCurrentChainIdSameAsEventChainId = useIsCurrentChainIdSameAsEventChainId(eventChainId);
@@ -13,10 +14,11 @@ export const useSwitchChain = (eventChainId: string): (() => Promise<void>) => {
     if (isCurrentChainIdSameAsEventChainId) {
       return;
     }
+    const chainId = toHex(eventChainId);
     try {
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: eventChainId }]
+        params: [{ chainId }]
       });
     } catch (error) {
       console.log(error);

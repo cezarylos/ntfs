@@ -14,7 +14,7 @@ interface Props extends ModalInterface {
   slug: string;
   address: string;
   amount: number;
-  crossmintProjectId: string;
+  checkoutProjectId: string;
   eventChainId: string;
   eventId: string | number;
 }
@@ -25,7 +25,7 @@ export default function PaymentModal({
   slug,
   address,
   amount,
-  crossmintProjectId,
+  checkoutProjectId,
   eventChainId,
   eventId
 }: Props): ReactElement {
@@ -152,9 +152,9 @@ export default function PaymentModal({
                   </Dialog.Title>
                   <div>
                     <CrossmintPayButton
-                      clientId={crossmintProjectId}
+                      clientId={checkoutProjectId}
                       mintConfig={mintConfig}
-                      environment={process.env.NEXT_PUBLIC_ENV === 'production' ? 'production' : 'staging'}
+                      environment={process.env.NEXT_PUBLIC_ENV !== 'production' ? 'production' : 'staging'}
                       successCallbackURL={`https://realbrain.art/events/${slug}/tokens`}
                       mintTo={address}
                       className={styles.xmintBtn}
