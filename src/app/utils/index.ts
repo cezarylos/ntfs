@@ -1,18 +1,7 @@
 import { StrapiService } from '@/app/services/strapi.service';
-import { Web3Service } from '@/app/services/web3.service';
 import { ChainsEnum } from '@/app/typings/chains.enum';
 import { SocialLinksEnum } from '@/app/typings/common.typings';
 import { EventInterface } from '@/app/typings/event.interface';
-
-export const formatBalance = (rawBalance: string) => {
-  const balance = (parseInt(rawBalance) / 1000000000000000000).toFixed(2);
-  return balance;
-};
-
-export const formatChainAsNum = (chainIdHex: string) => {
-  const chainIdNum = parseInt(chainIdHex);
-  return chainIdNum;
-};
 
 export const formatAddress = (addr: string) => {
   return `${addr.substring(0, 8)}...`;

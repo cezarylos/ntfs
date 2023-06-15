@@ -154,7 +154,7 @@ export default function PaymentModal({
                     <CrossmintPayButton
                       clientId={crossmintProjectId}
                       mintConfig={mintConfig}
-                      environment="staging"
+                      environment={process.env.NEXT_PUBLIC_ENV === 'production' ? 'production' : 'staging'}
                       successCallbackURL={`https://realbrain.art/events/${slug}/tokens`}
                       mintTo={address}
                       className={styles.xmintBtn}
