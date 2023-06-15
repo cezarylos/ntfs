@@ -31,7 +31,7 @@ export default function Checkout({
       walletAddress={address}
       orderSource={'opensea.io'}
       fillSource={'opensea.io'}
-      production={process.env.NEXT_PUBLIC_STRAPI_ENV === 'production'}
+      production={process.env.NEXT_PUBLIC_ENV === 'production'}
       language={'english'}
       onSuccess={onSuccess}
       mintQuantity={mintQuantity}
