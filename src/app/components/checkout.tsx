@@ -31,26 +31,24 @@ export default function Checkout({
       walletAddress={address}
       orderSource={'opensea.io'}
       fillSource={'opensea.io'}
-      production={false}
+      production={process.env.NEXT_PUBLIC_STRAPI_ENV === 'production'}
       language={'english'}
       onSuccess={onSuccess}
       mintQuantity={mintQuantity}
       appearance={{
         zIndex: 100,
-        leftBackgroundColor: '#131317',
-        rightBackgroundColor: '#22222d',
-        buttonTextColor: 'black',
-        buttonColor: '#f59e0c',
+        leftBackgroundColor: '#4c1d95',
+        rightBackgroundColor: '#8b5cf6',
+        buttonTextColor: 'white',
+        buttonColor: '#ec4899',
         primaryTextColor: 'white',
-        secondaryTextColor: '#85868a',
+        secondaryTextColor: '#e8d5de',
         fontFamily: 'Montserrat,sans-serif',
-        buttonAndInputBoxShadow: '0 3px 6px 1px rgba(217, 119, 6, 0.2)',
-        buttonAndInputFocusBoxShadow: '0 3px 6px 1px rgba(217, 119, 6, 0.8)',
-        quantityButtonPlusMinusSvgFilter:
-          'invert(100%) sepia(100%) saturate(1%) hue-rotate(135deg) brightness(105%) contrast(101%)',
-        inputBackgroundColor: '#131317',
+        buttonAndInputBoxShadow: '0 3px 6px 1px #ec4899',
+        buttonAndInputFocusBoxShadow: '0 3px 6px 1px #ec4899',
+        inputBackgroundColor: '#ec4899',
         mintingClipLoaderColor: 'white',
-        borderColor: 'rgba(245,158,11)'
+        borderColor: '#ec4899'
       }}
     />
   );

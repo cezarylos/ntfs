@@ -41,7 +41,7 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
         </p>
         <h1 className="text-base sm:text-lg text-purple-950 text-center mt-2 uppercase">
           Rozdanie nagród odbędzię się <br/>
-          <span className='text-pink-800 text-lg mb-2'>{DateTime.fromISO(giveawayStartDate).toFormat('dd/MM/yyyy')}</span>
+          <span className='text-pink-800 text-lg sm:text-2xl mb-2'>{DateTime.fromISO(giveawayStartDate).toFormat('dd/MM/yyyy')}</span>
         </h1>
         <Link
           href={`${NavigationRoutes.EVENTS}/${slug}${EventNavigationRoutes.REWARDS}`}
