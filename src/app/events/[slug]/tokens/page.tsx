@@ -18,10 +18,10 @@ const TokensLeft = dynamic(() => import('@/app/components/TokensLeft/TokensLeft'
 export default async function Tokens({ params: { slug } }: { params: { slug: string } }): Promise<ReactElement> {
   const event = await getEventBySlug(
     slug,
-    ['name', 'chainId', 'winterProjectId', 'amountOfTokensToGetReward', 'rewardTitle', 'giveawayStartDate'],
+    ['name', 'chainId', 'crossmintProjectId', 'amountOfTokensToGetReward', 'rewardTitle', 'giveawayStartDate'],
     true
   );
-  const { id, chainId, winterProjectId, collectionImage, amountOfTokensToGetReward, rewardTitle, giveawayStartDate } =
+  const { id, chainId, crossmintProjectId, collectionImage, amountOfTokensToGetReward, rewardTitle, giveawayStartDate } =
     event;
 
   return (
@@ -41,7 +41,7 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
         </p>
         <h1 className="text-base sm:text-lg text-purple-950 text-center mt-2 uppercase">
           Rozdanie nagród odbędzię się <br/>
-          <span className='text-pink-800 text-lg sm:text-2xl mb-2'>{DateTime.fromISO(giveawayStartDate).toFormat('dd/MM/yyyy')}</span>
+          <span className='text-pink-800 text-xl sm:text-2xl mb-2'>{DateTime.fromISO(giveawayStartDate).toFormat('dd/MM/yyyy')}</span>
         </h1>
         <Link
           href={`${NavigationRoutes.EVENTS}/${slug}${EventNavigationRoutes.REWARDS}`}
@@ -53,9 +53,10 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
         <TokensLeft id={id} chainId={chainId} hasSuffix />
       </h1>
       <AcquireToken
+        slug={slug}
         eventId={id}
         chainId={chainId as string}
-        winterProjectId={winterProjectId}
+        crossmintProjectId={crossmintProjectId}
         collectionImage={collectionImage}
         amountOfTokensToGetReward={amountOfTokensToGetReward}
       />

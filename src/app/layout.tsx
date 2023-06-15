@@ -1,5 +1,4 @@
 import { classNames } from '@/app/utils';
-import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { Archivo, Mogra } from 'next/font/google';
 import { ReactElement, ReactNode } from 'react';

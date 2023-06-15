@@ -30,7 +30,7 @@ fs.readdir(directoryPath, (err, files) => {
                     const { external_url, compiler, seller_fee_basis_points, ...rest } = jsonData;
                     jsonData = rest;
 
-                    const IMAGES_URL_IMPORTANT_WITH_SLASH = 'bafybeiafdq2xvvreagikyag7jcij6clwu76635fwwim4exmhu6m7ku3f3m/'
+                    const IMAGES_URL_IMPORTANT_WITH_SLASH = 'bafybeifbqlhkw4crnrhejuimrylnf4ggv2wn3oh43van3geud53bigiuha/'
 
                     // Update the description field
                     jsonData.description = 'Experience [Spokój Festiwal](https://instagram.com/spokojfestiwal) and get benefits from this exclusive NFT Token.';

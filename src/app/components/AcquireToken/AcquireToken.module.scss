@@ -1,0 +1,20 @@
+.xmintBtn {
+  @apply m-auto mt-6 p-4 w-3/4 justify-center bg-pink-500 text-white text-lg shadow-xl rounded-md items-center;
+
+  span {
+    display: none;
+  }
+
+  &:hover {
+    @apply bg-pink-500;
+    @apply brightness-110;
+    opacity: 1;
+  }
+
+  &:after {
+    content: "ZAPŁAć KARTĄ";
+    color: white;
+    text-transform: uppercase;
+    font-family: var(--font-mogra);
+  }
+}

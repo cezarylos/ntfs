@@ -13,11 +13,7 @@ const ipfsGateways = [
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const { eventId, providerUrl, address } = req.query as {
-      contractAddress: string;
-      providerUrl: string;
-      address: string;
-    };
+    const { eventId, providerUrl, address } = req.query as { eventId: string, providerUrl: string, address: string };
     try {
       const web3 = new Web3(providerUrl);
 

@@ -1,27 +1,25 @@
 'use client';
 
-import Checkout from '@/app/components/checkout';
 import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import {
-  getEventTokensSupplyData,
-  getMyEventTokens,
   selectEventSupplyData,
   selectMyEventTokens,
   setIsLoading,
   setIsShowWeb3BlockerModal
 } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
-import { EventInterface } from '@/app/typings/event.interface';
-import { classNames, getChainIdFromString, getTokenWord } from '@/app/utils';
+import { classNames, getChainIdFromString, getMaticProvider, getTokenWord } from '@/app/utils';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import PaymentModal from '@/app/components/Modals/PaymentModal/PaymentModal';
+import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 
 interface Props {
+  slug: string;
   eventId: number;
   chainId: string;
-  onSuccess?: () => Promise<void>;
-  winterProjectId: string;
+  crossmintProjectId: string;
   collectionImage: string;
   amountOfTokensToGetReward: number;
   buttonContent?: string;
@@ -29,10 +27,10 @@ interface Props {
 }
 
 export default function AcquireToken({
+  slug,
   eventId,
   chainId,
-  winterProjectId,
-  onSuccess,
+  crossmintProjectId,
   collectionImage,
   buttonContent,
   amountOfTokensToGetReward,
@@ -73,31 +71,21 @@ export default function AcquireToken({
     }
   }, [isBuyPanelOpen, isAllowMintMore, address, dispatch, switchChain]);
 
-  const onWidgetSuccess = useCallback(async (): Promise<void> => {
-    onSuccess?.();
-    dispatch(setIsLoading(false));
-  }, [dispatch, onSuccess]);
-
-  const onClose = useCallback((): void => {
-    setIsBuyPanelOpen(false);
-    dispatch(getEventTokensSupplyData({ id: eventId, chainId } as EventInterface));
-    dispatch(getMyEventTokens({ eventId, eventChainId, address }));
-    dispatch(setIsLoading(false));
-  }, [address, chainId, dispatch, eventChainId, eventId]);
-
   useEffect((): void => {
     addEventNetwork().finally();
   }, [addEventNetwork]);
 
   return (
     <>
-      <Checkout
+      <PaymentModal
+        isOpen={isBuyPanelOpen}
+        setIsOpen={setIsBuyPanelOpen}
         address={address}
-        projectId={winterProjectId}
-        isBuyPanelOpen={isBuyPanelOpen}
-        onSuccess={onWidgetSuccess}
-        onClose={onClose}
-        mintQuantity={amountOfTokensToGetReward - myEventTokens.length}
+        slug={slug}
+        amount={amountOfTokensToGetReward}
+        crossmintProjectId={crossmintProjectId}
+        eventChainId={eventChainId}
+        eventId={eventId}
       />
       {isTokensLeftMoreThenZero && (
         <div className="flex flex-col mt-4 mb-6">
