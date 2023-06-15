@@ -17,7 +17,7 @@ export const useAddEventNetwork = (eventChainId: string): (() => Promise<void>) 
       }
       const params = eventChainId === ChainsEnum.POLYGON ? {
         chainId: eventChainId,
-        rpcUrls: ['https://polygon-rpc.com/'],
+        rpcUrls: ['https://rpc-mainnet.maticvigil.com'],
         chainName: 'Matic Mainnet',
         nativeCurrency: {
           name: 'MATIC',
@@ -27,7 +27,7 @@ export const useAddEventNetwork = (eventChainId: string): (() => Promise<void>) 
         blockExplorerUrls: ['https://polygonscan.com/']
       } : {
         chainId: eventChainId,
-        rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
+        rpcUrls: ['https://rpc-mumbai.maticvigil.com'],
         chainName: 'Mumbai Testnet',
         nativeCurrency: {
           name: 'MATIC',

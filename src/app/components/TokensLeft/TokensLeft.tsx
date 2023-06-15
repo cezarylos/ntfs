@@ -7,8 +7,11 @@ import {
 } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
-import { getLeftWord, getTokenWord } from '@/app/utils';
+import { getChainIdFromString, getLeftWord, getTokenWord } from '@/app/utils';
 import React, { ReactElement, useEffect, useMemo, useState } from 'react';
+import { useSwitchChain } from '@/app/hooks/useSwitchChain';
+import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
+import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
 
 interface Props extends Partial<EventInterface> {
   hasSuffix?: boolean;
@@ -17,6 +20,13 @@ interface Props extends Partial<EventInterface> {
 export default function TokensLeft({ id, chainId, hasSuffix = false }: Props): ReactElement {
   const dispatch = useAppDispatch();
   const eventSupplyData = useAppSelector(selectEventSupplyData);
+
+  const eventChainId = useMemo((): string => getChainIdFromString(chainId as string), [chainId]);
+
+  const switchChain = useSwitchChain(eventChainId);
+  const addEventNetwork = useAddEventNetwork(eventChainId);
+
+  const isCurrentChainIdSameAsEventChainId = useIsCurrentChainIdSameAsEventChainId(eventChainId);
 
   const { tokensLeft, maxSupply } = useMemo(
     (): EventTokensSupplyData => (eventSupplyData.eventId === id ? eventSupplyData : ({} as EventTokensSupplyData)),
@@ -29,7 +39,12 @@ export default function TokensLeft({ id, chainId, hasSuffix = false }: Props): R
     const init = async (): Promise<void> => {
       setIsLoading(true);
       try {
-        await dispatch(getEventTokensSupplyData({ id, chainId } as EventInterface));
+        if (isCurrentChainIdSameAsEventChainId) {
+          await dispatch(getEventTokensSupplyData({ id, chainId } as EventInterface));
+          return;
+        }
+        await addEventNetwork();
+        await switchChain();
       } catch (error) {
         console.error(error);
       } finally {
@@ -37,7 +52,7 @@ export default function TokensLeft({ id, chainId, hasSuffix = false }: Props): R
       }
     };
     init().finally();
-  }, [id, chainId, dispatch]);
+  }, [id, chainId, dispatch, isCurrentChainIdSameAsEventChainId, addEventNetwork, switchChain]);
 
   if (isLoading) {
     return <span className="animate-pulse">Ładowanie...</span>;

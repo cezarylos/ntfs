@@ -23,7 +23,7 @@ export const shuffleArray = (array: any[]): any[] => {
 };
 
 export const getMaticProvider = (chainId: string): string => {
-  return chainId === ChainsEnum.POLYGON ? 'https://polygon-rpc.com/' : 'https://rpc-mumbai.maticvigil.com/';
+  return chainId === ChainsEnum.POLYGON ? 'https://rpc-mainnet.maticvigil.com' : 'https://rpc-mumbai.maticvigil.com';
 };
 
 export const getChainIdFromString = (chainString: string): string => {
