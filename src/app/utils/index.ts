@@ -34,7 +34,7 @@ export const shuffleArray = (array: any[]): any[] => {
 };
 
 export const getMaticProvider = (chainId: string): string => {
-  return chainId === '137' ? 'https://rpc-mainnet.maticvigil.com' : 'https://rpc-mumbai.maticvigil.com';
+  return chainId === '0x89' ? 'https://rpc-mainnet.maticvigil.com' : 'https://rpc-mumbai.maticvigil.com';
 };
 
 export const getChainIdFromString = (chainString: string): string => {
