@@ -11,6 +11,7 @@ import { getMyEventTokens, selectIsMyEventTokensLoading, selectMyEventTokens } f
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
 import { classNames, getChainIdFromString } from '@/app/utils';
+import Image from 'next/image';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 
 interface Props extends EventInterface {
@@ -72,9 +73,8 @@ export default function EventTokens({ id, chainId, amountOfTokensToGetReward, wr
               current={myEventTokens.length}
               isLoading={isMyEventTokensLoading}
             />
-            {selectedToken && (
+            {selectedToken?.image && (
               <TokenModal
-                id={selectedToken.id}
                 isOpen={isModalOpen}
                 setIsOpen={setIsModalOpen}
                 tokenUrl={selectedToken?.image}
@@ -87,13 +87,26 @@ export default function EventTokens({ id, chainId, amountOfTokensToGetReward, wr
               <div className="flex flex-wrap gap-[0.75rem] pb-8 mt-4 justify-center">
                 {myEventTokens.map((token: any, id: number) => {
                   return (
-                    <img
-                      onClick={onTokenClick(token)}
-                      key={`${token.tokenId}_${id}`}
-                      src={token.image}
-                      alt={token.name}
-                      className="max-w-[calc(50%-0.75rem)] cursor-pointer hover:brightness-110 rounded-md drop-shadow-xl shadow-red-500"
-                    />
+                    token.image &&
+                    token.description && (
+                      <div
+                        key={`${token.tokenId}_${id}`}
+                        className="max-w-[calc(50%-0.75rem)] cursor-pointer hover:brightness-110 rounded-md drop-shadow-xl shadow-red-500"
+                      >
+                        <Image
+                          onClick={onTokenClick(token)}
+                          src={token.image}
+                          alt={token.name}
+                          width={0}
+                          height={0}
+                          fill={false}
+                          priority
+                          sizes={'100vw'}
+                          style={{ width: '100%', height: '100%' }}
+                          className="rounded-md"
+                        />
+                      </div>
+                    )
                   );
                 })}
               </div>

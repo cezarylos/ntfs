@@ -6,7 +6,6 @@ import { marked } from 'marked';
 import React, { Fragment, ReactElement } from 'react';
 
 interface Props extends ModalInterface {
-  id: string;
   openSeaUrl: string;
   tokenName: string;
   tokenUrl: string;
@@ -14,7 +13,6 @@ interface Props extends ModalInterface {
 }
 
 export default function TokenModal({
-  id,
   isOpen,
   setIsOpen,
   openSeaUrl,
@@ -75,7 +73,7 @@ export default function TokenModal({
                       className="text-base mt-4 text-center font-inter md:w-[60%] m-auto"
                       dangerouslySetInnerHTML={{
                         __html: marked
-                          .parse(tokenDescription, { mangle: false, headerIds: false })
+                          .parse(tokenDescription || '', { mangle: false, headerIds: false })
                           .replace(
                             '<a ',
                             '<a target="_blank" class="underline text-purple-900 font-mogra cursor-pointer outline-none" '

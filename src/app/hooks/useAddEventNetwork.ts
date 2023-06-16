@@ -1,8 +1,9 @@
 'use client';
 
 import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
-import { useCallback } from 'react';
 import { ChainsEnum } from '@/app/typings/chains.enum';
+import { polygonRPC } from '@/app/utils';
+import { useCallback } from 'react';
 
 export const useAddEventNetwork = (eventChainId: string): (() => Promise<void>) => {
   const isCurrentChainIdSameAsEventChainId = useIsCurrentChainIdSameAsEventChainId(eventChainId);
@@ -15,27 +16,30 @@ export const useAddEventNetwork = (eventChainId: string): (() => Promise<void>) 
       if (isCurrentChainIdSameAsEventChainId) {
         return;
       }
-      const params = eventChainId === ChainsEnum.POLYGON ? {
-        chainId: eventChainId,
-        rpcUrls: ['https://rpc-mainnet.maticvigil.com'],
-        chainName: 'Matic Mainnet',
-        nativeCurrency: {
-          name: 'MATIC',
-          symbol: 'MATIC',
-          decimals: 18
-        },
-        blockExplorerUrls: ['https://polygonscan.com/']
-      } : {
-        chainId: eventChainId,
-        rpcUrls: ['https://rpc-mumbai.maticvigil.com'],
-        chainName: 'Mumbai Testnet',
-        nativeCurrency: {
-          name: 'MATIC',
-          symbol: 'MATIC',
-          decimals: 18
-        },
-        blockExplorerUrls: ['https://polygonscan.com/']
-      };
+      const params =
+        eventChainId === ChainsEnum.POLYGON
+          ? {
+              chainId: eventChainId,
+              rpcUrls: [polygonRPC],
+              chainName: 'Polygon',
+              nativeCurrency: {
+                name: 'MATIC',
+                symbol: 'MATIC',
+                decimals: 18
+              },
+              blockExplorerUrls: ['https://polygonscan.com/']
+            }
+          : {
+              chainId: eventChainId,
+              rpcUrls: ['https://rpc-mumbai.maticvigil.com'],
+              chainName: 'Mumbai Testnet',
+              nativeCurrency: {
+                name: 'MATIC',
+                symbol: 'MATIC',
+                decimals: 18
+              },
+              blockExplorerUrls: ['https://polygonscan.com/']
+            };
       await window.ethereum.request({
         method: 'wallet_addEthereumChain',
         params: [params]

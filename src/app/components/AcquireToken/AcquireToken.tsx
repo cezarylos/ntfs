@@ -1,6 +1,7 @@
 'use client';
 
 import PaymentModal from '@/app/components/Modals/PaymentModal/PaymentModal';
+import Checkout from '@/app/components/checkout';
 import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { useSwitchChain } from '@/app/hooks/useSwitchChain';
@@ -16,7 +17,6 @@ import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
 import { classNames, getChainIdFromString, getTokenWord } from '@/app/utils';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import Checkout from '@/app/components/checkout';
 
 interface Props {
   slug: string;

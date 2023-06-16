@@ -21,15 +21,8 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
     ['name', 'chainId', 'checkoutProjectId', 'amountOfTokensToGetReward', 'rewardTitle', 'giveawayStartDate'],
     true
   );
-  const {
-    id,
-    chainId,
-    checkoutProjectId,
-    collectionImage,
-    amountOfTokensToGetReward,
-    rewardTitle,
-    giveawayStartDate
-  } = event;
+  const { id, chainId, checkoutProjectId, collectionImage, amountOfTokensToGetReward, rewardTitle, giveawayStartDate } =
+    event;
 
   return (
     <div className="pb-4">

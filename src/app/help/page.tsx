@@ -4,10 +4,10 @@ import { helpNavigationItems, HelpNavigationRoutes } from '@/app/consts/navigati
 import { StrapiService } from '@/app/services/strapi.service';
 import { SocialLinksEnum } from '@/app/typings/common.typings';
 import { getSocialIcon } from '@/app/utils';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { ReactElement } from 'react';
-import dynamic from 'next/dynamic';
 
 export const metadata = {
   title: 'RealBrain'

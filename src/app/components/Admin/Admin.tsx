@@ -4,12 +4,12 @@ import { useHasProvider } from '@/app/hooks/useHasProvider';
 import { StrapiService } from '@/app/services/strapi.service';
 import { setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch } from '@/app/store/store';
+import { ChainsEnum } from '@/app/typings/chains.enum';
 import { EventInterface } from '@/app/typings/event.interface';
 import { TicketInterface } from '@/app/typings/ticket.interface';
-import { getChainIdFromString, getMaticProvider, shuffleArray } from '@/app/utils';
+import { getChainIdFromString, getMaticProvider, polygonRPC, shuffleArray } from '@/app/utils';
 import React, { ReactElement, useCallback, useState } from 'react';
 import Web3 from 'web3';
-import { ChainsEnum } from '@/app/typings/chains.enum';
 
 interface AdminProps {
   events: EventInterface[];
@@ -101,63 +101,62 @@ export default function Admin({ events }: AdminProps): ReactElement {
   );
 
   const startLottery = useCallback(
-      (eventId: number, chainId: string) =>
-        async (event: React.FormEvent): Promise<void> => {
-          event.preventDefault();
-          if (!adminUser || !window) {
-            return;
-          }
-          if (!adminUser.jwt) {
-            setError('No jwt. Refresh page');
-            return;
-          }
-          const eventChainId = getChainIdFromString(chainId);
-          try {
-            dispatch(setIsLoading(true));
-            const params = eventChainId === ChainsEnum.POLYGON ? {
-              chainId: eventChainId,
-              rpcUrls: ['https://polygon-rpc.com/'],
-              chainName: 'Matic Mainnet',
-              nativeCurrency: {
-                name: 'MATIC',
-                symbol: 'MATIC',
-                decimals: 18
-              },
-              blockExplorerUrls: ['https://polygonscan.com/']
-            } : {
-              chainId: eventChainId,
-              rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
-              chainName: 'Mumbai Testnet',
-              nativeCurrency: {
-                name: 'MATIC',
-                symbol: 'MATIC',
-                decimals: 18
-              },
-              blockExplorerUrls: ['https://polygonscan.com/']
-            };
-            await window.ethereum.request({
-              method: 'wallet_addEthereumChain',
-              params: [params]
-            });
-            await window.ethereum.request({
-              method: 'wallet_switchEthereumChain',
-              params: [{ chainId: eventChainId }]
-            });
-            await runLottery(eventId, chainId);
-            setLog(['Success', ...log]);
-          } catch
-            (e) {
-            setLog(['Fail', ...log]);
-            console.error(e);
-          } finally {
-            dispatch(setIsLoading(false));
-          }
+    (eventId: number, chainId: string) =>
+      async (event: React.FormEvent): Promise<void> => {
+        event.preventDefault();
+        if (!adminUser || !window) {
+          return;
         }
-      ,
-      [adminUser, dispatch, log, runLottery]
-    )
-  ;
-
+        if (!adminUser.jwt) {
+          setError('No jwt. Refresh page');
+          return;
+        }
+        const eventChainId = getChainIdFromString(chainId);
+        try {
+          dispatch(setIsLoading(true));
+          const params =
+            eventChainId === ChainsEnum.POLYGON
+              ? {
+                  chainId: eventChainId,
+                  rpcUrls: [polygonRPC],
+                  chainName: 'Polygon',
+                  nativeCurrency: {
+                    name: 'MATIC',
+                    symbol: 'MATIC',
+                    decimals: 18
+                  },
+                  blockExplorerUrls: ['https://polygonscan.com/']
+                }
+              : {
+                  chainId: eventChainId,
+                  rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
+                  chainName: 'Mumbai Testnet',
+                  nativeCurrency: {
+                    name: 'MATIC',
+                    symbol: 'MATIC',
+                    decimals: 18
+                  },
+                  blockExplorerUrls: ['https://polygonscan.com/']
+                };
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [params]
+          });
+          await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: eventChainId }]
+          });
+          await runLottery(eventId, chainId);
+          setLog(['Success', ...log]);
+        } catch (e) {
+          setLog(['Fail', ...log]);
+          console.error(e);
+        } finally {
+          dispatch(setIsLoading(false));
+        }
+      },
+    [adminUser, dispatch, log, runLottery]
+  );
   if (!hasProvider) {
     return <></>;
   }
@@ -165,12 +164,12 @@ export default function Admin({ events }: AdminProps): ReactElement {
   return (
     <form>
       <h1>Admin</h1>
-      <br/>
-      <br/>
+      <br />
+      <br />
       {!adminUser && (
         <>
           <label>Admin password:</label>
-          <input value={password} type="password" onChange={event => setPassword(event.target.value)}/>
+          <input value={password} type="password" onChange={event => setPassword(event.target.value)} />
           <button onClick={handleSend} type="submit">
             SEND
           </button>
@@ -189,8 +188,8 @@ export default function Admin({ events }: AdminProps): ReactElement {
             </button>
           </div>
         ))}
-      <br/>
-      <br/>
+      <br />
+      <br />
       {adminUser && !!log.length && (
         <>
           <h3>LOG:</h3>

@@ -1,5 +1,8 @@
 'use client';
 
+import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
+import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
+import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import {
   EventTokensSupplyData,
   selectEventSupplyData,
@@ -9,9 +12,6 @@ import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
 import { getChainIdFromString, getLeftWord, getTokenWord } from '@/app/utils';
 import React, { ReactElement, useEffect, useMemo, useState } from 'react';
-import { useSwitchChain } from '@/app/hooks/useSwitchChain';
-import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
-import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
 
 interface Props extends Partial<EventInterface> {
   hasSuffix?: boolean;
