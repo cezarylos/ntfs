@@ -80,7 +80,7 @@ export default function AcquireToken({
 
   const onClose = useCallback((): void => {
     setIsBuyPanelOpen(false);
-    dispatch(getEventTokensSupplyData({ id: eventId, chainId } as EventInterface));
+    dispatch(getEventTokensSupplyData({ id: eventId } as EventInterface));
     dispatch(getMyEventTokens({ eventId, eventChainId, address }));
     dispatch(setIsLoading(false));
   }, [address, chainId, dispatch, eventChainId, eventId]);

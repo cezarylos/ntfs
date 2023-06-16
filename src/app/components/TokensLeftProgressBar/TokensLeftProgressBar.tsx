@@ -25,7 +25,7 @@ export default function TokensLeftProgressBar({ id, chainId }: Partial<EventInte
     const init = async (): Promise<void> => {
       setIsLoading(true);
       try {
-        await dispatch(getEventTokensSupplyData({ id, chainId } as EventInterface));
+        await dispatch(getEventTokensSupplyData({ id } as EventInterface));
       } catch (error) {
         console.error(error);
       } finally {

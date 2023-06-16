@@ -1,14 +1,18 @@
 import { StrapiService } from '@/app/services/strapi.service';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Web3 from 'web3';
+import { getChainIdFromString, getMaticProvider } from '@/app/utils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const { eventId, providerUrl } = req.query as { eventId: string; providerUrl: string };
+    const { eventId } = req.query as { eventId: string; };
     try {
+      const eventResponse = await StrapiService.getEventById(eventId, ['contractAddress', 'ABI', 'name', 'chainId']);
+      const { contractAddress, ABI, chainId } = eventResponse.data.attributes;
+      const eventChainId = getChainIdFromString(chainId);
+      const providerUrl = getMaticProvider(eventChainId);
       const web3 = new Web3(providerUrl);
-      const eventResponse = await StrapiService.getEventById(eventId, ['contractAddress', 'ABI', 'name']);
-      const { contractAddress, ABI } = eventResponse.data.attributes;
+
       const contract = new web3.eth.Contract(ABI, contractAddress);
 
       const [totalSupply, MAX_TOKENS] = await Promise.all([

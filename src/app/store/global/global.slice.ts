@@ -52,10 +52,9 @@ export const getMyEventTokens = createAsyncThunk(
 
 export const getEventTokensSupplyData = createAsyncThunk(
   `${Slices.GLOBAL}/getEventTokensSupplyData`,
-  async ({ id: eventId, chainId }: EventInterface): Promise<EventTokensSupplyData | void> => {
+  async ({ id: eventId }: EventInterface): Promise<EventTokensSupplyData | void> => {
     try {
-      const eventChainId = getChainIdFromString(chainId);
-      const { tokensLeft, maxSupply } = (await Web3Service.getTokensLeft({ eventChainId, eventId })) || {};
+      const { tokensLeft, maxSupply } = (await Web3Service.getTokensLeft({ eventId })) || {};
       return {
         tokensLeft,
         maxSupply,

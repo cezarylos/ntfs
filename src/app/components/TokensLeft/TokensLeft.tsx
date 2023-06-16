@@ -39,12 +39,7 @@ export default function TokensLeft({ id, chainId, hasSuffix = false }: Props): R
     const init = async (): Promise<void> => {
       setIsLoading(true);
       try {
-        if (isCurrentChainIdSameAsEventChainId) {
-          await dispatch(getEventTokensSupplyData({ id, chainId } as EventInterface));
-          return;
-        }
-        await addEventNetwork();
-        await switchChain();
+        await dispatch(getEventTokensSupplyData({ id } as EventInterface));
       } catch (error) {
         console.error(error);
       } finally {
