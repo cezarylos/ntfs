@@ -83,7 +83,7 @@ export default function AcquireToken({
     dispatch(getEventTokensSupplyData({ id: eventId } as EventInterface));
     dispatch(getMyEventTokens({ eventId, eventChainId, address }));
     dispatch(setIsLoading(false));
-  }, [address, chainId, dispatch, eventChainId, eventId]);
+  }, [address, dispatch, eventChainId, eventId]);
 
   useEffect((): void => {
     addEventNetwork().finally();

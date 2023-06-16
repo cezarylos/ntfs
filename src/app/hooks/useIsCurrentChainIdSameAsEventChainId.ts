@@ -3,9 +3,14 @@
 import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { useMemo } from 'react';
 
-export const useIsCurrentChainIdSameAsEventChainId = (eventChainId: string): boolean => {
+export const useIsCurrentChainIdSameAsEventChainId = (eventChainId: string): boolean | undefined => {
   const {
     wallet: { chainId: currentChainId }
   } = useMetaMask();
-  return useMemo(() => eventChainId === currentChainId, [eventChainId, currentChainId]);
+  return useMemo(() => {
+    if (!currentChainId) {
+      return undefined;
+    }
+    return eventChainId === currentChainId;
+  }, [eventChainId, currentChainId]);
 };

@@ -2,6 +2,7 @@ import { StrapiService } from '@/app/services/strapi.service';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Web3 from 'web3';
 import { toBigInt } from 'web3-utils';
+import { BN } from 'bn.js';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
@@ -14,17 +15,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const contract = new web3.eth.Contract(ABI, contractAddress);
 
+      const price = await contract.methods.getPrice(1).call() as number;
+      const valueInWei = new BN(price);
+      const valueInHex = '0x' + price.toString(16);
+      const valueInEther = valueInWei.div(new BN('1000000000000000000'));
+
       const transactionParameters = {
         to: contractAddress,
         from: address,
-        data: contract.methods.mint(address, 1).encodeABI()
+        value: valueInHex,
+        data: contract.methods.mint(address, 1).encodeABI(),
       };
-
-      const price = await contract.methods.getPrice(1).call();
 
       return res.status(200).json({
         transactionParameters,
-        price: Number(toBigInt(price)) / 10 ** 18
+        price: valueInEther.toString()
       });
     } catch (e) {
       console.error(e);

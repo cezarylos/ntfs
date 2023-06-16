@@ -25,6 +25,7 @@
     "@types/web3": "^1.2.2",
     "@usewinter/checkout": "^0.1.46",
     "axios": "^1.4.0",
+    "bn.js": "^5.2.1",
     "crypto": "^1.0.1",
     "eslint-config-next": "13.4.1",
     "ipfs-core": "^0.18.0",

@@ -13,7 +13,7 @@ export const useAddEventNetwork = (eventChainId: string): (() => Promise<void>) 
       return;
     }
     try {
-      if (isCurrentChainIdSameAsEventChainId) {
+      if (isCurrentChainIdSameAsEventChainId || isCurrentChainIdSameAsEventChainId === undefined) {
         return;
       }
       const params =
