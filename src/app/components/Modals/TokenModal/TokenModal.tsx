@@ -4,6 +4,7 @@ import { classNames } from '@/app/utils';
 import { Dialog, Transition } from '@headlessui/react';
 import { marked } from 'marked';
 import React, { Fragment, ReactElement } from 'react';
+import Image from 'next/image';
 
 interface Props extends ModalInterface {
   openSeaUrl: string;
@@ -64,10 +65,16 @@ export default function TokenModal({
                     </span>
                   </Dialog.Title>
                   <div>
-                    <img
+                    <Image
                       src={tokenUrl}
                       alt={tokenName}
                       className="max-w-[60%] xl:max-w-[50%] mx-auto mt-2 rounded-md shadow-lg"
+                      width={0}
+                      height={0}
+                      fill={false}
+                      priority
+                      sizes={'100vw'}
+                      style={{ width: '100%', height: '100%' }}
                     />
                     <div
                       className="text-base mt-4 text-center font-inter md:w-[60%] m-auto"

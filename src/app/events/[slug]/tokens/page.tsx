@@ -27,10 +27,10 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
   return (
     <div className="pb-4">
       <EventName name={event.name} slug={slug} />
-      <SubheaderUnderlined name={'Zgarnij Token'} />
+      <SubheaderUnderlined name={'Kup Token'} />
       <div className="mt-2 bg-purple-400 p-2 sm:p-4 rounded-2xl">
         <p className="text-lg sm:text-xl text-purple-950">
-          Zdobądź{' '}
+          Kup{' '}
           <span className="text-yellow-300 uppercase">
             {amountOfTokensToGetReward} {getTokenWord(amountOfTokensToGetReward)}
           </span>{' '}

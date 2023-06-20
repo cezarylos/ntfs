@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
 import { classNames, getChainIdFromString, getTokenWord } from '@/app/utils';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import Image from 'next/image';
 
 interface Props {
   slug: string;
@@ -112,12 +113,18 @@ export default function AcquireToken({
       {isTokensLeftMoreThenZero && (
         <div className="flex flex-col mt-4 mb-6">
           {isPreviewImgShown && (
-            <img
+            <Image
               onClick={openWidget}
               src={collectionImage}
               alt={'collectionImage'}
+              width={0}
+              height={0}
+              fill={false}
+              priority
+              sizes={'100vw'}
+              style={{ width: '100%', height: '100%' }}
               className={classNames(
-                'max-w-[calc(33.33%)] h-auto m-auto rounded-md drop-shadow-xl shadow-red-500 outline-none',
+                'max-w-[calc(50%)] h-auto m-auto rounded-md drop-shadow-xl shadow-red-500 outline-none',
                 isAllowMintMore && 'hover:brightness-110 cursor-pointer'
               )}
             />
@@ -127,7 +134,7 @@ export default function AcquireToken({
             disabled={!isAllowMintMore}
             className="m-auto mt-6 p-4 w-3/4 justify-center bg-pink-500 flex item-center text-white text-lg shadow-xl rounded-md hover:brightness-110 disabled:cursor-auto disabled:text-opacity-50 disabled:hover:brightness-100 disabled:bg-gray-500/50"
           >
-            <h1>{buttonContent || 'ZGARNIJ TOKEN'}</h1>
+            <h1>{buttonContent || 'KUP TOKEN'}</h1>
           </button>
           {!isAllowMintMore && (
             <p className="text-white text-center mt-6">

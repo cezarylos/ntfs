@@ -38,9 +38,9 @@ export default async function Help(): Promise<ReactElement> {
           Dowiedz się jak podłączyć portfel
         </button>
       </Link>
-      <div className="mt-4 text-white">
+      <div className="mt-4 text-white text-lg">
         <ul className="sm:list-disc">
-          <li className="items-center text-white mb-4 sm:mb-2 text-center sm:text-left">
+          <li className="items-center text-white mb-4 sm:mb-2 text-center sm:text-left leading-tight">
             Napisz do nas na
             <a
               href={socialLinks[SocialLinksEnum.INSTAGRAM]}
