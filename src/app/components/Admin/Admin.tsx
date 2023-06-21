@@ -7,7 +7,7 @@ import { useAppDispatch } from '@/app/store/store';
 import { ChainsEnum } from '@/app/typings/chains.enum';
 import { EventInterface } from '@/app/typings/event.interface';
 import { TicketInterface } from '@/app/typings/ticket.interface';
-import { getChainIdFromString, getMaticProvider, polygonRPC, shuffleArray } from '@/app/utils';
+import { getChainIdFromString, getMaticProvider, mumbaiRPC, polygonRPC, shuffleArray } from '@/app/utils';
 import React, { ReactElement, useCallback, useState } from 'react';
 import Web3 from 'web3';
 
@@ -129,7 +129,7 @@ export default function Admin({ events }: AdminProps): ReactElement {
                 }
               : {
                   chainId: eventChainId,
-                  rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
+                  rpcUrls: [mumbaiRPC],
                   chainName: 'Mumbai Testnet',
                   nativeCurrency: {
                     name: 'MATIC',

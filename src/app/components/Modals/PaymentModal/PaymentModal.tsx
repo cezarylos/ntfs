@@ -4,7 +4,7 @@ import { setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch } from '@/app/store/store';
 import { ModalInterface } from '@/app/typings/common.typings';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
-import { classNames, getMaticProvider } from '@/app/utils';
+import { classNames, getChainIdFromString, getMaticProvider } from '@/app/utils';
 import { CrossmintPayButton } from '@crossmint/client-sdk-react-ui';
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
@@ -15,8 +15,8 @@ interface Props extends ModalInterface {
   address: string;
   amount: number;
   checkoutProjectId: string;
-  eventChainId: string;
   eventId: string | number;
+  eventChainId: string;
 }
 
 export default function PaymentModal({
@@ -45,10 +45,8 @@ export default function PaymentModal({
     const init = async (): Promise<void> => {
       dispatch(setIsLoading(true));
       try {
-        const providerUrl = getMaticProvider(eventChainId);
 
         const params = {
-          providerUrl,
           address,
           eventId: eventId.toString()
         };
@@ -66,7 +64,7 @@ export default function PaymentModal({
       }
     };
     init().finally();
-  }, [address, dispatch, eventChainId, eventId]);
+  }, [address, dispatch, eventId]);
 
   const mintConfig = useMemo(
     () => ({
@@ -115,7 +113,7 @@ export default function PaymentModal({
     };
 
     await waitForTransactionConfirmation(transactionHash as string);
-  }, [dispatch, eventChainId, mintParams, setIsOpen]);
+  }, [dispatch, eventChainId, mintParams, setIsOpen, tokenPrice, eventChainId]);
 
   return (
     <>
@@ -154,7 +152,7 @@ export default function PaymentModal({
                     <CrossmintPayButton
                       clientId={checkoutProjectId}
                       mintConfig={mintConfig}
-                      environment={process.env.NEXT_PUBLIC_ENV !== 'production' ? 'production' : 'staging'}
+                      environment={process.env.NEXT_PUBLIC_ENV === 'production' ? 'production' : 'staging'}
                       successCallbackURL={`https://realbrain.art/events/${slug}/tokens`}
                       mintTo={address}
                       className={styles.xmintBtn}
