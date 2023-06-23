@@ -75,16 +75,16 @@ export default function AcquireToken({
     }
   }, [isBuyPanelOpen, isAllowMintMore, address, dispatch, switchChain]);
 
-  const onWidgetSuccess = useCallback(async (): Promise<void> => {
-    dispatch(setIsLoading(false));
-  }, [dispatch]);
-
-  const onClose = useCallback((): void => {
-    setIsBuyPanelOpen(false);
-    dispatch(getEventTokensSupplyData({ id: eventId } as EventInterface));
-    dispatch(getMyEventTokens({ eventId, eventChainId, address }));
-    dispatch(setIsLoading(false));
-  }, [address, dispatch, eventChainId, eventId]);
+  // const onWidgetSuccess = useCallback(async (): Promise<void> => {
+  //   dispatch(setIsLoading(false));
+  // }, [dispatch]);
+  //
+  // const onClose = useCallback((): void => {
+  //   setIsBuyPanelOpen(false);
+  //   dispatch(getEventTokensSupplyData({ id: eventId } as EventInterface));
+  //   dispatch(getMyEventTokens({ eventId, eventChainId, address }));
+  //   dispatch(setIsLoading(false));
+  // }, [address, dispatch, eventChainId, eventId]);
 
   useEffect((): void => {
     addEventNetwork().finally();
@@ -92,24 +92,24 @@ export default function AcquireToken({
 
   return (
     <>
-      <Checkout
-        address={address}
-        projectId={checkoutProjectId}
-        isBuyPanelOpen={isBuyPanelOpen}
-        onSuccess={onWidgetSuccess}
-        onClose={onClose}
-        mintQuantity={amountOfTokensToGetReward - myEventTokens.length}
-      />
-      {/*<PaymentModal*/}
-      {/*  isOpen={isBuyPanelOpen}*/}
-      {/*  setIsOpen={setIsBuyPanelOpen}*/}
+      {/*<Checkout*/}
       {/*  address={address}*/}
-      {/*  slug={slug}*/}
-      {/*  amount={amountOfTokensToGetReward}*/}
-      {/*  checkoutProjectId={checkoutProjectId}*/}
-      {/*  eventChainId={eventChainId}*/}
-      {/*  eventId={eventId}*/}
+      {/*  projectId={checkoutProjectId}*/}
+      {/*  isBuyPanelOpen={isBuyPanelOpen}*/}
+      {/*  onSuccess={onWidgetSuccess}*/}
+      {/*  onClose={onClose}*/}
+      {/*  mintQuantity={amountOfTokensToGetReward - myEventTokens.length}*/}
       {/*/>*/}
+      <PaymentModal
+        isOpen={isBuyPanelOpen}
+        setIsOpen={setIsBuyPanelOpen}
+        address={address}
+        slug={slug}
+        amount={amountOfTokensToGetReward}
+        checkoutProjectId={checkoutProjectId}
+        eventChainId={eventChainId}
+        eventId={eventId}
+      />
       {isTokensLeftMoreThenZero && (
         <div className="flex flex-col mt-4 mb-6">
           {isPreviewImgShown && (

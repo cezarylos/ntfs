@@ -144,7 +144,7 @@ export default function PaymentModal({
               >
                 <Dialog.Panel className="flex flex-col w-full h-auto max-w-md lg:max-w-lg transform overflow-hidden rounded-2xl bg-purple-200 border-solid p-6 text-left align-middle shadow-3xl transition-all">
                   <Dialog.Title as="h3" className="text-3xl text-center font-medium leading-6 text-purple-950">
-                    <h1 className={classNames('text-xl font-bold mb-2 text-purple-900 outline-none relative')}>
+                    <h1 className={classNames('text-xl font-bold text-purple-900 outline-none relative')}>
                       Wybierz metodę płatności
                     </h1>
                   </Dialog.Title>
@@ -163,7 +163,7 @@ export default function PaymentModal({
                       onClick={mintWithCrypto}
                       className="m-auto mt-6 p-4 w-3/4 justify-center uppercase bg-pink-500 flex item-center text-white text-lg shadow-xl rounded-md hover:brightness-110 disabled:cursor-auto disabled:text-opacity-50 disabled:hover:brightness-100 disabled:bg-gray-500/50"
                     >
-                      <h1>ZAPŁAć CRYPTO - MATIC</h1>
+                      <h1>CRYPTO - MATIC</h1>
                     </button>
                   </div>
                 </Dialog.Panel>

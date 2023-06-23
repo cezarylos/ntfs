@@ -1,7 +1,6 @@
 import { StrapiService } from '@/app/services/strapi.service';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Web3 from 'web3';
-import { toBigInt } from 'web3-utils';
 import { BN } from 'bn.js';
 import { getChainIdFromString, getMaticProvider } from '@/app/utils';
 
