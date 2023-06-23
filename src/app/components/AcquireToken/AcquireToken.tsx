@@ -1,20 +1,16 @@
 'use client';
 
 import PaymentModal from '@/app/components/Modals/PaymentModal/PaymentModal';
-import Checkout from '@/app/components/checkout';
 import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import {
-  getEventTokensSupplyData,
-  getMyEventTokens,
   selectEventSupplyData,
   selectMyEventTokens,
   setIsLoading,
   setIsShowWeb3BlockerModal
 } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
-import { EventInterface } from '@/app/typings/event.interface';
 import { classNames, getChainIdFromString, getTokenWord } from '@/app/utils';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
@@ -75,31 +71,12 @@ export default function AcquireToken({
     }
   }, [isBuyPanelOpen, isAllowMintMore, address, dispatch, switchChain]);
 
-  // const onWidgetSuccess = useCallback(async (): Promise<void> => {
-  //   dispatch(setIsLoading(false));
-  // }, [dispatch]);
-  //
-  // const onClose = useCallback((): void => {
-  //   setIsBuyPanelOpen(false);
-  //   dispatch(getEventTokensSupplyData({ id: eventId } as EventInterface));
-  //   dispatch(getMyEventTokens({ eventId, eventChainId, address }));
-  //   dispatch(setIsLoading(false));
-  // }, [address, dispatch, eventChainId, eventId]);
-
   useEffect((): void => {
     addEventNetwork().finally();
   }, [addEventNetwork]);
 
   return (
     <>
-      {/*<Checkout*/}
-      {/*  address={address}*/}
-      {/*  projectId={checkoutProjectId}*/}
-      {/*  isBuyPanelOpen={isBuyPanelOpen}*/}
-      {/*  onSuccess={onWidgetSuccess}*/}
-      {/*  onClose={onClose}*/}
-      {/*  mintQuantity={amountOfTokensToGetReward - myEventTokens.length}*/}
-      {/*/>*/}
       <PaymentModal
         isOpen={isBuyPanelOpen}
         setIsOpen={setIsBuyPanelOpen}
