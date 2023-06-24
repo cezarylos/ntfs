@@ -11,4 +11,9 @@ export interface StrapiResponseInterface<T> {
 export interface StrapiArrayResponseInterface<T> {
   id: number;
   data: StrapiDataInterface<T>[];
+  meta: {
+    pagination: {
+      total: number;
+    }
+  }
 }

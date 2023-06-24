@@ -2,7 +2,7 @@ import styles from '@/app/components/AcquireToken/AcquireToken.module.scss';
 import { StrapiService } from '@/app/services/strapi.service';
 import { setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch } from '@/app/store/store';
-import { ModalInterface } from '@/app/typings/common.typings';
+import { ModalInterface, PAYMENT_STATUS_STRING, SUCCESS_STRING } from '@/app/typings/common.typings';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { classNames, getChainIdFromString, getMaticProvider } from '@/app/utils';
 import { CrossmintPayButton } from '@crossmint/client-sdk-react-ui';
@@ -37,6 +37,8 @@ export default function PaymentModal({
     setIsOpen(false);
     dispatch(setIsLoading(false));
   }
+
+  const successRedirectionLink = useMemo((): string => `${window.location.origin}/events/${slug}/tokens?${PAYMENT_STATUS_STRING}=${SUCCESS_STRING}`, [slug]);
 
   useEffect((): void => {
     if (!address || !eventId) {
@@ -97,7 +99,8 @@ export default function PaymentModal({
           if (receipt.status) {
             console.log('Transaction successful!');
             console.log('Receipt:', receipt);
-            window.location.reload();
+            dispatch(setIsLoading(false));
+            window.location.href = successRedirectionLink;
           } else {
             console.log('Transaction failed!');
             console.log('Receipt:', receipt);
@@ -153,7 +156,7 @@ export default function PaymentModal({
                       clientId={checkoutProjectId}
                       mintConfig={mintConfig}
                       environment={process.env.NEXT_PUBLIC_ENV === 'production' ? 'production' : 'staging'}
-                      successCallbackURL={`https://realbrain.art/events/${slug}/tokens`}
+                      successCallbackURL={successRedirectionLink}
                       mintTo={address}
                       className={styles.xmintBtn}
                       style={{ background: '#ec4899' }}

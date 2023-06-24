@@ -37,11 +37,11 @@ export default function EventTokens({ id, chainId, amountOfTokensToGetReward, wr
   const getMyTokens = useCallback(async () => {
     try {
       await switchChain();
-      dispatch(await getMyEventTokens({ eventId: id, address, eventChainId }));
+      dispatch(await getMyEventTokens({ eventId: id, address }));
     } catch (e) {
       console.error(e);
     }
-  }, [switchChain, eventChainId, dispatch, id, address]);
+  }, [switchChain, dispatch, id, address]);
 
   useEffect((): void => {
     addEventNetwork().finally();

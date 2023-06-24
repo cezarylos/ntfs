@@ -2,7 +2,6 @@ import { Web3Service } from '@/app/services/web3.service';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { EventInterface } from '@/app/typings/event.interface';
 import { Slices } from '@/app/typings/slices';
-import { getChainIdFromString, getMaticProvider } from '@/app/utils';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { AppState } from '../store';
@@ -13,24 +12,20 @@ export const getMyEventTokens = createAsyncThunk(
     {
       address,
       eventId,
-      eventChainId,
       skipLoading = false
     }: {
-      eventChainId: string;
       address: string;
       eventId: string | number;
       skipLoading?: boolean;
     },
     { dispatch }
   ): Promise<any[]> => {
-    const providerUrl = getMaticProvider(eventChainId);
     try {
       if (!skipLoading) {
         await dispatch(setIsMyEventTokensLoading(true));
       }
 
       const params = {
-        providerUrl,
         address,
         eventId
       } as Record<any, string>;

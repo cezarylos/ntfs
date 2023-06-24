@@ -107,7 +107,23 @@ export class StrapiService {
       const headers = getHeaders(jwt);
       const res = await fetch(
         `${BASE_STRAPI_URL}/api/tickets?filters[holderAddress][$eq]=${holderAddress.toLowerCase()}${hasEventId}${noLimitPagination}&populate[ticket][fields][0]=url${isPopulateEvent}`,
-        { headers, ...cacheOptions }
+        { headers, cache: 'no-cache' }
+      );
+      return res.json();
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  public static async getTicketsWithoutHolderAddress(
+    jwt: string
+  ): Promise<StrapiArrayResponseInterface<TicketInterface>> {
+    try {
+      const headers = getHeaders(jwt);
+      const res = await fetch(
+        `${BASE_STRAPI_URL}/api/tickets?filters[holderAddress][$null]=true&pagination[page]=1&pagination[pageSize]=1`,
+        { headers, cache: 'no-cache' }
       );
       return res.json();
     } catch (e) {

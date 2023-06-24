@@ -8,3 +8,6 @@ export enum SocialLinksEnum {
   INSTAGRAM = 'instagram',
   DISCORD = 'discord'
 }
+
+export const PAYMENT_STATUS_STRING = 'payment_status';
+export const SUCCESS_STRING = 'success';

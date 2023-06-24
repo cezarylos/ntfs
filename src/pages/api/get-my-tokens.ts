@@ -1,5 +1,5 @@
 import { StrapiService } from '@/app/services/strapi.service';
-import { createOpenSeaLink, getChainIdFromString } from '@/app/utils';
+import { createOpenSeaLink, getChainIdFromString, getMaticProvider } from '@/app/utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Web3 from 'web3';
 
@@ -13,12 +13,14 @@ const ipfsGateways = [
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const { eventId, providerUrl, address } = req.query as { eventId: string; providerUrl: string; address: string };
+    const { eventId, address } = req.query as { eventId: string; providerUrl: string; address: string };
     try {
-      const web3 = new Web3(providerUrl);
 
       const eventResponse = await StrapiService.getEventById(eventId, ['contractAddress', 'ABI', 'chainId']);
       const { contractAddress, ABI, chainId } = eventResponse.data.attributes;
+      const providerUrl = getMaticProvider(chainId);
+
+      const web3 = new Web3(providerUrl);
 
       const contract = new web3.eth.Contract(ABI, contractAddress);
 

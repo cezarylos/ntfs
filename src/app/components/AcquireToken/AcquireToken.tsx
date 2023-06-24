@@ -14,10 +14,14 @@ import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { classNames, getChainIdFromString, getTokenWord } from '@/app/utils';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { PAYMENT_STATUS_STRING, SUCCESS_STRING } from '@/app/typings/common.typings';
+import { EndpointsEnum } from '@/app/typings/endpoints.enum';
+import axios from 'axios';
 
 interface Props {
   slug: string;
-  eventId: number;
+  eventId: string | number;
   chainId: string;
   checkoutProjectId: string;
   collectionImage: string;
@@ -36,10 +40,13 @@ export default function AcquireToken({
   amountOfTokensToGetReward,
   isPreviewImgShown = true
 }: Props): ReactElement {
+  const params = useSearchParams();
+  const isStatusSuccess = params?.get(PAYMENT_STATUS_STRING) === SUCCESS_STRING;
   const { wallet } = useMetaMask();
   const dispatch = useAppDispatch();
   const { tokensLeft } = useAppSelector(selectEventSupplyData);
   const myEventTokens = useAppSelector(selectMyEventTokens);
+  const router = useRouter();
 
   const [isBuyPanelOpen, setIsBuyPanelOpen] = useState(false);
 
@@ -74,6 +81,27 @@ export default function AcquireToken({
   useEffect((): void => {
     addEventNetwork().finally();
   }, [addEventNetwork]);
+
+  useEffect((): void => {
+    if (!isStatusSuccess || !address || !eventId) {
+      return;
+    }
+    const assignTicket = async (): Promise<void> => {
+      try {
+        dispatch(setIsLoading(true));
+        await axios.post('/api/' + EndpointsEnum.ASSIGN_TICKET_TO_ADDRESS, {
+          address,
+          eventId
+        });
+      } catch (e) {
+        console.error(e);
+      } finally {
+        router.push(`/events/${slug}/tokens`);
+        dispatch(setIsLoading(false));
+      }
+    }
+    assignTicket().finally();
+  }, [address, dispatch, eventId, isStatusSuccess]);
 
   return (
     <>
