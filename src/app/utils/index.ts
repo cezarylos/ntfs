@@ -80,7 +80,7 @@ export const getEventBySlug = async (
 
 export const replaceS3LinkWithCloudFront = (url: string) => {
   const regex = /https:\/\/[^/]+\.s3\.eu-north-1\.amazonaws\.com(\/.*)$/;
-  if (regex.test(url) && process.env.NEXT_PUBLIC_CLOUDFRONT_URL) {
+  if (regex.test(url) && process.env.NEXT_PUBLIC_CLOUDFRONT_URL && process.env.NODE_ENV === 'production') {
     return url.replace(regex, `${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}$1`);
   }
   return url;

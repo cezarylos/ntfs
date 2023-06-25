@@ -26,7 +26,7 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
     <div className="pb-4">
       <EventName name={event.name} slug={slug} />
       <SubheaderUnderlined name={'Kup Token'} />
-      <div className="mt-2 bg-purple-400 p-2 sm:p-4 rounded-2xl">
+      {rewardTitle && <div className="mt-2 bg-purple-400 p-2 sm:p-4 rounded-2xl">
         <p className="text-lg sm:text-xl text-purple-950">
           Kup{' '}
           <span className="text-yellow-300 uppercase">
@@ -44,7 +44,7 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
             Sprawdź swoje nagrody
           </span>
         </Link>
-      </div>
+      </div>}
       <h1 className="text-xl text-white my-2 text-center">
         <TokensLeft id={id} chainId={chainId} hasSuffix />
       </h1>
