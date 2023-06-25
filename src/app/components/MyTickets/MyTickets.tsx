@@ -10,7 +10,7 @@ import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { EventInterface } from '@/app/typings/event.interface';
 import { TicketInterface } from '@/app/typings/ticket.interface';
 import { marked } from 'marked';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useMemo, useState } from 'react';
 
 import axios from 'axios';
 
@@ -22,6 +22,7 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
   } = useMetaMask();
   const hasProvider = useHasProvider();
   const [files, setFiles] = useState<TicketInterface[]>([]);
+  const address = useMemo((): string => accounts?.[0], [accounts]);
 
   useEffect((): void => {
     if (!hasProvider || !accounts?.length) {
@@ -30,8 +31,12 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
     const init = async (): Promise<void> => {
       try {
         dispatch(setIsLoading(true));
+        await axios.post('/api/' + EndpointsEnum.ASSIGN_TICKET_TO_ADDRESS, {
+          address,
+          eventId
+        });
+
         const message = 'Zweryfikuj swój adres';
-        const address = accounts[0];
 
         const signature = await window.ethereum.request({
           method: 'personal_sign',

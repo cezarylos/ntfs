@@ -11,12 +11,13 @@ import {
   setIsShowWeb3BlockerModal
 } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
-import { classNames, getChainIdFromString, getTokenWord } from '@/app/utils';
-import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { PAYMENT_STATUS_STRING, SUCCESS_STRING } from '@/app/typings/common.typings';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
+import { classNames, getChainIdFromString, getTokenWord } from '@/app/utils';
+import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+
 import axios from 'axios';
 
 interface Props {
@@ -99,7 +100,7 @@ export default function AcquireToken({
         router.push(`/events/${slug}/tokens`);
         dispatch(setIsLoading(false));
       }
-    }
+    };
     assignTicket().finally();
   }, [address, dispatch, eventId, isStatusSuccess]);
 

@@ -1,11 +1,11 @@
 import { StrapiService } from '@/app/services/strapi.service';
+import { getChainIdFromString, getMaticProvider } from '@/app/utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Web3 from 'web3';
-import { getChainIdFromString, getMaticProvider } from '@/app/utils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const { eventId } = req.query as { eventId: string; };
+    const { eventId } = req.query as { eventId: string };
     try {
       const eventResponse = await StrapiService.getEventById(eventId, ['contractAddress', 'ABI', 'name', 'chainId']);
       const { contractAddress, ABI, chainId } = eventResponse.data.attributes;

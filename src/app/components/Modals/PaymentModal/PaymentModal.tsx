@@ -38,7 +38,10 @@ export default function PaymentModal({
     dispatch(setIsLoading(false));
   }
 
-  const successRedirectionLink = useMemo((): string => `${window.location.origin}/events/${slug}/tokens?${PAYMENT_STATUS_STRING}=${SUCCESS_STRING}`, [slug]);
+  const successRedirectionLink = useMemo(
+    (): string => `${window.location.origin}/events/${slug}/tokens?${PAYMENT_STATUS_STRING}=${SUCCESS_STRING}`,
+    [slug]
+  );
 
   useEffect((): void => {
     if (!address || !eventId) {
@@ -47,7 +50,6 @@ export default function PaymentModal({
     const init = async (): Promise<void> => {
       dispatch(setIsLoading(true));
       try {
-
         const params = {
           address,
           eventId: eventId.toString()
@@ -116,7 +118,7 @@ export default function PaymentModal({
     };
 
     await waitForTransactionConfirmation(transactionHash as string);
-  }, [dispatch, eventChainId, mintParams, setIsOpen, tokenPrice, eventChainId]);
+  }, [mintParams, eventChainId, dispatch, successRedirectionLink, setIsOpen]);
 
   return (
     <>

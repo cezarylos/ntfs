@@ -3,8 +3,8 @@ import { ModalInterface } from '@/app/typings/common.typings';
 import { classNames } from '@/app/utils';
 import { Dialog, Transition } from '@headlessui/react';
 import { marked } from 'marked';
-import React, { Fragment, ReactElement } from 'react';
 import Image from 'next/image';
+import React, { Fragment, ReactElement } from 'react';
 
 interface Props extends ModalInterface {
   openSeaUrl: string;

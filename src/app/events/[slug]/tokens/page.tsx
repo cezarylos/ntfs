@@ -20,13 +20,12 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
     ['name', 'chainId', 'checkoutProjectId', 'amountOfTokensToGetReward', 'rewardTitle'],
     true
   );
-  const { id, chainId, checkoutProjectId, collectionImage, amountOfTokensToGetReward, rewardTitle } =
-    event;
+  const { id, chainId, checkoutProjectId, collectionImage, amountOfTokensToGetReward, rewardTitle } = event;
 
   return (
     <div className="pb-4">
-      <EventName name={event.name} slug={slug}/>
-      <SubheaderUnderlined name={'Kup Token'}/>
+      <EventName name={event.name} slug={slug} />
+      <SubheaderUnderlined name={'Kup Token'} />
       <div className="mt-2 bg-purple-400 p-2 sm:p-4 rounded-2xl">
         <p className="text-lg sm:text-xl text-purple-950">
           Kup{' '}
@@ -47,7 +46,7 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
         </Link>
       </div>
       <h1 className="text-xl text-white my-2 text-center">
-        <TokensLeft id={id} chainId={chainId} hasSuffix/>
+        <TokensLeft id={id} chainId={chainId} hasSuffix />
       </h1>
       <AcquireToken
         slug={slug}

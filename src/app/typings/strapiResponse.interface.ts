@@ -14,6 +14,6 @@ export interface StrapiArrayResponseInterface<T> {
   meta: {
     pagination: {
       total: number;
-    }
-  }
+    };
+  };
 }
