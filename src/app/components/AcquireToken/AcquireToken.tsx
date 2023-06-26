@@ -130,7 +130,7 @@ export default function AcquireToken({
               sizes={'100vw'}
               style={{ width: '100%', height: '100%' }}
               className={classNames(
-                'max-w-[calc(50%)] h-auto m-auto rounded-md drop-shadow-xl shadow-red-500 outline-none',
+                'max-w-[calc(50%)] h-auto m-auto rounded-md drop-shadow-xl outline-none',
                 isAllowMintMore && 'hover:brightness-110 cursor-pointer'
               )}
             />

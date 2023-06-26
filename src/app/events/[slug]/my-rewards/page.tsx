@@ -10,8 +10,10 @@ const MyTicketsComponent = dynamic(() => import('@/app/components/MyTickets/MyTi
 
 export default async function MyTickets({ params: { slug } }: { params: { slug: string } }): Promise<ReactElement> {
   const eventResponse = await StrapiService.getEventBySlug(slug, ['name']);
-  const { id, name } = eventResponse
-    ? { id: eventResponse.data[0].id, ...eventResponse.data[0].attributes }
-    : ({} as any);
+  const {
+    id,
+    attributes: { name }
+  } = eventResponse.data[0] || { attributes: {} };
+
   return <MyTicketsComponent id={id} name={name} slug={slug} />;
 }

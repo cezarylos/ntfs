@@ -74,7 +74,7 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
             className="text-sm mt-1 font-inter m-auto"
             dangerouslySetInnerHTML={{
               __html: marked
-                .parse(description, { mangle: false, headerIds: false })
+                .parse(description || '', { mangle: false, headerIds: false })
                 .replace(
                   '<a ',
                   '<a target="_blank" class="underline mt-1 text-purple-900 font-mogra cursor-pointer outline-none text-base" '
