@@ -102,7 +102,7 @@ export default function AcquireToken({
       }
     };
     assignTicket().finally();
-  }, [address, dispatch, eventId, isStatusSuccess]);
+  }, [address, dispatch, eventId, isStatusSuccess, router, slug]);
 
   return (
     <>

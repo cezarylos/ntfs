@@ -26,25 +26,23 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
     <div className="pb-4">
       <EventName name={event.name} slug={slug} />
       <SubheaderUnderlined name={'Kup Token'} />
-      {rewardTitle && <div className="mt-2 bg-purple-400 p-2 sm:p-4 rounded-2xl">
-        <p className="text-lg sm:text-xl text-purple-950">
-          Kup{' '}
-          <span className="text-yellow-300 uppercase">
-            {amountOfTokensToGetReward} {getTokenWord(amountOfTokensToGetReward)}
-          </span>{' '}
-          i otrzymaj:
-        </p>
-        <p className="text-yellow-300 text-xl sm:text-2xl text-center uppercase mb-2">{rewardTitle}</p>
-        <Link href={`${NavigationRoutes.EVENTS}/${slug}${EventNavigationRoutes.REWARDS}`}>
-          <span
-            className={
-              'block text-center mt-2 text-purple-950 text-base uppercase w-full hover:brightness-110 leading-none'
-            }
-          >
-            Sprawdź swoje nagrody
-          </span>
-        </Link>
-      </div>}
+      {rewardTitle && (
+        <div className="mt-2 bg-purple-400 p-2 sm:p-4 rounded-2xl">
+          <p className="text-lg sm:text-xl text-purple-950">
+            Kup{' '}
+            <span className="text-yellow-300 uppercase">
+              {amountOfTokensToGetReward} {getTokenWord(amountOfTokensToGetReward)}
+            </span>{' '}
+            i otrzymaj:
+          </p>
+          <p className="text-yellow-300 text-xl sm:text-2xl text-center uppercase mb-2">{rewardTitle}</p>
+          <Link href={`${NavigationRoutes.EVENTS}/${slug}${EventNavigationRoutes.REWARDS}`}>
+            <button className="rounded-md shadow-xl text-white bg-pink-500 font-semibold p-1 text-sm hover:brightness-110 font-inter w-32 animate-pulse">
+              Sprawdź swoje nagrody
+            </button>
+          </Link>
+        </div>
+      )}
       <h1 className="text-xl text-white my-2 text-center">
         <TokensLeft id={id} chainId={chainId} hasSuffix />
       </h1>

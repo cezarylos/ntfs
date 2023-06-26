@@ -20,7 +20,7 @@ interface Props extends EventInterface {
 
 export default function EventTokens({ id, chainId, amountOfTokensToGetReward, wrapperClassName }: Props): ReactElement {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedToken, setSelectedToken] = useState<any>(null);
+  const [selectedToken, setSelectedToken] = useState<Record<string, any> | null>(null);
   const dispatch = useAppDispatch();
   const myEventTokens = useAppSelector(selectMyEventTokens);
   const isMyEventTokensLoading = useAppSelector(selectIsMyEventTokensLoading);
