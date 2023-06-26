@@ -4,7 +4,7 @@ import EventName from '@/app/components/Event/EventName';
 import SubheaderUnderlined from '@/app/components/SubheaderUnderlined/SubheaderUnderlined';
 import { useHasProvider } from '@/app/hooks/useHasProvider';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
-import { selectIsLoading, setIsLoading } from '@/app/store/global/global.slice';
+import { selectIsLoading, setIsLoading, setIsShowWeb3BlockerModal } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { EventInterface } from '@/app/typings/event.interface';
@@ -57,11 +57,7 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
       }
     };
     init().finally();
-  }, [accounts, dispatch, eventId, hasProvider]);
-
-  if (!hasProvider) {
-    return <></>;
-  }
+  }, [accounts, address, dispatch, eventId, hasProvider]);
 
   return (
     <div className="pb-2">
@@ -95,7 +91,9 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
         </div>
       ))}
       {!isLoading && files?.length === 0 && (
-        <h1 className="text-xl text-white my-2 text-center">Brak dostępnych nagród :(</h1>
+        <h1 className="text-xl text-white my-2 text-center">
+          {address ? 'Brak dostępnych nagród :(' : 'Podłącz Portfel żeby zobaczyć nagrody'}
+        </h1>
       )}
     </div>
   );
