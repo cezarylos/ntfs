@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const isUserTokenUsed = tokenIds.some(tokenId => usedTokens.includes(tokenId));
 
       if (isUserTokenUsed) {
-        return res.status(400).json({ message: 'Some of the tokens have been already used to receive the reward' });
+        return res.status(201).json({ message: 'Some of the tokens have been already used to receive the reward' });
       }
 
       const tokensCount = tokenIds.length;
