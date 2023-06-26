@@ -10,7 +10,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ message: 'Address and event ID are required' });
     }
     try {
-      const [holderTicketResponse, eventResponse] = await Promise.all([
+      const [usedTokensResponse, holderTicketResponse, eventResponse] = await Promise.all([
+        StrapiService.getUsedTokens(process.env.STRAPI_API_TOKEN as string),
         StrapiService.getTicketsByHolderAddress(process.env.STRAPI_API_TOKEN as string, address.toLowerCase()),
         StrapiService.getEventById(eventId, [
           'contractAddress',
@@ -29,6 +30,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const { contractAddress, ABI, chainId, amountOfTokensToGetReward, excludedAddressesFromRewards } =
         eventResponse.data.attributes;
 
+      const usedTokens = usedTokensResponse.data.map(ticket => ticket.attributes.tokenIds).flat();
+
       if (total > 0) {
         return res.status(201).json({ message: 'Ticket already assigned' });
       }
@@ -41,10 +44,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const web3 = new Web3(providerUrl);
       const contract = new web3.eth.Contract(ABI, contractAddress);
 
-      const tokensIds =
+      const tokenIds =
         (await contract.methods.getTokensByOwner?.(address).call())?.map((tokenId: string) => Number(tokenId)) || [];
 
-      const tokensCount = tokensIds.length;
+      const isUserTokenUsed = tokenIds.some(tokenId => usedTokens.includes(tokenId));
+
+      if (isUserTokenUsed) {
+        return res.status(400).json({ message: 'Some of the tokens have been already used to receive the reward' });
+      }
+
+      const tokensCount = tokenIds.length;
 
       if (tokensCount < amountOfTokensToGetReward) {
         return res.status(400).json({ message: `Not enough tokens. Has ${tokensCount}/${amountOfTokensToGetReward}.` });
@@ -62,7 +71,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       await StrapiService.assignHolderAddressToTicket(
         process.env.STRAPI_API_TOKEN as string,
         emptyTicketId,
-        address.toLowerCase()
+        address.toLowerCase(),
+        tokenIds
       );
 
       return res.status(201).json({ message: 'Ticket assigned' });

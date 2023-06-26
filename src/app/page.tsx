@@ -1,5 +1,5 @@
 import Tile from '@/app/components/shared/Tile/Tile';
-import { EventNavigationRoutes, navigationItems, NavigationRoutes } from '@/app/consts/navigation-items.const';
+import { navigationItems } from '@/app/consts/navigation-items.const';
 import Link from 'next/link';
 import React, { ReactElement } from 'react';
 

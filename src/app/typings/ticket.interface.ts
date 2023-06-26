@@ -17,4 +17,5 @@ export interface TicketInterface {
   url: string;
   title: string;
   description: string;
+  tokenIds: number[];
 }

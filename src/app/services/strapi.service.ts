@@ -132,12 +132,34 @@ export class StrapiService {
     }
   }
 
-  public static async assignHolderAddressToTicket(jwt: string, ticketId: number, holderAddress: string): Promise<void> {
+  public static async getUsedTokens(jwt: string): Promise<StrapiArrayResponseInterface<TicketInterface>> {
+    try {
+      const headers = getHeaders(jwt);
+      const res = await fetch(
+        `${BASE_STRAPI_URL}/api/tickets?filters[tokenIds][$notNull]=true&pagination[page]=1&pagination[pageSize]=100`,
+        {
+          headers,
+          cache: 'no-cache'
+        }
+      );
+      return res.json();
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  public static async assignHolderAddressToTicket(
+    jwt: string,
+    ticketId: number,
+    holderAddress: string,
+    tokenIds: number[]
+  ): Promise<void> {
     try {
       const headers = getHeaders(jwt);
       const res = await axios.put(
         `${BASE_STRAPI_URL}/api/tickets/${ticketId}`,
-        { data: { holderAddress: holderAddress.toLowerCase() } },
+        { data: { holderAddress: holderAddress.toLowerCase(), tokenIds } },
         { headers, ...cacheOptions }
       );
       return res.data;

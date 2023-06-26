@@ -37,7 +37,7 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
           </p>
           <p className="text-yellow-300 text-xl sm:text-2xl text-center uppercase mb-2">{rewardTitle}</p>
           <Link href={`${NavigationRoutes.EVENTS}/${slug}${EventNavigationRoutes.REWARDS}`}>
-            <button className="rounded-md shadow-xl m-auto block text-white bg-pink-500 font-semibold p-2 uppercase text-sm hover:brightness-110 w-1/2">
+            <button className="rounded-md shadow-xl m-auto block text-white bg-pink-500 font-semibold p-2 uppercase text-sm hover:brightness-110 w-fit">
               Sprawdź swoje nagrody
             </button>
           </Link>

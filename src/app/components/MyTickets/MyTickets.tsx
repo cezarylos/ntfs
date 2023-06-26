@@ -4,7 +4,7 @@ import EventName from '@/app/components/Event/EventName';
 import SubheaderUnderlined from '@/app/components/SubheaderUnderlined/SubheaderUnderlined';
 import { useHasProvider } from '@/app/hooks/useHasProvider';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
-import { selectIsLoading, setIsLoading, setIsShowWeb3BlockerModal } from '@/app/store/global/global.slice';
+import { selectIsLoading, setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { EventInterface } from '@/app/typings/event.interface';
