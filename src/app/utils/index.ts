@@ -38,7 +38,7 @@ export const getChainIdFromString = (chainString: string): string => {
   if (match) {
     return match[1];
   }
-  return '';
+  return chainString;
 };
 
 export const createOpenSeaLink = ({

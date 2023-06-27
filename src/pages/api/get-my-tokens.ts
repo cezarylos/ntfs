@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const eventResponse = await StrapiService.getEventById(eventId, ['contractAddress', 'ABI', 'chainId']);
       const { contractAddress, ABI, chainId } = eventResponse.data.attributes;
-      const providerUrl = getMaticProvider(chainId);
+      const providerUrl = getMaticProvider(getChainIdFromString(chainId));
 
       const web3 = new Web3(providerUrl);
 

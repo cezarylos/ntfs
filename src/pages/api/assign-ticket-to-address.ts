@@ -1,5 +1,5 @@
 import { StrapiService } from '@/app/services/strapi.service';
-import { getMaticProvider } from '@/app/utils';
+import { getChainIdFromString, getMaticProvider } from '@/app/utils';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Web3 from 'web3';
 
@@ -40,7 +40,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(400).json({ message: 'Address is excluded from rewards' });
       }
 
-      const providerUrl = getMaticProvider(chainId);
+      const providerUrl = getMaticProvider(getChainIdFromString(chainId));
+
       const web3 = new Web3(providerUrl);
       const contract = new web3.eth.Contract(ABI, contractAddress);
 
