@@ -38,10 +38,10 @@ export default function PaymentModal({
     dispatch(setIsLoading(false));
   }
 
-  const successRedirectionLink = useMemo(
-    (): string => `${window.location.origin}/events/${slug}/tokens?${PAYMENT_STATUS_STRING}=${SUCCESS_STRING}`,
-    [slug]
-  );
+  const successRedirectionLink = useMemo((): string => {
+    const origin = process.env.NODE_ENV === 'production' ? 'https://realbrain.art' : window.location.origin;
+    return `${origin}/events/${slug}/tokens?${PAYMENT_STATUS_STRING}=${SUCCESS_STRING}`;
+  }, [slug]);
 
   useEffect((): void => {
     if (!address || !eventId) {
