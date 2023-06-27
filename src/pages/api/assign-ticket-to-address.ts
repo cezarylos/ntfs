@@ -36,7 +36,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(201).json({ message: 'Ticket already assigned' });
       }
 
-      if (excludedAddressesFromRewards.includes(address)) {
+      const excludedAddressesFromRewardsLowercase = excludedAddressesFromRewards.map(address => address.toLowerCase());
+
+      if (excludedAddressesFromRewardsLowercase.includes(address.toLocaleString())) {
         return res.status(400).json({ message: 'Address is excluded from rewards' });
       }
 
