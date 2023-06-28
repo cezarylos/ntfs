@@ -1,10 +1,9 @@
 import styles from '@/app/components/AcquireToken/AcquireToken.module.scss';
-import { StrapiService } from '@/app/services/strapi.service';
 import { setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch } from '@/app/store/store';
 import { ModalInterface, PAYMENT_STATUS_STRING, SUCCESS_STRING } from '@/app/typings/common.typings';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
-import { classNames, getChainIdFromString, getMaticProvider } from '@/app/utils';
+import { classNames, getMaticProvider } from '@/app/utils';
 import { CrossmintPayButton } from '@crossmint/client-sdk-react-ui';
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
@@ -52,7 +51,8 @@ export default function PaymentModal({
       try {
         const params = {
           address,
-          eventId: eventId.toString()
+          eventId: eventId.toString(),
+          amount: amount.toString()
         };
         const queryString = new URLSearchParams(params).toString();
         const mintParamsResponse = await fetch(`/api/${EndpointsEnum.GET_MINT_PARAMS}?${queryString}`, {
@@ -68,7 +68,7 @@ export default function PaymentModal({
       }
     };
     init().finally();
-  }, [address, dispatch, eventId]);
+  }, [address, amount, dispatch, eventId]);
 
   const mintConfig = useMemo(
     () => ({
@@ -79,6 +79,8 @@ export default function PaymentModal({
     }),
     [amount, tokenPrice]
   );
+
+  console.log('mintConfig', mintConfig);
 
   const mintWithCrypto = useCallback(async () => {
     if (!mintParams || typeof mintParams !== 'object') {
@@ -157,8 +159,8 @@ export default function PaymentModal({
                     <CrossmintPayButton
                       clientId={checkoutProjectId}
                       mintConfig={mintConfig}
-                      environment={process.env.NEXT_PUBLIC_ENV === 'production' ? 'production' : 'staging'}
-                      successCallbackURL={successRedirectionLink}
+                      environment={process.env.NEXT_PUBLIC_ENV !== 'production' ? 'production' : 'staging'}
+                      // successCallbackURL={successRedirectionLink}
                       mintTo={address}
                       className={styles.xmintBtn}
                       style={{ background: '#ec4899' }}

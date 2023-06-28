@@ -6,8 +6,15 @@ import Web3 from 'web3';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const { eventId, address } = req.query as { eventId: string; providerUrl: string; address: string };
+    const { eventId, address, amount } = req.query as {
+      eventId: string;
+      providerUrl: string;
+      address: string;
+      amount: string;
+    };
     try {
+      const amountToMint = Number(amount || 1);
+
       const eventResponse = await StrapiService.getEventById(eventId, ['contractAddress', 'ABI', 'chainId']);
       const { contractAddress, ABI, chainId } = eventResponse.data.attributes;
 
@@ -17,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const contract = new web3.eth.Contract(ABI, contractAddress);
 
-      const price = (await contract.methods.getPrice(1).call()) as number;
+      const price = (await contract.methods.getPrice(amountToMint).call()) as number;
       const valueInWei = new BN(price);
       const valueInHex = '0x' + price.toString(16);
       const valueInEther = valueInWei.div(new BN('1000000000000000000'));
@@ -26,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         to: contractAddress,
         from: address,
         value: valueInHex,
-        data: contract.methods.mint(address, 1).encodeABI()
+        data: contract.methods.mint(address, amountToMint).encodeABI()
       };
 
       return res.status(200).json({
