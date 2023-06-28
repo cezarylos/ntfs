@@ -80,8 +80,6 @@ export default function PaymentModal({
     [amount, tokenPrice]
   );
 
-  console.log('mintConfig', mintConfig);
-
   const mintWithCrypto = useCallback(async () => {
     if (!mintParams || typeof mintParams !== 'object') {
       return;
@@ -159,8 +157,8 @@ export default function PaymentModal({
                     <CrossmintPayButton
                       clientId={checkoutProjectId}
                       mintConfig={mintConfig}
-                      environment={process.env.NEXT_PUBLIC_ENV !== 'production' ? 'production' : 'staging'}
-                      // successCallbackURL={successRedirectionLink}
+                      environment={process.env.NEXT_PUBLIC_ENV === 'production' ? 'production' : 'staging'}
+                      successCallbackURL={successRedirectionLink}
                       mintTo={address}
                       className={styles.xmintBtn}
                       style={{ background: '#ec4899' }}
