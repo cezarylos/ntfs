@@ -191,7 +191,7 @@ export class StrapiService {
     }
   }
 
-  public static async getHowToConnect(): Promise<StrapiResponseInterface<{ description: string }>> {
+  public static async getHowToConnect(): Promise<StrapiResponseInterface<{ description: string; videoSlug: string }>> {
     try {
       const res = await fetch(`${BASE_STRAPI_URL}/api/how-to-connect`, { ...cacheOptions });
       return await res.json();
