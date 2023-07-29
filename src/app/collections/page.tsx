@@ -9,7 +9,7 @@ export const metadata = {
   title: 'RealBrain'
 };
 
-const populateFields = ['name', 'startDate', 'endDate', 'slug'];
+const populateFields = ['name', 'startDate', 'endDate', 'slug', 'isCollab'];
 
 const soon = Array(2).fill({});
 
@@ -18,26 +18,31 @@ export default async function Events(): Promise<ReactElement> {
   return (
     <div className="h-[calc(100%-3.5rem)] flex flex-col">
       <div className="grid grid-rows-3 flex-grow gap-4">
-        {[...events, ...soon].map(({ id, startDate, endDate, name, slug }: EventInterface, idx) => (
+        {[...events, ...soon].map(({ id, startDate, endDate, name, slug, isCollab }: EventInterface, idx) => (
           <Fragment key={idx}>
             {slug ? (
               <Tile
                 alternateWrapper={{
                   component: Link,
                   props: {
-                    href: `/events/${slug}`,
+                    href: `/collections/${slug}`,
                     key: `${id}_${idx}`
                   }
                 }}
-                mainText={name}
+                mainText={
+                  <>
+                    <span className={'normal-case'}>{`${isCollab ? 'RealBrain x ' : ''}`}</span>
+                    {name}
+                  </>
+                }
                 styledTileIdx={idx}
                 secondaryContent={
                   <>
-                    {DateTime.fromISO(startDate as any).toFormat('dd.MM.yyyy')}
+                    {startDate && DateTime.fromISO(startDate, { zone: 'Europe/Warsaw' }).toFormat('dd.MM.yyyy')}
                     {endDate && (
                       <>
                         <span className="mx-1">-</span>
-                        {DateTime.fromISO(endDate as any).toFormat('dd.MM.yyyy')}
+                        {DateTime.fromISO(endDate, { zone: 'Europe/Warsaw' }).toFormat('dd.MM.yyyy')}
                       </>
                     )}
                   </>

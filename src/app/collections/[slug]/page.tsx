@@ -13,19 +13,26 @@ export const metadata = {
 const TokensLeft = dynamic(() => import('@/app/components/TokensLeft/TokensLeft'), { ssr: false });
 
 export default async function Page({ params: { slug } }: { params: { slug: string } }): Promise<ReactElement> {
-  const { id, name, chainId } = await getEventBySlug(slug, ['name', 'chainId']);
+  const { id, name, chainId, isCollab } = await getEventBySlug(slug, ['name', 'chainId', 'isCollab']);
+
+  const filteredNavigationItems = eventNavigationItems
+    .filter(({ href }) => !(isCollab && href === EventNavigationRoutes.REWARDS))
+    .map(item => ({
+      ...item,
+      label: item.href === EventNavigationRoutes.ABOUT && isCollab ? 'O KOLEKCJI' : item.label
+    }));
 
   return (
     <div className="h-full flex flex-col">
       <EventName name={name} />
       <div className="grid grid-rows-4 flex-grow gap-4">
-        {eventNavigationItems.map(({ label, href }, idx) => (
+        {filteredNavigationItems.map(({ label, href }, idx) => (
           <Tile
             key={idx}
             alternateWrapper={{
               component: Link,
               props: {
-                href: `/events/${slug}${href}`,
+                href: `/collections/${slug}${href}`,
                 key: `${slug}_${idx}`
               }
             }}

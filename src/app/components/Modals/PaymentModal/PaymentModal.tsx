@@ -39,7 +39,7 @@ export default function PaymentModal({
 
   const successRedirectionLink = useMemo((): string => {
     const origin = process.env.NODE_ENV === 'production' ? 'https://realbrain.art' : window.location.origin;
-    return `${origin}/events/${slug}/tokens?${PAYMENT_STATUS_STRING}=${SUCCESS_STRING}`;
+    return `${origin}/collections/${slug}/tokens?${PAYMENT_STATUS_STRING}=${SUCCESS_STRING}`;
   }, [slug]);
 
   useEffect((): void => {

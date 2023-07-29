@@ -7,9 +7,9 @@ interface Props {
     component: any;
     props?: any;
   };
-  mainText: string;
+  mainText: ReactElement | string;
   styledTileIdx: number;
-  secondaryContent?: ReactElement;
+  secondaryContent?: ReactElement | string | undefined;
   additionalTileClassName?: string;
   hasAccent?: boolean;
   isActive?: boolean;

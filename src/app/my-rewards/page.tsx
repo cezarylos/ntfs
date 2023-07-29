@@ -10,13 +10,13 @@ export const metadata = {
   title: 'RealBrain'
 };
 
-const populateFields = ['name', 'startDate', 'endDate', 'slug'];
+const populateFields = ['name', 'startDate', 'endDate', 'slug', 'isCollab'];
 
 export default async function MyTokens(): Promise<ReactElement> {
-  const events = await StrapiService.getAllEvents(populateFields);
+  const events = await StrapiService.getAllEvents(populateFields, true);
   return (
     <>
-      <SubheaderUnderlined name={'Wybierz Event:'} />
+      <SubheaderUnderlined name={'Wybierz Kolekcję:'} />
       {!!events?.length && (
         <div className="grid grid-rows-4 h-full gap-4">
           {events.map(({ id, startDate, endDate, name, slug }: EventInterface, idx) => (
@@ -33,11 +33,11 @@ export default async function MyTokens(): Promise<ReactElement> {
               styledTileIdx={idx}
               secondaryContent={
                 <>
-                  {DateTime.fromISO(startDate as any).toFormat('dd.MM.yyyy')}
+                  {startDate && DateTime.fromISO(startDate, { zone: 'Europe/Warsaw' }).toFormat('dd.MM.yyyy')}
                   {endDate && (
                     <>
                       <span className="mx-1">-</span>
-                      {DateTime.fromISO(endDate as any).toFormat('dd.MM.yyyy')}
+                      {DateTime.fromISO(endDate, { zone: 'Europe/Warsaw' }).toFormat('dd.MM.yyyy')}
                     </>
                   )}
                 </>

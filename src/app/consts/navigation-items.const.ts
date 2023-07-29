@@ -1,13 +1,13 @@
 export enum NavigationRoutes {
   HOME = '/',
-  EVENTS = '/events',
+  COLLECTIONS = '/collections',
   HELP = '/help',
   MY_REWARDS = '/my-rewards',
   MY_TOKENS = '/my-tokens'
 }
 
 export const navigationItems = [
-  { label: 'EVENTY', href: NavigationRoutes.EVENTS },
+  { label: 'KOLEKCJE', href: NavigationRoutes.COLLECTIONS },
   { label: 'POMOC', href: NavigationRoutes.HELP },
   { label: 'MOJE TOKENY', href: NavigationRoutes.MY_TOKENS },
   { label: 'MOJE NAGRODY', href: NavigationRoutes.MY_REWARDS }

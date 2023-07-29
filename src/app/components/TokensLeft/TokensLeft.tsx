@@ -61,7 +61,7 @@ export default function TokensLeft({ id, chainId, hasSuffix = false }: Props): R
           {hasSuffix && <span className="text-yellow-300 ml-1 uppercase">{getTokenWord(tokensLeft)}</span>}
         </>
       ) : (
-        !isLoading && 'Sorki, brak dostępnych tokenów'
+        !isLoading && 'Sorki, sold out :('
       )}
     </>
   );

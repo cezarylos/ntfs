@@ -30,7 +30,7 @@ export default function EventName({ name, className, slug, bgClassName }: Props)
   );
 
   return slug ? (
-    <Link className="outline-none" href={`/events/${slug}`}>
+    <Link className="outline-none" href={`/collections/${slug}`}>
       {content}
     </Link>
   ) : (

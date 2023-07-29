@@ -17,5 +17,5 @@ export interface EventInterface {
   excludedAddressesFromRewards: string[];
   socialLinks: Record<SocialLinksEnum, string>;
   rewardTitle: string;
-  giveawayStartDate: string;
+  isCollab: boolean;
 }

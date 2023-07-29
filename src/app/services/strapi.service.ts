@@ -25,11 +25,17 @@ const cacheOptions = {
 };
 
 export class StrapiService {
-  public static async getAllEvents(fields?: string[]): Promise<EventInterface[]> {
+  public static async getAllEvents(fields?: string[], isWithRewardsOnly?: boolean): Promise<EventInterface[]> {
     try {
-      const res = await fetch(`${BASE_STRAPI_URL}/api/events${filerFields(fields)}&populate[picture][fields][0]=url`, {
-        ...cacheOptions
-      });
+      const filterWithRewardsOnly = isWithRewardsOnly ? '&filters[isCollab][$eq]=false' : '';
+      const res = await fetch(
+        `${BASE_STRAPI_URL}/api/events${filerFields(
+          fields
+        )}&populate[picture][fields][0]=url&sort[0]=createdAt:desc${filterWithRewardsOnly}${noLimitPagination}`,
+        {
+          ...cacheOptions
+        }
+      );
       const resJson = await res.json();
       return resJson.data.map(({ attributes, id }: { attributes: Partial<EventInterface>; id: number }) => ({
         ...attributes,
