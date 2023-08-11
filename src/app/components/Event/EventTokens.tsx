@@ -66,8 +66,6 @@ export default function EventTokens({
 
   const isMoreThenOneTokenToCollect = amountOfTokensToGetReward > 1;
 
-  console.log(myEventTokens);
-
   return (
     <>
       {isCurrentChainIdSameAsEventChainId ? (
