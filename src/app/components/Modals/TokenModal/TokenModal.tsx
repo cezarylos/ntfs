@@ -11,6 +11,8 @@ interface Props extends ModalInterface {
   tokenName: string;
   tokenUrl: string;
   tokenDescription: string;
+  contractAddress: string;
+  tokenId: string;
 }
 
 export default function TokenModal({
@@ -19,7 +21,9 @@ export default function TokenModal({
   openSeaUrl,
   tokenName,
   tokenUrl,
-  tokenDescription
+  tokenDescription,
+  contractAddress,
+  tokenId
 }: Props): ReactElement {
   function closeModal() {
     setIsOpen(false);
@@ -87,6 +91,14 @@ export default function TokenModal({
                           )
                       }}
                     />
+                  </div>
+                  <div className="text-center mt-2">
+                    <p className="mb-0.5 text-purple-900">Adres kontraktu:</p>
+                    <p className="font-inter break-words">{contractAddress}</p>
+                  </div>
+                  <div className="text-center mt-2">
+                    <p className="mb-0.5 text-purple-900">Token ID:</p>
+                    <p className="font-inter break-words">{tokenId}</p>
                   </div>
                   <div className="mt-1">
                     <a

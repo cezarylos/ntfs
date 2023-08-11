@@ -17,7 +17,7 @@ const TokensLeft = dynamic(() => import('@/app/components/TokensLeft/TokensLeft'
 export default async function Tokens({ params: { slug } }: { params: { slug: string } }): Promise<ReactElement> {
   const event = await getEventBySlug(
     slug,
-    ['name', 'chainId', 'checkoutProjectId', 'amountOfTokensToGetReward', 'rewardTitle'],
+    ['name', 'chainId', 'checkoutProjectId', 'amountOfTokensToGetReward', 'rewardTitle', 'contractAddress'],
     true
   );
   const { id, chainId, checkoutProjectId, collectionImage, amountOfTokensToGetReward, rewardTitle } = event;
@@ -36,7 +36,7 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
             i otrzymaj:
           </p>
           <p className="text-yellow-300 text-xl sm:text-2xl text-center uppercase mb-2">{rewardTitle}</p>
-          <Link href={`${NavigationRoutes.EVENTS}/${slug}${EventNavigationRoutes.REWARDS}`}>
+          <Link href={`${NavigationRoutes.COLLECTIONS}/${slug}${EventNavigationRoutes.REWARDS}`}>
             <button className="rounded-md shadow-xl m-auto block text-white bg-pink-500 font-semibold p-2 uppercase text-sm hover:brightness-110 w-fit">
               Sprawdź swoje nagrody
             </button>

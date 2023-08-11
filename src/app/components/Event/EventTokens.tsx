@@ -18,7 +18,13 @@ interface Props extends EventInterface {
   wrapperClassName?: string;
 }
 
-export default function EventTokens({ id, chainId, amountOfTokensToGetReward, wrapperClassName }: Props): ReactElement {
+export default function EventTokens({
+  id,
+  chainId,
+  amountOfTokensToGetReward,
+  wrapperClassName,
+  contractAddress
+}: Props): ReactElement {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedToken, setSelectedToken] = useState<Record<string, any> | null>(null);
   const dispatch = useAppDispatch();
@@ -60,6 +66,8 @@ export default function EventTokens({ id, chainId, amountOfTokensToGetReward, wr
 
   const isMoreThenOneTokenToCollect = amountOfTokensToGetReward > 1;
 
+  console.log(myEventTokens);
+
   return (
     <>
       {isCurrentChainIdSameAsEventChainId ? (
@@ -81,6 +89,8 @@ export default function EventTokens({ id, chainId, amountOfTokensToGetReward, wr
                 tokenName={selectedToken?.name}
                 openSeaUrl={selectedToken?.openseaUrl}
                 tokenDescription={selectedToken?.description}
+                contractAddress={contractAddress}
+                tokenId={selectedToken?.id}
               />
             )}
             {!isMyEventTokensLoading && myEventTokens?.length ? (
