@@ -1,6 +1,5 @@
 'use client';
 
-import SubheaderUnderlined from '@/app/components/SubheaderUnderlined/SubheaderUnderlined';
 import { useHasProvider } from '@/app/hooks/useHasProvider';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { setIsLoading } from '@/app/store/global/global.slice';
@@ -63,7 +62,7 @@ export default function MyQrCode(): ReactElement {
       {encryptedAddress && (
         <div className={'flex flex-col items-center mt-4'}>
           <Canvas
-            text={`${address}:${encryptedAddress}`}
+            text={encryptedAddress}
             options={{
               errorCorrectionLevel: 'M',
               margin: 3,
