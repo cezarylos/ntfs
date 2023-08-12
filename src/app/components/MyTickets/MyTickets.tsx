@@ -67,7 +67,7 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
           <SubheaderUnderlined name={'Moje Nagrody'} />
         </>
       )}
-      {files?.map(({ title, description, url }, idx) => (
+      {files?.map(({ title, description, url, isRewardCollected }, idx) => (
         <div key={idx} className="bg-purple-200 rounded-xl p-4 my-4">
           <h2 className="text-xl text-purple-950">{title}</h2>
           <div
@@ -89,6 +89,11 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
             >
               Pobierz
             </a>
+          )}
+          {isRewardCollected && (
+            <span className="m-auto mt-4 p-2 w-3/4 font-inter justify-center bg-green-500 flex item-center text-white px-3 py-2 text-sm font-medium shadow-xl rounded-md">
+              Nagroda odebrana
+            </span>
           )}
         </div>
       ))}

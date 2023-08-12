@@ -25,11 +25,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           await Promise.all(
             data.map(async ticketWrapper => {
               const {
-                attributes: { title, description }
+                attributes: { title, description, isRewardCollected }
               } = ticketWrapper;
               const res = {
                 title,
-                description
+                description,
+                isRewardCollected
               } as TicketInterface;
               const ticketUrl = ticketWrapper.attributes.ticket?.data?.attributes.url;
               res.url = ticketUrl ? replaceS3LinkWithCloudFront(ticketUrl) : '';

@@ -67,7 +67,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       );
 
       if (emptyTicketsResponse.data.length === 0) {
-        return res.status(400).json({ message: 'No tickets available' });
+        return res.status(200).json({ message: 'No tickets available' });
       }
 
       const warningMessages = [];
