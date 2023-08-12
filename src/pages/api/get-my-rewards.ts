@@ -31,7 +31,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 title,
                 description
               } as TicketInterface;
-              res.url = replaceS3LinkWithCloudFront(ticketWrapper.attributes.ticket.data.attributes.url);
+              const ticketUrl = ticketWrapper.attributes.ticket?.data?.attributes.url;
+              res.url = ticketUrl ? replaceS3LinkWithCloudFront(ticketUrl) : '';
               return res;
             })
           )

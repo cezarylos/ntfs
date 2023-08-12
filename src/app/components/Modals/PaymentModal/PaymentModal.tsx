@@ -38,7 +38,8 @@ export default function PaymentModal({
   }
 
   const successRedirectionLink = useMemo((): string => {
-    const origin = process.env.NODE_ENV === 'production' ? 'https://realbrain.art' : window.location.origin;
+    const origin =
+      process.env.NODE_ENV === 'production' ? 'https://realbrain.art' : 'https://ntfs-git-develop-cezarylos.vercel.app';
     return `${origin}/collections/${slug}/tokens?${PAYMENT_STATUS_STRING}=${SUCCESS_STRING}`;
   }, [slug]);
 

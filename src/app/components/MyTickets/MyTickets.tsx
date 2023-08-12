@@ -81,13 +81,15 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
                 )
             }}
           />
-          <a
-            href={url}
-            target="_blank"
-            className="m-auto mt-4 p-2 w-3/4 font-inter justify-center bg-pink-500 flex item-center text-white px-3 py-2 text-sm font-medium shadow-xl rounded-md hover:brightness-110"
-          >
-            Pobierz
-          </a>
+          {url && (
+            <a
+              href={url}
+              target="_blank"
+              className="m-auto mt-4 p-2 w-3/4 font-inter justify-center bg-pink-500 flex item-center text-white px-3 py-2 text-sm font-medium shadow-xl rounded-md hover:brightness-110"
+            >
+              Pobierz
+            </a>
+          )}
         </div>
       ))}
       {!isLoading && files?.length === 0 && (

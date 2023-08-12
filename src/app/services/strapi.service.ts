@@ -123,12 +123,14 @@ export class StrapiService {
   }
 
   public static async getTicketsWithoutHolderAddress(
-    jwt: string
+    jwt: string,
+    eventId: string
   ): Promise<StrapiArrayResponseInterface<TicketInterface>> {
     try {
+      const hasEventId = `&filters[event][id][$eq]=${eventId}`;
       const headers = getHeaders(jwt);
       const res = await fetch(
-        `${BASE_STRAPI_URL}/api/tickets?filters[holderAddress][$null]=true&pagination[page]=1&pagination[pageSize]=1`,
+        `${BASE_STRAPI_URL}/api/tickets?filters[holderAddress][$null]=true${hasEventId}${noLimitPagination}`,
         { headers, cache: 'no-cache' }
       );
       return res.json();
@@ -138,11 +140,15 @@ export class StrapiService {
     }
   }
 
-  public static async getUsedTokens(jwt: string): Promise<StrapiArrayResponseInterface<TicketInterface>> {
+  public static async getUsedTokens(
+    jwt: string,
+    eventId: string
+  ): Promise<StrapiArrayResponseInterface<TicketInterface>> {
     try {
+      const hasEventId = `&filters[event][id][$eq]=${eventId}`;
       const headers = getHeaders(jwt);
       const res = await fetch(
-        `${BASE_STRAPI_URL}/api/tickets?filters[tokenIds][$notNull]=true&pagination[page]=1&pagination[pageSize]=100`,
+        `${BASE_STRAPI_URL}/api/tickets?filters[tokenIds][$notNull]=true${hasEventId}&pagination[page]=1&pagination[pageSize]=100`,
         {
           headers,
           cache: 'no-cache'

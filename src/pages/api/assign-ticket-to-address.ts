@@ -11,8 +11,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
     try {
       const [usedTokensResponse, holderTicketResponse, eventResponse] = await Promise.all([
-        StrapiService.getUsedTokens(process.env.STRAPI_API_TOKEN as string),
-        StrapiService.getTicketsByHolderAddress(process.env.STRAPI_API_TOKEN as string, address.toLowerCase()),
+        StrapiService.getUsedTokens(process.env.STRAPI_API_TOKEN as string, eventId),
+        StrapiService.getTicketsByHolderAddress(process.env.STRAPI_API_TOKEN as string, address.toLowerCase(), eventId),
         StrapiService.getEventById(eventId, [
           'contractAddress',
           'ABI',
@@ -32,10 +32,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const usedTokens = usedTokensResponse.data.map(ticket => ticket.attributes.tokenIds).flat();
 
-      if (total > 0) {
-        return res.status(201).json({ message: 'Ticket already assigned' });
-      }
-
       const excludedAddressesFromRewardsLowercase = excludedAddressesFromRewards.map(address => address.toLowerCase());
 
       if (excludedAddressesFromRewardsLowercase.includes(address.toLocaleString())) {
@@ -50,35 +46,68 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const tokenIds =
         (await contract.methods.getTokensByOwner?.(address).call())?.map((tokenId: string) => Number(tokenId)) || [];
 
-      const isUserTokenUsed = tokenIds.some(tokenId => usedTokens.includes(tokenId));
+      const divideArrayIntoGroups = (arr: number[], groupSize: number): number[][] => {
+        const dividedArrays = [];
+        for (let i = 0; i < arr.length; i += groupSize) {
+          dividedArrays.push(arr.slice(i, i + groupSize));
+        }
+        return dividedArrays;
+      };
 
-      if (isUserTokenUsed) {
-        return res.status(201).json({ message: 'Some of the tokens have been already used to receive the reward' });
-      }
+      const tokenIdsGroups = divideArrayIntoGroups(tokenIds, amountOfTokensToGetReward);
+      const amountOfFullTokenSets = tokenIdsGroups.filter(group => group.length === amountOfTokensToGetReward).length;
 
-      const tokensCount = tokenIds.length;
-
-      if (tokensCount < amountOfTokensToGetReward) {
-        return res.status(400).json({ message: `Not enough tokens. Has ${tokensCount}/${amountOfTokensToGetReward}.` });
+      if (total >= amountOfFullTokenSets) {
+        return res.status(201).json({ message: 'Ticket already assigned' });
       }
 
       const emptyTicketsResponse = await StrapiService.getTicketsWithoutHolderAddress(
-        process.env.STRAPI_API_TOKEN as string
+        process.env.STRAPI_API_TOKEN as string,
+        eventId
       );
 
       if (emptyTicketsResponse.data.length === 0) {
         return res.status(400).json({ message: 'No tickets available' });
       }
 
-      const emptyTicketId = emptyTicketsResponse.data[0].id;
-      await StrapiService.assignHolderAddressToTicket(
-        process.env.STRAPI_API_TOKEN as string,
-        emptyTicketId,
-        address.toLowerCase(),
-        tokenIds
-      );
+      const warningMessages = [];
 
-      return res.status(201).json({ message: 'Ticket assigned' });
+      for (let i = 0; i < tokenIdsGroups.length; i++) {
+        const tokenSetNumber = i + 1;
+        const tokenIdsGroup = tokenIdsGroups[i];
+        const tokensCount = tokenIdsGroup.length;
+        if (tokensCount < amountOfTokensToGetReward) {
+          warningMessages.push({ tokenSetNumber, message: 'Not enough tokens to receive a reward' });
+          continue;
+        }
+
+        const isUserTokenUsed = tokenIdsGroup.some(tokenId => usedTokens.includes(tokenId));
+
+        if (isUserTokenUsed) {
+          warningMessages.push({
+            tokenSetNumber,
+            message: 'Some of the tokens have been already used to receive the reward'
+          });
+          continue;
+        }
+
+        const emptyTicketId = emptyTicketsResponse.data[i]?.id;
+        if (!emptyTicketId) {
+          warningMessages.push({
+            tokenSetNumber,
+            message: 'Not enough tickets'
+          });
+          continue;
+        }
+        await StrapiService.assignHolderAddressToTicket(
+          process.env.STRAPI_API_TOKEN as string,
+          emptyTicketId,
+          address.toLowerCase(),
+          tokenIdsGroup
+        );
+      }
+
+      return res.status(201).json({ message: 'Ticket assigned', warningMessages });
     } catch (e) {
       console.error(e);
       return res.status(500).json({ message: 'Something went wrong' });
