@@ -60,7 +60,6 @@ export default function MyQrCode(): ReactElement {
 
   return (
     <div className="pb-2" ref={parentRef}>
-      <SubheaderUnderlined name={'Mój kod QR'} className={'text-3xl text-center'} />
       {encryptedAddress && (
         <div className={'flex flex-col items-center'}>
           <Canvas
