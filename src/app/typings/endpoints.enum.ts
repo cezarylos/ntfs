@@ -4,5 +4,6 @@ export enum EndpointsEnum {
   GET_MINT_PARAMS = 'get-mint-params',
   START_LOTTERY = 'start-lottery',
   GET_TOKENS_AMOUNT_LEFT = 'get-tokens-amount-left',
-  ASSIGN_TICKET_TO_ADDRESS = 'assign-ticket-to-address'
+  ASSIGN_TICKET_TO_ADDRESS = 'assign-ticket-to-address',
+  GET_MY_QR_CODE = 'get-my-qr-code'
 }

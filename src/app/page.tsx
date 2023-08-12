@@ -10,7 +10,7 @@ export const metadata = {
 export default async function Home(): Promise<ReactElement> {
   return (
     <div className="h-full flex flex-col">
-      <div className="grid grid-rows-4 flex-grow gap-4">
+      <div className="grid grid-rows-5 flex-grow gap-4">
         {navigationItems.map(({ label, href, isTwoLiner }, index) => (
           <Tile
             isTwoLiner={isTwoLiner}

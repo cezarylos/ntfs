@@ -3,14 +3,16 @@ export enum NavigationRoutes {
   COLLECTIONS = '/collections',
   HELP = '/help',
   MY_REWARDS = '/my-rewards',
-  MY_TOKENS = '/my-tokens'
+  MY_TOKENS = '/my-tokens',
+  MY_QR_CODE = '/my-qr-code'
 }
 
 export const navigationItems = [
   { label: 'KOLEKCJE', href: NavigationRoutes.COLLECTIONS },
   { label: 'POMOC', href: NavigationRoutes.HELP },
   { label: 'MOJE TOKENY', href: NavigationRoutes.MY_TOKENS },
-  { label: 'MOJE NAGRODY', href: NavigationRoutes.MY_REWARDS }
+  { label: 'MOJE NAGRODY', href: NavigationRoutes.MY_REWARDS },
+  { label: 'MÓJ KOD QR', href: NavigationRoutes.MY_QR_CODE }
 ];
 
 export enum EventNavigationRoutes {
