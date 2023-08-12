@@ -61,7 +61,7 @@ export default function MyQrCode(): ReactElement {
   return (
     <div className="pb-2" ref={parentRef}>
       {encryptedAddress && (
-        <div className={'flex flex-col items-center'}>
+        <div className={'flex flex-col items-center mt-4'}>
           <Canvas
             text={`${address}:${encryptedAddress}`}
             options={{
