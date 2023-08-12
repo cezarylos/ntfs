@@ -12,7 +12,7 @@ import React, { ReactElement, useEffect, useMemo, useRef, useState } from 'react
 import axios from 'axios';
 
 export default function MyQrCode(): ReactElement {
-  const { SVG } = useQRCode();
+  const { Canvas } = useQRCode();
 
   const dispatch = useAppDispatch();
 
@@ -63,7 +63,7 @@ export default function MyQrCode(): ReactElement {
       <SubheaderUnderlined name={'Mój kod QR'} className={'text-3xl text-center'} />
       {encryptedAddress && (
         <div className={'flex flex-col items-center'}>
-          <SVG
+          <Canvas
             text={`${address}:${encryptedAddress}`}
             options={{
               errorCorrectionLevel: 'M',
@@ -73,6 +73,12 @@ export default function MyQrCode(): ReactElement {
               color: {
                 dark: '#4c1d95',
                 light: '#FFFFFF'
+              }
+            }}
+            logo={{
+              src: '/logo1.gif',
+              options: {
+                width: (parentRef.current?.clientWidth / 4) as number
               }
             }}
           />
