@@ -77,7 +77,9 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
                 .parse(description || '', { mangle: false, headerIds: false })
                 .replace(
                   '<a ',
-                  '<a target="_blank" class="underline mt-1 text-purple-900 font-mogra cursor-pointer outline-none text-base" '
+                  `<a ${
+                    url ? 'target="_blank"' : ''
+                  } class="underline mt-1 text-purple-900 font-mogra cursor-pointer outline-none text-base"`
                 )
             }}
           />

@@ -77,8 +77,7 @@ export default function PaymentModal({
     () => ({
       type: 'erc-721',
       totalPrice: tokenPrice?.toString(),
-      _amount: amount,
-      quantity: amount
+      _amount: amount
     }),
     [amount, tokenPrice]
   );
