@@ -26,6 +26,7 @@ export const styleTileSets = [
   {
     background: 'bg-teal-400',
     text: 'text-pink-700',
-    accent: 'before:bg-cyan-500'
+    accent:
+      'before:inset-1 before:-skew-y-3 before:h-[30%] before:w-[calc(100%+0.75rem)] before:bg-lime-300 before:translate-x-[-0.5rem] before:translate-y-[1rem]'
   }
 ];
