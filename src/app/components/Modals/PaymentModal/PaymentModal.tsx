@@ -158,7 +158,8 @@ export default function PaymentModal({
                     <CrossmintPayButton
                       clientId={checkoutProjectId}
                       mintConfig={mintConfig}
-                      environment={process.env.NEXT_PUBLIC_ENV === 'production' ? 'production' : 'staging'}
+                      //TODO: change to production
+                      environment={process.env.NEXT_PUBLIC_ENV === 'production' ? 'staging' : 'staging'}
                       successCallbackURL={successRedirectionLink}
                       mintTo={address}
                       className={styles.xmintBtn}
