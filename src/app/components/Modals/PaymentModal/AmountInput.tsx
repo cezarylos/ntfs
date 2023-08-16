@@ -1,0 +1,67 @@
+import React, { useState, ChangeEvent, ReactElement, Dispatch, useCallback } from 'react';
+
+interface Props {
+  amount: number;
+  setAmount: Dispatch<number>;
+  maxAmount: number;
+}
+
+export default function AmountInput({ amount, setAmount, maxAmount }: Props): ReactElement {
+  const handleIncrement = useCallback((): void => {
+    if (amount < maxAmount) {
+      setAmount(amount + 1);
+    }
+  }, [amount, maxAmount, setAmount]);
+
+  const handleDecrement = useCallback((): void => {
+    if (amount > 1) {
+      setAmount(amount - 1);
+    }
+  }, [amount, setAmount]);
+
+  const handleInputChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>): void => {
+      const inputValue = event.target.value;
+      if (inputValue === '') {
+        setAmount(1);
+      }
+      if (parseInt(inputValue) >= 1 && parseInt(inputValue) <= maxAmount) {
+        setAmount(parseInt(inputValue));
+      }
+    },
+    [maxAmount, setAmount]
+  );
+
+  return (
+    <div className="flex flex-row h-10 w-3/4 rounded-lg relative bg-transparent mt-2 mb-2 mx-auto">
+      <button
+        data-action="decrement"
+        className={`bg-pink-500 text-white ${
+          amount === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-pink-400'
+        } h-full w-20 rounded-l cursor-pointer outline-none disabled:bg-pink-800`}
+        onClick={handleDecrement}
+        disabled={amount === 1}
+      >
+        <span className="m-auto text-2xl font-thin">−</span>
+      </button>
+      <input
+        type="text"
+        className="focus:outline-none text-center w-full bg-pink-400 text-white font-semibold text-md md:text-base cursor-default flex items-center outline-none"
+        name="custom-input-number"
+        value={amount}
+        readOnly
+        onChange={handleInputChange}
+      />
+      <button
+        data-action="increment"
+        className={`bg-pink-500 text-white ${
+          amount === 10 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-pink-400'
+        } h-full w-20 rounded-r cursor-pointer outline-none disabled:bg-pink-800`}
+        onClick={handleIncrement}
+        disabled={amount === maxAmount}
+      >
+        <span className="m-auto text-2xl font-thin">+</span>
+      </button>
+    </div>
+  );
+}

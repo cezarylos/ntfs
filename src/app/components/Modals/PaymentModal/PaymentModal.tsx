@@ -1,4 +1,5 @@
 import styles from '@/app/components/AcquireToken/AcquireToken.module.scss';
+import AmountInput from '@/app/components/Modals/PaymentModal/AmountInput';
 import { setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch } from '@/app/store/store';
 import { ModalInterface, PAYMENT_STATUS_STRING, SUCCESS_STRING } from '@/app/typings/common.typings';
@@ -13,6 +14,7 @@ interface Props extends ModalInterface {
   slug: string;
   address: string;
   amount: number;
+  maxTokensPerWallet: number;
   checkoutProjectId: string;
   checkoutCollectionId: string;
   eventId: string | number;
@@ -28,12 +30,17 @@ export default function PaymentModal({
   checkoutProjectId,
   eventChainId,
   eventId,
-  checkoutCollectionId
+  checkoutCollectionId,
+  maxTokensPerWallet
 }: Props): ReactElement {
   const dispatch = useAppDispatch();
 
   const [tokenPrice, setTokenPrice] = useState(0);
+
   const [mintParams, setMintParams] = useState(null);
+
+  const [tokenAmount, setTokenAmount] = useState(amount);
+
   function closeModal() {
     setIsOpen(false);
     dispatch(setIsLoading(false));
@@ -150,7 +157,26 @@ export default function PaymentModal({
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="flex flex-col w-full h-auto max-w-md lg:max-w-lg transform overflow-hidden rounded-2xl bg-purple-200 border-solid p-6 text-left align-middle shadow-3xl transition-all">
-                  <Dialog.Title as="h3" className="text-3xl text-center font-medium leading-6 text-purple-950">
+                  {maxTokensPerWallet && (
+                    <>
+                      <Dialog.Title
+                        as="h3"
+                        className="text-3xl text-center font-medium leading-6 text-purple-950 uppercase"
+                      >
+                        <h1 className={classNames('text-xl font-bold text-purple-900 outline-none relative')}>
+                          Wybierz ilość
+                        </h1>
+                      </Dialog.Title>
+                      <AmountInput amount={tokenAmount} setAmount={setTokenAmount} maxAmount={maxTokensPerWallet} />
+                      <h1 className="text-lg text-center mb-4 text-purple-950">
+                        Max {maxTokensPerWallet} tokenów na portfel
+                      </h1>
+                    </>
+                  )}
+                  <Dialog.Title
+                    as="h3"
+                    className="text-3xl text-center font-medium leading-6 text-purple-950 uppercase"
+                  >
                     <h1 className={classNames('text-xl font-bold text-purple-900 outline-none relative')}>
                       Wybierz metodę płatności
                     </h1>

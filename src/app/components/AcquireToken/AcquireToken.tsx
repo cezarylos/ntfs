@@ -116,6 +116,7 @@ export default function AcquireToken({
         address={address}
         slug={slug}
         amount={amountOfTokensToGetReward}
+        maxTokensPerWallet={maxTokensPerWallet}
         checkoutProjectId={checkoutProjectId}
         eventChainId={eventChainId}
         eventId={eventId}

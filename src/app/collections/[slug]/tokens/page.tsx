@@ -2,6 +2,7 @@ import EventName from '@/app/components/Event/EventName';
 import SubheaderUnderlined from '@/app/components/SubheaderUnderlined/SubheaderUnderlined';
 import { EventNavigationRoutes, NavigationRoutes } from '@/app/consts/navigation-items.const';
 import { getEventBySlug, getTokenWord } from '@/app/utils';
+import { marked } from 'marked';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import React, { ReactElement } from 'react';
@@ -53,7 +54,14 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
             </span>{' '}
             i otrzymaj:
           </p>
-          <p className="text-yellow-300 text-xl sm:text-2xl text-center uppercase mb-2">{rewardTitle}</p>
+          <div
+            className="text-yellow-300 text-xl sm:text-2xl text-center uppercase mb-2"
+            dangerouslySetInnerHTML={{
+              __html: marked
+                .parse(rewardTitle || '', { mangle: false, headerIds: false })
+                .replace('<p', '<p class="text-white text-md sm:text-lg"')
+            }}
+          />
           <Link href={`${NavigationRoutes.COLLECTIONS}/${slug}${EventNavigationRoutes.REWARDS}`}>
             <button className="rounded-md shadow-xl m-auto block text-white bg-pink-500 font-semibold p-2 uppercase text-sm hover:brightness-110 w-fit">
               Sprawdź swoje nagrody
