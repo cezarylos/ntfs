@@ -10,7 +10,7 @@
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
-    "@crossmint/client-sdk-react-ui": "^0.2.8-alpha.3",
+    "@crossmint/client-sdk-react-ui": "^1.0.1-alpha.4",
     "@headlessui/react": "^1.7.14",
     "@heroicons/react": "^2.0.18",
     "@metamask/detect-provider": "^2.0.0",
