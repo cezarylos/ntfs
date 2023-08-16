@@ -39,7 +39,7 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
   } = event;
 
   return (
-    <div className="pb-4">
+    <div className="pb-4 flex flex-col">
       <EventName name={event.name} slug={slug} />
       <SubheaderUnderlined name={'Kup Token'} />
       {rewardTitle && (
