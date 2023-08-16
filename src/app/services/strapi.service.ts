@@ -28,10 +28,11 @@ export class StrapiService {
   public static async getAllEvents(fields?: string[], isWithRewardsOnly?: boolean): Promise<EventInterface[]> {
     try {
       const filterWithRewardsOnly = isWithRewardsOnly ? '&filters[isCollab][$eq]=false' : '';
+      const filterIsNotHidden = '&filters[isHidden][$eq]=false';
       const res = await fetch(
         `${BASE_STRAPI_URL}/api/events${filerFields(
           fields
-        )}&populate[picture][fields][0]=url&sort[0]=createdAt:desc${filterWithRewardsOnly}${noLimitPagination}`,
+        )}&populate[picture][fields][0]=url&sort[0]=createdAt:desc${filterWithRewardsOnly}${filterIsNotHidden}${noLimitPagination}`,
         {
           ...cacheOptions
         }

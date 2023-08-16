@@ -15,12 +15,9 @@ const TokensLeft = dynamic(() => import('@/app/components/TokensLeft/TokensLeft'
 export default async function Page({ params: { slug } }: { params: { slug: string } }): Promise<ReactElement> {
   const { id, name, chainId, isCollab } = await getEventBySlug(slug, ['name', 'chainId', 'isCollab']);
 
-  const filteredNavigationItems = eventNavigationItems
-    .filter(({ href }) => !(isCollab && href === EventNavigationRoutes.REWARDS))
-    .map(item => ({
-      ...item,
-      label: item.href === EventNavigationRoutes.ABOUT && isCollab ? 'O KOLEKCJI' : item.label
-    }));
+  const filteredNavigationItems = eventNavigationItems.filter(
+    ({ href }) => !(isCollab && href === EventNavigationRoutes.REWARDS)
+  );
 
   return (
     <div className="h-full flex flex-col">

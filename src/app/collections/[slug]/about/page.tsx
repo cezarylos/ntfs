@@ -19,7 +19,7 @@ export default async function About({ params: { slug } }: { params: { slug: stri
   return (
     <>
       <EventName name={name} />
-      <SubheaderUnderlined name={'O Kolekcji'} />
+      <SubheaderUnderlined name={'Informacje'} />
       <SocialLinks socialLinks={socialLinks} />
       <div className="relative w-full h-auto my-4">
         <div className="w-full h-full rounded-md overflow-clip">

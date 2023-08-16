@@ -27,7 +27,7 @@ export enum HelpNavigationRoutes {
 
 export const eventNavigationItems = [
   { label: 'KUP TOKEN', href: EventNavigationRoutes.TOKENS },
-  { label: 'O EVENCIE', href: EventNavigationRoutes.ABOUT },
+  { label: 'INFORMACJE', href: EventNavigationRoutes.ABOUT },
   { label: 'MOJE NAGRODY', href: EventNavigationRoutes.REWARDS }
   // { label: 'BONUS', href: EventNavigationRoutes.ABOUT }
 ];
