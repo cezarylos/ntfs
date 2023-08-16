@@ -21,9 +21,9 @@ interface Props extends EventInterface {
 export default function EventTokens({
   id,
   chainId,
-  amountOfTokensToGetReward,
   wrapperClassName,
-  contractAddress
+  contractAddress,
+  maxTokensPerWallet
 }: Props): ReactElement {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedToken, setSelectedToken] = useState<Record<string, any> | null>(null);
@@ -64,7 +64,7 @@ export default function EventTokens({
     setIsModalOpen(true);
   };
 
-  const isMoreThenOneTokenToCollect = amountOfTokensToGetReward > 1;
+  const isMoreThenOneTokenToCollect = maxTokensPerWallet > 1;
 
   return (
     <>
@@ -74,11 +74,7 @@ export default function EventTokens({
             <h2 className="text-xl mb-2 text-yellow-300 uppercase text-center">
               {isMoreThenOneTokenToCollect ? 'MOJE TOKENY' : 'Mój TOKEN'}:
             </h2>
-            <ProgressBar
-              max={amountOfTokensToGetReward}
-              current={myEventTokens.length}
-              isLoading={isMyEventTokensLoading}
-            />
+            <ProgressBar max={maxTokensPerWallet} current={myEventTokens.length} isLoading={isMyEventTokensLoading} />
             {selectedToken?.image && (
               <TokenModal
                 isOpen={isModalOpen}

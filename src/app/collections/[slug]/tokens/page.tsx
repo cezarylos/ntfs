@@ -24,7 +24,8 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
       'checkoutCollectionId',
       'amountOfTokensToGetReward',
       'rewardTitle',
-      'contractAddress'
+      'contractAddress',
+      'maxTokensPerWallet'
     ],
     true
   );
@@ -35,7 +36,8 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
     collectionImage,
     amountOfTokensToGetReward,
     rewardTitle,
-    checkoutCollectionId
+    checkoutCollectionId,
+    maxTokensPerWallet
   } = event;
 
   return (
@@ -70,6 +72,7 @@ export default async function Tokens({ params: { slug } }: { params: { slug: str
         collectionImage={collectionImage}
         amountOfTokensToGetReward={amountOfTokensToGetReward}
         checkoutCollectionId={checkoutCollectionId}
+        maxTokensPerWallet={maxTokensPerWallet}
       />
       <EventTokens {...event} />
     </div>

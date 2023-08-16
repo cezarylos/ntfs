@@ -28,6 +28,7 @@ interface Props {
   checkoutCollectionId: string;
   collectionImage: string;
   amountOfTokensToGetReward: number;
+  maxTokensPerWallet: number;
   buttonContent?: string;
   isPreviewImgShown?: boolean;
 }
@@ -41,7 +42,8 @@ export default function AcquireToken({
   buttonContent,
   amountOfTokensToGetReward,
   isPreviewImgShown = true,
-  checkoutCollectionId
+  checkoutCollectionId,
+  maxTokensPerWallet
 }: Props): ReactElement {
   const params = useSearchParams();
   const isStatusSuccess = params?.get(PAYMENT_STATUS_STRING) === SUCCESS_STRING;
@@ -57,8 +59,8 @@ export default function AcquireToken({
   const address = useMemo((): string => wallet.accounts?.[0], [wallet.accounts]);
   const isTokensLeftMoreThenZero = useMemo((): boolean => (tokensLeft || 0) > 0, [tokensLeft]);
   const isAllowMintMore = useMemo(
-    (): boolean => (myEventTokens.length || 0) < amountOfTokensToGetReward,
-    [myEventTokens.length, amountOfTokensToGetReward]
+    (): boolean => (myEventTokens.length || 0) < maxTokensPerWallet,
+    [myEventTokens.length, maxTokensPerWallet]
   );
 
   const switchChain = useSwitchChain(eventChainId);
@@ -149,7 +151,7 @@ export default function AcquireToken({
             </button>
             {!isAllowMintMore && (
               <p className="text-white text-center mt-6">
-                Sorki, limit {amountOfTokensToGetReward} {getTokenWord(amountOfTokensToGetReward)} na portfel :(
+                Sorki, limit {maxTokensPerWallet} {getTokenWord(maxTokensPerWallet)} na portfel :(
               </p>
             )}
           </>

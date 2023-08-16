@@ -15,6 +15,7 @@ export interface EventInterface {
   slug: string;
   collectionImage: any;
   amountOfTokensToGetReward: number;
+  maxTokensPerWallet: number;
   excludedAddressesFromRewards: string[];
   socialLinks: Record<SocialLinksEnum, string>;
   rewardTitle: string;
