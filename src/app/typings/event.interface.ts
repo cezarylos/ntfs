@@ -3,6 +3,7 @@ import { SocialLinksEnum } from '@/app/typings/common.typings';
 export interface EventInterface {
   contractAddress: string;
   checkoutProjectId: string;
+  checkoutCollectionId: string;
   ABI: Array<Record<string, any>>;
   name: string;
   description: string;

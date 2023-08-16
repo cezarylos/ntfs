@@ -25,6 +25,7 @@ interface Props {
   eventId: string | number;
   chainId: string;
   checkoutProjectId: string;
+  checkoutCollectionId: string;
   collectionImage: string;
   amountOfTokensToGetReward: number;
   buttonContent?: string;
@@ -39,7 +40,8 @@ export default function AcquireToken({
   collectionImage,
   buttonContent,
   amountOfTokensToGetReward,
-  isPreviewImgShown = true
+  isPreviewImgShown = true,
+  checkoutCollectionId
 }: Props): ReactElement {
   const params = useSearchParams();
   const isStatusSuccess = params?.get(PAYMENT_STATUS_STRING) === SUCCESS_STRING;
@@ -115,6 +117,7 @@ export default function AcquireToken({
         checkoutProjectId={checkoutProjectId}
         eventChainId={eventChainId}
         eventId={eventId}
+        checkoutCollectionId={checkoutCollectionId}
       />
 
       <div className="flex flex-col mt-4 mb-6">

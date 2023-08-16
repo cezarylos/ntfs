@@ -14,6 +14,7 @@ interface Props extends ModalInterface {
   address: string;
   amount: number;
   checkoutProjectId: string;
+  checkoutCollectionId: string;
   eventId: string | number;
   eventChainId: string;
 }
@@ -26,7 +27,8 @@ export default function PaymentModal({
   amount,
   checkoutProjectId,
   eventChainId,
-  eventId
+  eventId,
+  checkoutCollectionId
 }: Props): ReactElement {
   const dispatch = useAppDispatch();
 
@@ -156,7 +158,8 @@ export default function PaymentModal({
                   </Dialog.Title>
                   <div>
                     <CrossmintPayButton
-                      clientId={checkoutProjectId}
+                      projectId={checkoutProjectId}
+                      collectionId={checkoutCollectionId}
                       mintConfig={mintConfig}
                       //TODO: change to production
                       environment={process.env.NEXT_PUBLIC_ENV === 'production' ? 'staging' : 'staging'}
