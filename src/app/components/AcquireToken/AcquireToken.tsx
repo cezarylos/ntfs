@@ -80,6 +80,8 @@ export default function AcquireToken({
       setIsBuyPanelOpen(true);
     } catch (e) {
       console.error(e);
+    } finally {
+      dispatch(setIsLoading(false));
     }
   }, [isBuyPanelOpen, isAllowMintMore, address, dispatch, switchChain]);
 

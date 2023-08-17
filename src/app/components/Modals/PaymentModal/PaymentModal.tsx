@@ -1,4 +1,5 @@
 import styles from '@/app/components/AcquireToken/AcquireToken.module.scss';
+import GlobalLoader from '@/app/components/GlobalLoader/GlobalLoader';
 import AmountInput from '@/app/components/Modals/PaymentModal/AmountInput';
 import { setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch } from '@/app/store/store';
@@ -62,7 +63,7 @@ export default function PaymentModal({
         const params = {
           address,
           eventId: eventId.toString(),
-          amount: amount.toString()
+          amount: tokenAmount.toString()
         };
         const queryString = new URLSearchParams(params).toString();
         const mintParamsResponse = await fetch(`/api/${EndpointsEnum.GET_MINT_PARAMS}?${queryString}`, {
@@ -78,7 +79,7 @@ export default function PaymentModal({
       }
     };
     init().finally();
-  }, [address, amount, dispatch, eventId]);
+  }, [address, tokenAmount, dispatch, eventId]);
 
   const mintConfig = useMemo(
     () => ({
@@ -133,6 +134,7 @@ export default function PaymentModal({
     <>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
+          <GlobalLoader />
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -168,7 +170,7 @@ export default function PaymentModal({
                         </h1>
                       </Dialog.Title>
                       <AmountInput amount={tokenAmount} setAmount={setTokenAmount} maxAmount={maxTokensPerWallet} />
-                      <h1 className="text-lg text-center mb-4 text-purple-950">
+                      <h1 className="text-lg text-center mb-4 text-purple-800">
                         Max {maxTokensPerWallet} tokenów na portfel
                       </h1>
                     </>
