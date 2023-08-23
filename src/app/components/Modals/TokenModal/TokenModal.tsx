@@ -2,6 +2,7 @@ import { styleTileSets } from '@/app/consts/style-tile-sets';
 import { ModalInterface } from '@/app/typings/common.typings';
 import { classNames } from '@/app/utils';
 import { Dialog, Transition } from '@headlessui/react';
+import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import Image from 'next/image';
 import React, { Fragment, ReactElement } from 'react';
@@ -83,12 +84,14 @@ export default function TokenModal({
                     <div
                       className="text-base mt-4 text-center font-inter md:w-[60%] m-auto"
                       dangerouslySetInnerHTML={{
-                        __html: marked
-                          .parse(tokenDescription || '', { mangle: false, headerIds: false })
-                          .replace(
-                            '<a ',
-                            '<a target="_blank" class="underline text-purple-900 font-mogra cursor-pointer outline-none" '
-                          )
+                        __html: DOMPurify.sanitize(
+                          marked
+                            .parse(tokenDescription || '', { mangle: false, headerIds: false })
+                            .replace(
+                              '<a ',
+                              '<a target="_blank" class="underline text-purple-900 font-mogra cursor-pointer outline-none" '
+                            )
+                        )
                       }}
                     />
                   </div>

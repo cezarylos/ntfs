@@ -14,7 +14,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
 
       if (recoveredAddress.toLowerCase() === address.toLowerCase()) {
-        const response = await StrapiService.getTicketsByHolderAddress(process.env.STRAPI_API_TOKEN, address, eventId);
+        const response = await StrapiService.getTicketsByHolderAddress(
+          process.env.STRAPI_API_TOKEN as string,
+          address,
+          eventId
+        );
         const { data } = response;
 
         if (!data) {
@@ -37,10 +41,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               return res;
             })
           )
-        ).sort((a, b) => {
-          if (a.event && b.event) {
+        ).sort((a: TicketInterface | undefined, b: TicketInterface | undefined): number => {
+          if (a?.event && b?.event) {
             return +a.event.id - +b.event.id;
           }
+          return 0;
         });
 
         return res.status(201).json(tickets);

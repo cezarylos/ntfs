@@ -4,14 +4,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Web3 from 'web3';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  res.setHeader('Access-Control-Allow-Origin', 'https://realbrain.art');
-
-  if (req.method === 'OPTIONS') {
-    // Pre-flight request. Reply with CORS headers and end the response.
-    res.status(200).end();
-    return;
-  }
-
   if (req.method === 'POST') {
     const { address, eventId } = req.body;
     if (!address || !eventId) {

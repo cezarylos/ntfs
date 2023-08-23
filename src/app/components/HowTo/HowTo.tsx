@@ -2,6 +2,7 @@
 
 import { useMetaMaskConnect } from '@/app/hooks/useMetaMaskConnect';
 import { classNames } from '@/app/utils';
+import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import React, { useEffect, useMemo } from 'react';
 import ReactDOMServer from 'react-dom/server';
@@ -60,7 +61,7 @@ export default function HowTo({ description }: Props) {
       ref={ref}
       className={classNames('mt-4 text-[1.2rem] text-left pb-4', styles.description)}
       dangerouslySetInnerHTML={{
-        __html: updatedDescription
+        __html: DOMPurify.sanitize(updatedDescription)
       }}
     />
   );

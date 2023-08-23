@@ -1,3 +1,5 @@
+import { selectMyEventTokens } from '@/app/store/global/global.slice';
+import { useAppSelector } from '@/app/store/store';
 import { debounce } from 'lodash';
 import React, { ChangeEvent, Dispatch, ReactElement, useCallback, useEffect, useState } from 'react';
 
@@ -8,13 +10,19 @@ interface Props {
 }
 
 export default function AmountInput({ amount, setAmount, maxAmount }: Props): ReactElement {
+  const myEventTokens = useAppSelector(selectMyEventTokens);
+
+  const myTokensAmount = myEventTokens.length;
+
+  const allowedAmount = maxAmount - myTokensAmount;
+
   const [value, setValue] = useState(amount);
 
   const handleIncrement = useCallback((): void => {
-    if (value < maxAmount) {
+    if (value < allowedAmount) {
       setValue(value + 1);
     }
-  }, [maxAmount, value]);
+  }, [allowedAmount, value]);
 
   const handleDecrement = useCallback((): void => {
     if (value > 1) {
@@ -28,11 +36,11 @@ export default function AmountInput({ amount, setAmount, maxAmount }: Props): Re
       if (inputValue === '') {
         setValue(1);
       }
-      if (parseInt(inputValue) >= 1 && parseInt(inputValue) <= maxAmount) {
+      if (parseInt(inputValue) >= 1 && parseInt(inputValue) <= allowedAmount) {
         setValue(parseInt(inputValue));
       }
     },
-    [maxAmount, setValue]
+    [allowedAmount, setValue]
   );
 
   useEffect(() => {
@@ -48,7 +56,7 @@ export default function AmountInput({ amount, setAmount, maxAmount }: Props): Re
     };
   }, [setAmount, value]);
 
-  const isIncrementDisabled = value === maxAmount;
+  const isIncrementDisabled = value === allowedAmount;
   const isDecrementDisabled = value === 1;
 
   return (

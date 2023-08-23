@@ -1,3 +1,5 @@
+'use client';
+
 import styles from '@/app/components/AcquireToken/AcquireToken.module.scss';
 import GlobalLoader from '@/app/components/GlobalLoader/GlobalLoader';
 import AmountInput from '@/app/components/Modals/PaymentModal/AmountInput';
@@ -5,7 +7,7 @@ import { setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch } from '@/app/store/store';
 import { ModalInterface, PAYMENT_STATUS_STRING, SUCCESS_STRING } from '@/app/typings/common.typings';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
-import { classNames, getMaticProvider } from '@/app/utils';
+import { classNames, getMaticProvider, getTokenWord } from '@/app/utils';
 import { CrossmintPayButton } from '@crossmint/client-sdk-react-ui';
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
@@ -171,7 +173,7 @@ export default function PaymentModal({
                       </Dialog.Title>
                       <AmountInput amount={tokenAmount} setAmount={setTokenAmount} maxAmount={maxTokensPerWallet} />
                       <h1 className="text-lg text-center mb-4 text-purple-800">
-                        Max {maxTokensPerWallet} tokenów na portfel
+                        Max {maxTokensPerWallet} {getTokenWord(maxTokensPerWallet)} na portfel
                       </h1>
                     </>
                   )}
