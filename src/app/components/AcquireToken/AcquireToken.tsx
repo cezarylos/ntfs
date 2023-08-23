@@ -46,7 +46,7 @@ export default function AcquireToken({
   maxTokensPerWallet
 }: Props): ReactElement {
   const params = useSearchParams();
-  const isStatusSuccess = params?.get(PAYMENT_STATUS_STRING) === SUCCESS_STRING;
+  const isStatusSuccess = params?.get(PAYMENT_STATUS_STRING)?.split('?')?.[0] === SUCCESS_STRING;
   const { wallet } = useMetaMask();
   const dispatch = useAppDispatch();
   const { tokensLeft } = useAppSelector(selectEventSupplyData);
