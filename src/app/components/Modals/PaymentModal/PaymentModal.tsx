@@ -90,8 +90,6 @@ export default function PaymentModal({
     [tokenAmount, tokenPrice]
   );
 
-  console.log(mintConfig);
-
   const mintWithCrypto = useCallback(async () => {
     if (!mintParams || typeof mintParams !== 'object') {
       return;
