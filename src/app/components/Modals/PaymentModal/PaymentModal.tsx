@@ -85,10 +85,12 @@ export default function PaymentModal({
     () => ({
       type: 'erc-721',
       totalPrice: tokenPrice?.toString(),
-      _amount: amount
+      _amount: tokenAmount
     }),
-    [amount, tokenPrice]
+    [tokenAmount, tokenPrice]
   );
+
+  console.log(mintConfig);
 
   const mintWithCrypto = useCallback(async () => {
     if (!mintParams || typeof mintParams !== 'object') {
