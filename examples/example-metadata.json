@@ -1,0 +1,31 @@
+{
+  "name": "Spokooj #74",
+  "image": "ipfs://bafybeiblkryusvgfvs7bahc6b3xkjesdkiyqgmkasi5mgbvq6ikjay3yua/74.png",
+  "description": "Experience [Spokój Festiwal](https://instagram.com/spokojfestiwal) and get benefits from this exclusive NFT Token.",
+  "attributes": [
+    {
+      "trait_type": "Head",
+      "value": "Amfetti"
+    },
+    {
+      "trait_type": "Torso",
+      "value": "Pink Chain"
+    },
+    {
+      "trait_type": "Left Hand",
+      "value": "Fork"
+    },
+    {
+      "trait_type": "Right Hand",
+      "value": "Spoon"
+    },
+    {
+      "trait_type": "Wings",
+      "value": "Trash"
+    },
+    {
+      "trait_type": "Background",
+      "value": "Spread Of Mind"
+    }
+  ]
+}

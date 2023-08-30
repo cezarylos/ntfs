@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Directory where the JSON files are located
-const directoryPath = '../../../../../Downloads/spk SFW/metadata/';
+const directoryPath = '../../../../../Documents/REALBRAIN/spec elementy/metadata/json';
 
 // Iterate over the files in the directory
 fs.readdir(directoryPath, (err, files) => {
@@ -27,7 +27,7 @@ fs.readdir(directoryPath, (err, files) => {
           // Parse the JSON data
           let jsonData = JSON.parse(data);
           const fileName = path.basename(filePath, path.extname(filePath));
-          const { external_url, compiler, seller_fee_basis_points, ...rest } = jsonData;
+          const { external_url, compiler, seller_fee_basis_points, date, edition, imageName, dna, ...rest } = jsonData;
           jsonData = rest;
 
           const IMAGES_URL_IMPORTANT_WITH_SLASH = 'bafybeiblkryusvgfvs7bahc6b3xkjesdkiyqgmkasi5mgbvq6ikjay3yua/';
