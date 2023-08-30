@@ -1,31 +1,23 @@
+import NftMedia from '@/app/components/NftMedia/NftMedia';
 import { styleTileSets } from '@/app/consts/style-tile-sets';
 import { ModalInterface } from '@/app/typings/common.typings';
 import { classNames } from '@/app/utils';
 import { Dialog, Transition } from '@headlessui/react';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
-import Image from 'next/image';
 import React, { Fragment, ReactElement } from 'react';
 
 interface Props extends ModalInterface {
   openSeaUrl: string;
-  tokenName: string;
-  tokenUrl: string;
-  tokenDescription: string;
   contractAddress: string;
   tokenId: string;
 }
 
-export default function TokenModal({
-  isOpen,
-  setIsOpen,
-  openSeaUrl,
-  tokenName,
-  tokenUrl,
-  tokenDescription,
-  contractAddress,
-  tokenId
-}: Props): ReactElement {
+export default function TokenModal({ isOpen, setIsOpen, openSeaUrl, contractAddress, tokenId }: Props): ReactElement {
+  const [metadata, setMetadata] = React.useState<Record<string, any>>({});
+
+  const { name: tokenName, description: tokenDescription } = metadata;
+
   function closeModal() {
     setIsOpen(false);
   }
@@ -70,16 +62,12 @@ export default function TokenModal({
                     </span>
                   </Dialog.Title>
                   <div>
-                    <Image
-                      src={tokenUrl}
-                      alt={tokenName}
+                    <NftMedia
+                      contractAddress={contractAddress}
+                      tokenId={tokenId}
                       className="max-w-[60%] xl:max-w-[50%] mx-auto mt-2 rounded-md shadow-lg"
-                      width={0}
-                      height={0}
-                      fill={false}
-                      priority
-                      sizes={'100vw'}
                       style={{ width: '100%', height: '100%' }}
+                      setMetadata={setMetadata}
                     />
                     <div
                       className="text-base mt-4 text-center font-inter md:w-[60%] m-auto"

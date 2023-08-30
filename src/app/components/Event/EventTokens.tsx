@@ -1,6 +1,7 @@
 'use client';
 
 import TokenModal from '@/app/components/Modals/TokenModal/TokenModal';
+import NftMedia from '@/app/components/NftMedia/NftMedia';
 import ProgressBar from '@/app/components/ProgressBar/ProgressBar';
 import MetamaskLinks from '@/app/components/metamaskLinks';
 import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
@@ -11,7 +12,6 @@ import { getMyEventTokens, selectIsMyEventTokensLoading, selectMyEventTokens } f
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
 import { classNames, getChainIdFromString } from '@/app/utils';
-import Image from 'next/image';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 
 interface Props extends EventInterface {
@@ -75,42 +75,29 @@ export default function EventTokens({
               {isMoreThenOneTokenToCollect ? 'MOJE TOKENY' : 'Mój TOKEN'}:
             </h2>
             <ProgressBar max={maxTokensPerWallet} current={myEventTokens.length} isLoading={isMyEventTokensLoading} />
-            {selectedToken?.image && (
-              <TokenModal
-                isOpen={isModalOpen}
-                setIsOpen={setIsModalOpen}
-                tokenUrl={selectedToken?.image}
-                tokenName={selectedToken?.name}
-                openSeaUrl={selectedToken?.openseaUrl}
-                tokenDescription={selectedToken?.description}
-                contractAddress={contractAddress}
-                tokenId={selectedToken?.id}
-              />
-            )}
+            <TokenModal
+              isOpen={isModalOpen}
+              setIsOpen={setIsModalOpen}
+              openSeaUrl={selectedToken?.openseaUrl}
+              contractAddress={contractAddress}
+              tokenId={selectedToken?.id}
+            />
             {!isMyEventTokensLoading && myEventTokens?.length ? (
               <div className="flex flex-wrap gap-[0.75rem] pb-8 mt-4 justify-center">
                 {myEventTokens.map((token: any, id: number) => {
                   return (
-                    token.image &&
-                    token.description && (
-                      <div
-                        key={`${token.tokenId}_${id}`}
-                        className="max-w-[calc(50%-0.75rem)] cursor-pointer hover:brightness-110 rounded-md drop-shadow-xl shadow-red-500"
-                      >
-                        <Image
-                          onClick={onTokenClick(token)}
-                          src={token.image}
-                          alt={token.name}
-                          width={0}
-                          height={0}
-                          fill={false}
-                          priority
-                          sizes={'100vw'}
-                          style={{ width: '100%', height: '100%' }}
-                          className="rounded-md"
-                        />
-                      </div>
-                    )
+                    <div
+                      key={`${token.id}_${id}`}
+                      onClick={onTokenClick(token)}
+                      className="w-[calc(50%-0.75rem)] cursor-pointer hover:brightness-110 rounded-md drop-shadow-xl shadow-red-500"
+                    >
+                      <NftMedia
+                        contractAddress={contractAddress}
+                        tokenId={token.id}
+                        className="rounded-md"
+                        style={{ width: '100%', height: '100%' }}
+                      />
+                    </div>
                   );
                 })}
               </div>
