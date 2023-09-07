@@ -89,13 +89,14 @@ export default function EventTokens({
                     <div
                       key={`${token.id}_${id}`}
                       onClick={onTokenClick(token)}
-                      className="w-[calc(50%-0.75rem)] cursor-pointer hover:brightness-110 rounded-md drop-shadow-xl shadow-red-500"
+                      className="w-[33vmin] h-[33vmin] max-h-[300px] max-w-[300px] cursor-pointer hover:brightness-110 rounded-md drop-shadow-xl shadow-red-500"
                     >
                       <NftMedia
                         contractAddress={contractAddress}
                         tokenId={token.id}
                         className="rounded-md"
                         style={{ width: '100%', height: '100%' }}
+                        controls={false}
                       />
                     </div>
                   );

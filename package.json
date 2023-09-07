@@ -18,7 +18,7 @@
     "@openzeppelin/contracts": "^4.8.3",
     "@react-pdf/renderer": "^3.1.9",
     "@reduxjs/toolkit": "^1.9.5",
-    "@thirdweb-dev/react": "^3.14.39",
+    "@thirdweb-dev/react": "^3.14.40",
     "@types/marked": "^4.3.0",
     "@types/node": "20.1.0",
     "@types/react": "18.2.6",

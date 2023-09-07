@@ -1,0 +1,13 @@
+.nftMedia {
+  img {
+    border-radius: .375rem;
+  }
+
+  button {
+    display: none !important;
+  }
+}
+
+.disabledControls {
+  pointer-events: none;
+}

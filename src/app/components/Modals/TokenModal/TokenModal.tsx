@@ -62,15 +62,17 @@ export default function TokenModal({ isOpen, setIsOpen, openSeaUrl, contractAddr
                     </span>
                   </Dialog.Title>
                   <div>
-                    <NftMedia
-                      contractAddress={contractAddress}
-                      tokenId={tokenId}
-                      className="max-w-[60%] xl:max-w-[50%] mx-auto mt-2 rounded-md shadow-lg"
-                      style={{ width: '100%', height: '100%' }}
-                      setMetadata={setMetadata}
-                    />
+                    <div className="w-[33vmin] h-[33vmin] max-h-[300px] max-w-[300px] mx-auto mt-2 rounded-md shadow-lg">
+                      <NftMedia
+                        contractAddress={contractAddress}
+                        tokenId={tokenId}
+                        style={{ width: '100%', height: '100%' }}
+                        setMetadata={setMetadata}
+                        controls={true}
+                      />
+                    </div>
                     <div
-                      className="text-base mt-4 text-center font-inter md:w-[60%] m-auto"
+                      className="text-sm mt-4 text-center font-inter md:w-[80%] m-auto"
                       dangerouslySetInnerHTML={{
                         __html: DOMPurify.sanitize(
                           marked
@@ -83,7 +85,7 @@ export default function TokenModal({ isOpen, setIsOpen, openSeaUrl, contractAddr
                       }}
                     />
                   </div>
-                  <div className="text-center mt-2">
+                  <div className="text-center mt-4">
                     <p className="mb-0.5 text-purple-900">Adres kontraktu:</p>
                     <p className="font-inter break-words">{contractAddress}</p>
                   </div>
