@@ -1,52 +1,40 @@
 'use client';
 
 import { classNames } from '@/app/utils';
-import { ThirdwebNftMedia, useContract, useNFT } from '@thirdweb-dev/react';
-import React, { Dispatch, ReactElement, useEffect } from 'react';
+import Image from 'next/image';
+import React, { ReactElement } from 'react';
+import GifPlayer from 'react-gif-player';
 
 import styles from './NftMedia.module.scss';
 
 interface Props {
-  contractAddress: string;
-  tokenId: string;
+  imageSrc: string;
   style?: Record<string, string>;
   className?: string;
-  setMetadata?: Dispatch<Record<string, any>>;
-  controls?: boolean;
+  isAutoPlay?: boolean;
+  isGif?: boolean;
 }
 
-export default function NftMedia({
-  contractAddress,
-  tokenId,
-  style,
-  className,
-  setMetadata,
-  controls
-}: Props): ReactElement {
-  const { contract } = useContract(contractAddress);
-  const { data: nft, isLoading, error } = useNFT(contract, tokenId);
-
-  useEffect((): void => {
-    if (nft?.metadata) {
-      setMetadata?.(nft.metadata);
-    }
-  }, [nft, setMetadata]);
-
-  if (isLoading || error || !nft)
-    return (
-      <div className="w-full h-full flex items-center justify-center rounded-2xl bg-cyan-100/50">
-        {isLoading && <span className="animate-pulse text-white text-lg">Ładowanie...</span>}
-        {!isLoading && (error || !nft) && <span className="text-white text-lg">Błąd</span>}
-      </div>
-    );
-
+export default function NftMedia({ style, className, imageSrc, isAutoPlay, isGif }: Props): ReactElement {
   return (
-    <ThirdwebNftMedia
-      metadata={nft.metadata}
-      className={classNames(styles.nftMedia, !controls && styles.disabledControls, className)}
-      style={style}
-      controls={controls}
-      requireInteraction={!controls}
-    />
+    <>
+      {isGif ? (
+        <div className={classNames(className, styles.nftMedia)}>
+          <GifPlayer gif={imageSrc} autoplay={isAutoPlay} />
+        </div>
+      ) : (
+        <Image
+          src={imageSrc}
+          alt={'img'}
+          width={0}
+          height={0}
+          fill={false}
+          priority
+          sizes={'100vw'}
+          style={style}
+          className={className}
+        />
+      )}
+    </>
   );
 }

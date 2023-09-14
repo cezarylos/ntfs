@@ -11,7 +11,7 @@ import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import { getMyEventTokens, selectIsMyEventTokensLoading, selectMyEventTokens } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
-import { classNames, getChainIdFromString } from '@/app/utils';
+import { checkIfImageIsGift, classNames, getChainIdFromString } from '@/app/utils';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 
 interface Props extends EventInterface {
@@ -75,30 +75,37 @@ export default function EventTokens({
               {isMoreThenOneTokenToCollect ? 'MOJE TOKENY' : 'Mój TOKEN'}:
             </h2>
             <ProgressBar max={maxTokensPerWallet} current={myEventTokens.length} isLoading={isMyEventTokensLoading} />
-            <TokenModal
-              isOpen={isModalOpen}
-              setIsOpen={setIsModalOpen}
-              openSeaUrl={selectedToken?.openseaUrl}
-              contractAddress={contractAddress}
-              tokenId={selectedToken?.id}
-            />
+            {selectedToken?.image && (
+              <TokenModal
+                isOpen={isModalOpen}
+                setIsOpen={setIsModalOpen}
+                tokenUrl={selectedToken?.image}
+                tokenName={selectedToken?.name}
+                openSeaUrl={selectedToken?.openseaUrl}
+                tokenDescription={selectedToken?.description}
+                contractAddress={contractAddress}
+                tokenId={selectedToken?.id}
+              />
+            )}
             {!isMyEventTokensLoading && myEventTokens?.length ? (
               <div className="flex flex-wrap gap-[0.75rem] pb-8 mt-4 justify-center">
                 {myEventTokens.map((token: any, id: number) => {
                   return (
-                    <div
-                      key={`${token.id}_${id}`}
-                      onClick={onTokenClick(token)}
-                      className="w-[33vmin] h-[33vmin] max-h-[300px] max-w-[300px] cursor-pointer hover:brightness-110 rounded-md drop-shadow-xl shadow-red-500"
-                    >
-                      <NftMedia
-                        contractAddress={contractAddress}
-                        tokenId={token.id}
-                        className="rounded-md"
-                        style={{ width: '100%', height: '100%' }}
-                        controls={false}
-                      />
-                    </div>
+                    token.image &&
+                    token.description && (
+                      <div
+                        onClick={onTokenClick(token)}
+                        key={`${token.tokenId}_${id}`}
+                        className="max-w-[calc(50%-0.75rem)] cursor-pointer hover:brightness-110 rounded-md drop-shadow-xl shadow-red-500"
+                      >
+                        <NftMedia
+                          imageSrc={token.image}
+                          style={{ width: '100%', height: '100%' }}
+                          className="rounded-md pointer-events-none"
+                          isGif={checkIfImageIsGift(token.image)}
+                        />
+                      </div>
+                    )
                   );
                 })}
               </div>
