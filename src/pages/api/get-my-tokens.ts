@@ -3,6 +3,14 @@ import { createOpenSeaLink, getChainIdFromString, getMaticProvider } from '@/app
 import { NextApiRequest, NextApiResponse } from 'next';
 import Web3 from 'web3';
 
+const ipfsGateways = [
+  'https://ipfs.io/ipfs/',
+  'https://cloudflare-ipfs.com/ipfs/',
+  'https://ipfs.fleek.co/ipfs/',
+  'https://ipfs.infura.io/ipfs/',
+  'https://gateway.pinata.cloud/ipfs/'
+];
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     const { eventId, address } = req.query as { eventId: string; providerUrl: string; address: string };
@@ -19,13 +27,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         Number(tokenId)
       );
 
-      const mappedTokens = myTokenIds?.map(id => {
+      const gateway = ipfsGateways[1];
+
+      const tokens = await Promise.all(
+        myTokenIds.map(async (tokenId: number) => {
+          try {
+            const metadataURI = await contract.methods.tokenURI(tokenId).call();
+            const link = metadataURI.split('ipfs://')[1];
+            const res = await fetch(`${gateway}${link}`);
+            const data = await res.json();
+            return { ...data, id: tokenId };
+          } catch (e) {
+            console.error(e, `error fetching metadata from tokenId: ${tokenId}`);
+            return { id: tokenId };
+          }
+        })
+      );
+
+      const mappedTokens = tokens.map(token => {
+        const imageLink = token.image?.split('ipfs://')[1];
         const openseaUrl = createOpenSeaLink({
           contractAddress,
-          tokenId: id,
+          tokenId: token.id,
           chainId: getChainIdFromString(chainId)
         });
-        return { id, openseaUrl };
+        return { ...token, image: `${gateway}${imageLink}`, openseaUrl };
       });
 
       return res.status(200).json(mappedTokens);

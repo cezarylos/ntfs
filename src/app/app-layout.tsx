@@ -1,6 +1,5 @@
 'use client';
 
-import ThirdWebProviderLayout from '@/app/(third-web-provider)/layout';
 import GlobalLoader from '@/app/components/GlobalLoader/GlobalLoader';
 import ConnectWeb3BlockerModal from '@/app/components/Modals/ConnectWeb3BlockerModal/ConnectWeb3BlockerModal';
 import Navbar from '@/app/components/Navigation/Navbar';
@@ -45,7 +44,7 @@ export default function AppLayout({
                   <h1 className="text-5xl mb-2 text-white relative">{sectionName}</h1>
                 </span>
               )}
-              <ThirdWebProviderLayout>{children}</ThirdWebProviderLayout>
+              {children}
             </div>
           </div>
         </MetaMaskContextProvider>
