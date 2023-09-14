@@ -1,11 +1,13 @@
+import NftMedia from '@/app/components/NftMedia/NftMedia';
 import { styleTileSets } from '@/app/consts/style-tile-sets';
 import { ModalInterface } from '@/app/typings/common.typings';
-import { classNames } from '@/app/utils';
-import { Dialog, Transition } from '@headlessui/react';
+import { checkIfImageIsGift, classNames } from '@/app/utils';
+import { Dialog, Disclosure, Transition } from '@headlessui/react';
+import { XMarkIcon } from '@heroicons/react/24/solid';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import Image from 'next/image';
-import React, { Fragment, ReactElement } from 'react';
+import React, { Fragment, ReactElement, useEffect, useRef } from 'react';
 
 interface Props extends ModalInterface {
   openSeaUrl: string;
@@ -26,9 +28,16 @@ export default function TokenModal({
   contractAddress,
   tokenId
 }: Props): ReactElement {
+  const containerRef = useRef<HTMLDivElement | null>();
   function closeModal() {
     setIsOpen(false);
   }
+
+  useEffect(() => {
+    if (isOpen) {
+      window.scrollTo(0, 0);
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -58,7 +67,12 @@ export default function TokenModal({
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="flex flex-col w-full h-auto max-w-md lg:max-w-lg transform overflow-hidden rounded-2xl bg-purple-200 border-solid p-6 text-left align-middle shadow-3xl transition-all">
-                  <Dialog.Title as="h3" className="text-3xl text-center font-medium leading-6 text-purple-950">
+                  <XMarkIcon
+                    onClick={closeModal}
+                    className="block h-8 w-8 text-purple-900 float-right self-end cursor-pointer hover:brightness-110 absolute top-2 right-2"
+                    aria-hidden="true"
+                  />
+                  <Dialog.Title as="h3" className="text-3xl text-center font-medium leading-6 text-purple-950 mt-2">
                     <span
                       className={classNames(
                         `before:block before:absolute ${styleTileSets[0].accent} relative inline-block`
@@ -70,19 +84,15 @@ export default function TokenModal({
                     </span>
                   </Dialog.Title>
                   <div>
-                    <Image
-                      src={tokenUrl}
-                      alt={tokenName}
-                      className="max-w-[60%] xl:max-w-[50%] mx-auto mt-2 rounded-md shadow-lg"
-                      width={0}
-                      height={0}
-                      fill={false}
-                      priority
-                      sizes={'100vw'}
+                    <NftMedia
+                      imageSrc={tokenUrl}
                       style={{ width: '100%', height: '100%' }}
+                      className="max-w-[100%] xl:max-w-[70%] mx-auto mt-2 rounded-md shadow-lg pointer-events-none"
+                      isGif={checkIfImageIsGift(tokenUrl)}
+                      isAutoPlay
                     />
                     <div
-                      className="text-base mt-4 text-center font-inter md:w-[60%] m-auto"
+                      className="text-base md:text-sm mt-4 text-center font-inter m-auto mb-2"
                       dangerouslySetInnerHTML={{
                         __html: DOMPurify.sanitize(
                           marked
@@ -107,11 +117,16 @@ export default function TokenModal({
                     <a
                       href={openSeaUrl}
                       target="_blank"
-                      className="m-auto mt-2 p-2 w-3/4 font-inter justify-center bg-pink-500 flex item-center text-white px-3 py-2 text-sm font-medium shadow-xl rounded-md hover:brightness-110"
+                      className="m-auto mt-2 p-2 w-3/4 font-inter justify-center bg-pink-500 flex item-center text-white px-3 py-2 text-lg md:text-sm font-medium shadow-xl rounded-md hover:brightness-110 outline-none"
                     >
                       Obczaj na OpenSea
                     </a>
                   </div>
+                  <button className="mt-1" onClick={closeModal}>
+                    <span className="m-auto mt-2 p-2 w-3/4 font-inter justify-center bg-pink-200 flex item-center text-purple-900 px-3 py-2 text-lg md:text-sm font-medium shadow-xl rounded-md hover:brightness-110 cursor-pointer">
+                      Zamknij
+                    </span>
+                  </button>
                 </Dialog.Panel>
               </Transition.Child>
             </div>

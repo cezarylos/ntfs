@@ -1,6 +1,7 @@
 'use client';
 
 import TokenModal from '@/app/components/Modals/TokenModal/TokenModal';
+import NftMedia from '@/app/components/NftMedia/NftMedia';
 import ProgressBar from '@/app/components/ProgressBar/ProgressBar';
 import MetamaskLinks from '@/app/components/metamaskLinks';
 import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
@@ -10,8 +11,7 @@ import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import { getMyEventTokens, selectIsMyEventTokensLoading, selectMyEventTokens } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
-import { classNames, getChainIdFromString } from '@/app/utils';
-import Image from 'next/image';
+import { checkIfImageIsGift, classNames, getChainIdFromString } from '@/app/utils';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 
 interface Props extends EventInterface {
@@ -94,20 +94,15 @@ export default function EventTokens({
                     token.image &&
                     token.description && (
                       <div
+                        onClick={onTokenClick(token)}
                         key={`${token.tokenId}_${id}`}
                         className="max-w-[calc(50%-0.75rem)] cursor-pointer hover:brightness-110 rounded-md drop-shadow-xl shadow-red-500"
                       >
-                        <Image
-                          onClick={onTokenClick(token)}
-                          src={token.image}
-                          alt={token.name}
-                          width={0}
-                          height={0}
-                          fill={false}
-                          priority
-                          sizes={'100vw'}
+                        <NftMedia
+                          imageSrc={token.image}
                           style={{ width: '100%', height: '100%' }}
-                          className="rounded-md"
+                          className="rounded-md pointer-events-none"
+                          isGif={checkIfImageIsGift(token.image)}
                         />
                       </div>
                     )

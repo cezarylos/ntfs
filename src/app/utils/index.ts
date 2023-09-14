@@ -128,3 +128,5 @@ export const getLeftWord = (amount: number): string => {
 export const polygonRPC = 'https://polygon-rpc.com';
 export const mumbaiRPC = 'https://rpc-mumbai.maticvigil.com';
 // export const polygonRPC = 'https://rpc-mainnet.maticvigil.com';
+
+export const checkIfImageIsGift = (imageUrl: string): boolean => /\.gif$/i.test(imageUrl);
