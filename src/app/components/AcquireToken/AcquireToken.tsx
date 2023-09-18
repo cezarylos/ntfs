@@ -13,6 +13,7 @@ import {
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { PAYMENT_STATUS_STRING, SUCCESS_STRING } from '@/app/typings/common.typings';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
+import { LocalStorageEnum } from '@/app/typings/localStorage.enum';
 import { classNames, getChainIdFromString, getTokenWord } from '@/app/utils';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -54,6 +55,7 @@ export default function AcquireToken({
   const router = useRouter();
 
   const [isBuyPanelOpen, setIsBuyPanelOpen] = useState(false);
+  const [isShowTokenDelayMessage, setIsShowTokenDelayMessage] = useState(false);
 
   const eventChainId = useMemo((): string => getChainIdFromString(chainId), [chainId]);
   const address = useMemo((): string => wallet.accounts?.[0], [wallet.accounts]);
@@ -78,12 +80,13 @@ export default function AcquireToken({
       await switchChain();
       dispatch(setIsLoading(true));
       setIsBuyPanelOpen(true);
+      localStorage.setItem(LocalStorageEnum.TOKENS_COUNT, (myEventTokens?.length || 0).toString());
     } catch (e) {
       console.error(e);
     } finally {
       dispatch(setIsLoading(false));
     }
-  }, [isBuyPanelOpen, isAllowMintMore, address, dispatch, switchChain]);
+  }, [isBuyPanelOpen, isAllowMintMore, address, dispatch, switchChain, myEventTokens]);
 
   useEffect((): void => {
     addEventNetwork().finally();
@@ -109,6 +112,14 @@ export default function AcquireToken({
     };
     assignTicket().finally();
   }, [address, dispatch, eventId, isStatusSuccess, router, slug]);
+
+  useEffect((): void => {
+    const isTokenDelayMessageShownValue =
+      myEventTokens.length === 0 &&
+      !isStatusSuccess &&
+      (myEventTokens?.length || 0).toString() === localStorage.getItem(LocalStorageEnum.TOKENS_COUNT);
+    setIsShowTokenDelayMessage(isTokenDelayMessageShownValue);
+  }, [isStatusSuccess, myEventTokens]);
 
   return (
     <>
@@ -158,6 +169,11 @@ export default function AcquireToken({
               </p>
             )}
           </>
+        )}
+        {isShowTokenDelayMessage && (
+          <p className="text-white text-center mt-6 font-inter text-lg">
+            *** Jeśli nie widzisz swoich tokenów daj nam chwilkę i odśwież tę stronę za kilanaście sekund ***
+          </p>
         )}
       </div>
     </>
