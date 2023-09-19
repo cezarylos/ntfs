@@ -191,8 +191,7 @@ export default function PaymentModal({
                       collectionId={checkoutCollectionId}
                       clientId={checkoutCollectionId}
                       mintConfig={mintConfig}
-                      //TODO: change to production
-                      environment={process.env.NEXT_PUBLIC_ENV === 'production' ? 'staging' : 'staging'}
+                      environment={process.env.NEXT_PUBLIC_ENV === 'production' ? 'production' : 'staging'}
                       successCallbackURL={successRedirectionLink}
                       mintTo={address}
                       className={styles.xmintBtn}
