@@ -80,7 +80,7 @@ export default function AcquireToken({
       await switchChain();
       dispatch(setIsLoading(true));
       setIsBuyPanelOpen(true);
-      localStorage.setItem(LocalStorageEnum.TOKENS_COUNT, (myEventTokens?.length || 0).toString());
+      localStorage.setItem(LocalStorageEnum.TOKENS_COUNT, `${(myEventTokens?.length || 0).toString()}:${eventId}`);
     } catch (e) {
       console.error(e);
     } finally {
@@ -114,10 +114,13 @@ export default function AcquireToken({
   }, [address, dispatch, eventId, isStatusSuccess, router, slug]);
 
   useEffect((): void => {
+    const valFromStorage = localStorage.getItem(LocalStorageEnum.TOKENS_COUNT);
+    const tokensCount = valFromStorage?.split(':')?.[0];
+    const eventIdFromStorage = valFromStorage?.split(':')?.[1];
     const isTokenDelayMessageShownValue =
-      myEventTokens.length === 0 &&
-      !isStatusSuccess &&
-      (myEventTokens?.length || 0).toString() === localStorage.getItem(LocalStorageEnum.TOKENS_COUNT);
+      isStatusSuccess &&
+      (myEventTokens?.length || 0).toString() === tokensCount &&
+      eventIdFromStorage === eventId.toString();
     setIsShowTokenDelayMessage(isTokenDelayMessageShownValue);
   }, [isStatusSuccess, myEventTokens]);
 
