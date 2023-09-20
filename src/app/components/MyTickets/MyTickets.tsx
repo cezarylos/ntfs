@@ -9,11 +9,14 @@ import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { EventInterface } from '@/app/typings/event.interface';
 import { TicketInterface } from '@/app/typings/ticket.interface';
+import { classNames } from '@/app/utils';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import React, { ReactElement, useEffect, useMemo, useState } from 'react';
 
 import axios from 'axios';
+
+import styles from './MyTickets.module.scss';
 
 export default function MyTickets({ id: eventId, name, slug }: Partial<EventInterface>): ReactElement {
   const dispatch = useAppDispatch();
@@ -69,7 +72,7 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
         </>
       )}
       {files?.map(({ title, description, url, isRewardCollected }, idx) => (
-        <div key={idx} className="bg-purple-200 rounded-xl p-4 my-4">
+        <div key={idx} className={classNames('bg-purple-200 rounded-xl p-4 my-4', styles.ticket)}>
           <h2 className="text-xl text-purple-950">{title}</h2>
           <div
             className="text-sm mt-1 font-inter m-auto"

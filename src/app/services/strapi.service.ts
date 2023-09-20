@@ -113,7 +113,7 @@ export class StrapiService {
       const isPopulateEvent = eventId ? '' : '&populate[event][fields][0]=name';
       const headers = getHeaders(jwt);
       const res = await fetch(
-        `${BASE_STRAPI_URL}/api/tickets?filters[holderAddress][$eq]=${holderAddress.toLowerCase()}${hasEventId}${noLimitPagination}&populate[ticket][fields][0]=url${isPopulateEvent}`,
+        `${BASE_STRAPI_URL}/api/tickets?filters[holderAddress][$eqi]=${holderAddress.toLowerCase()}${hasEventId}${noLimitPagination}&populate[ticket][fields][0]=url${isPopulateEvent}`,
         { headers, cache: 'no-cache' }
       );
       return res.json();

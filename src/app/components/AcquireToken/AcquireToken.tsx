@@ -86,7 +86,7 @@ export default function AcquireToken({
     } finally {
       dispatch(setIsLoading(false));
     }
-  }, [isBuyPanelOpen, isAllowMintMore, address, dispatch, switchChain, myEventTokens]);
+  }, [isBuyPanelOpen, isAllowMintMore, address, dispatch, switchChain, myEventTokens?.length, eventId]);
 
   useEffect((): void => {
     addEventNetwork().finally();
