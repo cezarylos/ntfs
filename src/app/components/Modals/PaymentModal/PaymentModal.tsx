@@ -189,7 +189,7 @@ export default function PaymentModal({
                     <CrossmintPayButton
                       projectId={checkoutProjectId}
                       collectionId={checkoutCollectionId}
-                      clientId={process.env.NEXT_PUBLIC_CROSSMINT_PROJECT_ID}
+                      clientId={checkoutCollectionId}
                       mintConfig={mintConfig}
                       environment={process.env.NEXT_PUBLIC_ENV === 'production' ? 'production' : 'staging'}
                       successCallbackURL={successRedirectionLink}
