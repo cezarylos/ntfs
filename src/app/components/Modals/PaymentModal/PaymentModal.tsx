@@ -101,35 +101,42 @@ export default function PaymentModal({
 
     dispatch(setIsLoading(true));
 
-    const transactionHash = await window.ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [mintParams]
-    });
+    try {
+      const transactionHash = await window.ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [mintParams]
+      });
 
-    const waitForTransactionConfirmation = async (transactionHash: string): Promise<void> => {
-      try {
-        const receipt = await web3.eth.getTransactionReceipt(transactionHash);
-        if (receipt) {
-          if (receipt.status) {
-            console.log('Transaction successful!');
-            console.log('Receipt:', receipt);
-            dispatch(setIsLoading(false));
-            window.location.href = successRedirectionLink;
-          } else {
-            console.log('Transaction failed!');
-            console.log('Receipt:', receipt);
-            alert('Transaction failed!');
-            dispatch(setIsLoading(false));
+      const waitForTransactionConfirmation = async (transactionHash: string): Promise<void> => {
+        try {
+          const receipt = await web3.eth.getTransactionReceipt(transactionHash);
+          if (receipt) {
+            if (receipt.status) {
+              console.log('Transaction successful!');
+              console.log('Receipt:', receipt);
+              dispatch(setIsLoading(false));
+              window.location.href = successRedirectionLink;
+            } else {
+              console.log('Transaction failed!');
+              console.log('Receipt:', receipt);
+              alert('Transaction failed!');
+              dispatch(setIsLoading(false));
+            }
           }
+        } catch (error: any) {
+          setIsOpen(false);
+          setTimeout(() => waitForTransactionConfirmation(transactionHash), 1000); // Retry after 1 second
+          console.error('Error:', error);
         }
-      } catch (error) {
-        setIsOpen(false);
-        setTimeout(() => waitForTransactionConfirmation(transactionHash), 1000); // Retry after 1 second
-        console.error('Error:', error);
-      }
-    };
+      };
 
-    await waitForTransactionConfirmation(transactionHash as string);
+      await waitForTransactionConfirmation(transactionHash as string);
+    } catch (error: any) {
+      if (error?.code === 4001) {
+        dispatch(setIsLoading(false));
+        return;
+      }
+    }
   }, [mintParams, eventChainId, dispatch, successRedirectionLink, setIsOpen]);
 
   return (
