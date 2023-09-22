@@ -11,7 +11,7 @@ export const metadata = {
 
 const populateFields = ['name', 'startDate', 'endDate', 'slug', 'isCollab'];
 
-const soon = Array(2).fill({});
+const soon = Array(1).fill({});
 
 export default async function Events(): Promise<ReactElement> {
   const events = await StrapiService.getAllEvents(populateFields);
