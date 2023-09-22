@@ -45,7 +45,8 @@ export default function ConnectWeb3BlockerModal(): ReactElement {
                 <Dialog.Panel className="flex flex-col w-full h-auto max-w-md transform overflow-hidden rounded-2xl bg-purple-200 border-solid p-6 text-left align-middle shadow-3xl transition-all">
                   <div className="flex flex-col w-full h-auto max-w-md transform overflow-hiddenborder-solid p-3 text-left align-middle">
                     <h3 className="text-xl text-purple-950 font-inter text-center font-medium leading-6">
-                      Podłącz Portfel, żeby zobaczyć swoje <br />
+                      Podłącz Portfel, żeby kupić
+                      <br />
                       <span className="text-transparent bg-gradient-to-r bg-clip-text from-cyan-500 to-yellow-500 text-2xl font-mogra">
                         TOKENY
                       </span>
