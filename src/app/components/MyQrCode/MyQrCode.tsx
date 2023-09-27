@@ -1,12 +1,12 @@
 'use client';
 
 import { useHasProvider } from '@/app/hooks/useHasProvider';
-import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch } from '@/app/store/store';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { useQRCode } from 'next-qrcode';
 import React, { ReactElement, useEffect, useMemo, useRef, useState } from 'react';
+import { useAccount } from 'wagmi';
 
 import axios from 'axios';
 
@@ -15,20 +15,16 @@ export default function MyQrCode(): ReactElement {
 
   const dispatch = useAppDispatch();
 
-  const {
-    wallet: { accounts }
-  } = useMetaMask();
-
   const hasProvider = useHasProvider();
 
-  const [encryptedAddress, setEncryptedAddress] = useState<string>('');
+  const { address } = useAccount() as { address: string };
 
-  const address = useMemo((): string => accounts?.[0], [accounts]);
+  const [encryptedAddress, setEncryptedAddress] = useState<string>('');
 
   const parentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect((): void => {
-    if (!hasProvider || !accounts?.length) {
+    if (!hasProvider) {
       return;
     }
     const init = async (): Promise<void> => {
@@ -55,7 +51,7 @@ export default function MyQrCode(): ReactElement {
       }
     };
     init().finally();
-  }, [accounts, address, dispatch, hasProvider]);
+  }, [address, dispatch, hasProvider]);
 
   return (
     <div className="pb-2" ref={parentRef}>
@@ -76,7 +72,7 @@ export default function MyQrCode(): ReactElement {
             logo={{
               src: '/logo1.gif',
               options: {
-                width: (parentRef.current?.clientWidth / 4) as number
+                width: ((parentRef.current?.clientWidth || 0) / 4) as number
               }
             }}
           />

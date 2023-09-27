@@ -1,7 +1,7 @@
 'use client';
 
-import { useMetaMaskConnect } from '@/app/hooks/useMetaMaskConnect';
 import { classNames } from '@/app/utils';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import React, { useEffect, useMemo } from 'react';
@@ -29,7 +29,7 @@ const buttonToRender = (
 
 const REPLACE_TEMPLATE = '${insertButton}';
 export default function HowTo({ description }: Props) {
-  const onMetaMaskConnect = useMetaMaskConnect();
+  const { open: openWalletConnect } = useWeb3Modal();
   const ref = React.useRef<HTMLDivElement>(null);
 
   const updatedDescription = useMemo((): string => {
@@ -40,7 +40,7 @@ export default function HowTo({ description }: Props) {
 
   useEffect((): (() => void) => {
     const handleClick = (): void => {
-      onMetaMaskConnect();
+      openWalletConnect();
     };
 
     const button = ref.current?.querySelector(`#${BUTTON_ID}`);
@@ -54,7 +54,7 @@ export default function HowTo({ description }: Props) {
         button.removeEventListener('click', handleClick);
       }
     };
-  }, [onMetaMaskConnect]);
+  }, [openWalletConnect]);
 
   return (
     <div
