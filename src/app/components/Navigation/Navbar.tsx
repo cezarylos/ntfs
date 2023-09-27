@@ -2,10 +2,10 @@
 
 import { navigationItems, NavigationRoutes } from '@/app/consts/navigation-items.const';
 import { useMetaMask } from '@/app/hooks/useMetaMask';
-import { useMetaMaskConnect } from '@/app/hooks/useMetaMaskConnect';
 import { classNames, formatAddress, isMobileDevice } from '@/app/utils';
 import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, ChevronDoubleLeftIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -16,7 +16,7 @@ export default function Navbar() {
   const router = useRouter();
   const { wallet, isConnecting } = useMetaMask();
   const isMobile = isMobileDevice();
-  const onMetaMaskConnect = useMetaMaskConnect();
+  const { open: openWalletConnect } = useWeb3Modal();
 
   const isHomePage = useMemo(() => pathname === NavigationRoutes.HOME, [pathname]);
 
@@ -125,7 +125,7 @@ export default function Navbar() {
                 ) : (
                   <button
                     className="rounded-md shadow-xl text-white bg-pink-500 font-semibold p-1 text-sm hover:brightness-110 font-inter w-32 animate-pulse"
-                    onClick={onMetaMaskConnect}
+                    onClick={openWalletConnect}
                   >
                     {isConnecting ? <span className="animate-pulse">Łączenie...</span> : 'Podłącz Portfel'}
                   </button>

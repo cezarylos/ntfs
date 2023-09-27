@@ -1,14 +1,14 @@
 import { useMetaMask } from '@/app/hooks/useMetaMask';
-import { useMetaMaskConnect } from '@/app/hooks/useMetaMaskConnect';
 import { selectIsShowWeb3BlockerModal, setIsShowWeb3BlockerModal } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { Dialog, Transition } from '@headlessui/react';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import React, { Fragment, ReactElement } from 'react';
 
 export default function ConnectWeb3BlockerModal(): ReactElement {
   const dispatch = useAppDispatch();
   const isShowWeb3BlockerModal = useAppSelector(selectIsShowWeb3BlockerModal);
-  const onMetaMaskConnect = useMetaMaskConnect();
+  const { open: openWalletConnect } = useWeb3Modal();
   const { isConnecting } = useMetaMask();
 
   const closeModal = (): void => {
@@ -54,7 +54,7 @@ export default function ConnectWeb3BlockerModal(): ReactElement {
                   </div>
                   <button
                     className="rounded-md text-white bg-pink-500 shadow-lg font-semibold text-lg hover:brightness-110 font-inter px-4 py-2 mx-auto w-auto"
-                    onClick={onMetaMaskConnect}
+                    onClick={openWalletConnect}
                   >
                     {isConnecting ? <span className="animate-pulse">Łączenie...</span> : 'Podłącz Portfel'}
                   </button>
