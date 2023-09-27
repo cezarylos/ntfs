@@ -15,8 +15,14 @@ import { polygon, polygonMumbai } from 'wagmi/chains';
 
 const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string;
 
+const metadata = {
+  name: 'RealBrain',
+  url: 'https://realbrain.art',
+  icons: ['https://prod-strapi-aws-s3-realbrain.s3.eu-north-1.amazonaws.com/preview_fyrtel_b2b3f3c44c.gif']
+};
+
 const chains = [polygon, polygonMumbai];
-const wagmiConfig = defaultWagmiConfig({ projectId, chains });
+const wagmiConfig = defaultWagmiConfig({ projectId, chains, metadata });
 
 createWeb3Modal({ wagmiConfig, projectId, chains });
 
