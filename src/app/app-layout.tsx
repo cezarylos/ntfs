@@ -4,7 +4,6 @@ import GlobalLoader from '@/app/components/GlobalLoader/GlobalLoader';
 import ConnectWeb3BlockerModal from '@/app/components/Modals/ConnectWeb3BlockerModal/ConnectWeb3BlockerModal';
 import Navbar from '@/app/components/Navigation/Navbar';
 import { navigationItems, NavigationRoutes } from '@/app/consts/navigation-items.const';
-import { MetaMaskContextProvider } from '@/app/hooks/useMetaMask';
 import { inter, mogra } from '@/app/layout';
 import store from '@/app/store/store';
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
@@ -14,17 +13,10 @@ import { Provider } from 'react-redux';
 import { WagmiConfig } from 'wagmi';
 import { polygon, polygonMumbai } from 'wagmi/chains';
 
-const metadata = {
-  name: 'Web3Modal',
-  description: 'Web3Modal Example',
-  url: 'https://web3modal.com',
-  icons: ['https://avatars.githubusercontent.com/u/37784886']
-};
-
 const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string;
 
 const chains = [polygon, polygonMumbai];
-const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
+const wagmiConfig = defaultWagmiConfig({ projectId, chains });
 
 createWeb3Modal({ wagmiConfig, projectId, chains });
 
@@ -51,21 +43,19 @@ export default function AppLayout({
       `}</style>
       <Provider store={store}>
         <WagmiConfig config={wagmiConfig}>
-          <MetaMaskContextProvider>
-            <div className="overflow-auto left-0 right-0 top-0 fixed h-full bg-violet-500">
-              <Navbar />
-              <GlobalLoader />
-              <ConnectWeb3BlockerModal />
-              <div className="container max-w-md mx-auto h-[calc(100%-4rem)] p-4 flex flex-col">
-                {sectionName && (
-                  <span className="before:block before:absolute before:-inset-1 before:-skew-y-3 before:h-[90%] before:bg-pink-500 relative inline-block before:translate-x-[-0.5rem]">
-                    <h1 className="text-5xl mb-2 text-white relative">{sectionName}</h1>
-                  </span>
-                )}
-                {children}
-              </div>
+          <div className="overflow-auto left-0 right-0 top-0 fixed h-full bg-violet-500">
+            <Navbar />
+            <GlobalLoader />
+            <ConnectWeb3BlockerModal />
+            <div className="container max-w-md mx-auto h-[calc(100%-4rem)] p-4 flex flex-col">
+              {sectionName && (
+                <span className="before:block before:absolute before:-inset-1 before:-skew-y-3 before:h-[90%] before:bg-pink-500 relative inline-block before:translate-x-[-0.5rem]">
+                  <h1 className="text-5xl mb-2 text-white relative">{sectionName}</h1>
+                </span>
+              )}
+              {children}
             </div>
-          </MetaMaskContextProvider>
+          </div>
         </WagmiConfig>
       </Provider>
     </>

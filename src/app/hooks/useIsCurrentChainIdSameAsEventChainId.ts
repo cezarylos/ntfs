@@ -1,16 +1,11 @@
 'use client';
 
-import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { useMemo } from 'react';
+import { useNetwork } from 'wagmi';
 
 export const useIsCurrentChainIdSameAsEventChainId = (eventChainId: string): boolean | undefined => {
-  const {
-    wallet: { chainId: currentChainId }
-  } = useMetaMask();
+  const { chain } = useNetwork();
   return useMemo(() => {
-    if (!currentChainId) {
-      return undefined;
-    }
-    return eventChainId === currentChainId;
-  }, [eventChainId, currentChainId]);
+    return !!chain;
+  }, [eventChainId, chain]);
 };

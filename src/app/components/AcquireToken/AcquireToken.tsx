@@ -2,7 +2,6 @@
 
 import PaymentModal from '@/app/components/Modals/PaymentModal/PaymentModal';
 import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
-import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import {
   selectEventSupplyData,
@@ -18,6 +17,7 @@ import { classNames, getChainIdFromString, getTokenWord } from '@/app/utils';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import { useAccount } from 'wagmi';
 
 import axios from 'axios';
 
@@ -48,7 +48,6 @@ export default function AcquireToken({
 }: Props): ReactElement {
   const params = useSearchParams();
   const isStatusSuccess = params?.get(PAYMENT_STATUS_STRING)?.split('?')?.[0] === SUCCESS_STRING;
-  const { wallet } = useMetaMask();
   const dispatch = useAppDispatch();
   const { tokensLeft } = useAppSelector(selectEventSupplyData);
   const myEventTokens = useAppSelector(selectMyEventTokens);
@@ -58,7 +57,8 @@ export default function AcquireToken({
   const [isShowTokenDelayMessage, setIsShowTokenDelayMessage] = useState(false);
 
   const eventChainId = useMemo((): string => getChainIdFromString(chainId), [chainId]);
-  const address = useMemo((): string => wallet.accounts?.[0], [wallet.accounts]);
+  const { address } = useAccount();
+
   const isTokensLeftMoreThenZero = useMemo((): boolean => (tokensLeft || 0) > 0, [tokensLeft]);
   const isAllowMintMore = useMemo(
     (): boolean => (myEventTokens.length || 0) < maxTokensPerWallet,
@@ -129,7 +129,7 @@ export default function AcquireToken({
       <PaymentModal
         isOpen={isBuyPanelOpen}
         setIsOpen={setIsBuyPanelOpen}
-        address={address}
+        address={address as string}
         slug={slug}
         amount={amountOfTokensToGetReward}
         maxTokensPerWallet={maxTokensPerWallet}

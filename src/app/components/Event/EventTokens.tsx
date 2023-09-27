@@ -6,13 +6,13 @@ import ProgressBar from '@/app/components/ProgressBar/ProgressBar';
 import MetamaskLinks from '@/app/components/metamaskLinks';
 import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
 import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
-import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import { getMyEventTokens, selectIsMyEventTokensLoading, selectMyEventTokens } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
 import { checkIfImageIsGift, classNames, getChainIdFromString } from '@/app/utils';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import { useAccount } from 'wagmi';
 
 interface Props extends EventInterface {
   wrapperClassName?: string;
@@ -30,7 +30,6 @@ export default function EventTokens({
   const dispatch = useAppDispatch();
   const myEventTokens = useAppSelector(selectMyEventTokens);
   const isMyEventTokensLoading = useAppSelector(selectIsMyEventTokensLoading);
-  const { wallet } = useMetaMask();
 
   const eventChainId = useMemo((): string => getChainIdFromString(chainId), [chainId]);
   const isCurrentChainIdSameAsEventChainId = useIsCurrentChainIdSameAsEventChainId(eventChainId);
@@ -38,7 +37,7 @@ export default function EventTokens({
   const switchChain = useSwitchChain(eventChainId);
   const addEventNetwork = useAddEventNetwork(eventChainId);
 
-  const address = useMemo((): string => wallet.accounts?.[0], [wallet.accounts]);
+  const { address } = useAccount() as { address: string };
 
   const getMyTokens = useCallback(async () => {
     try {

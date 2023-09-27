@@ -3,7 +3,6 @@
 import EventName from '@/app/components/Event/EventName';
 import SubheaderUnderlined from '@/app/components/SubheaderUnderlined/SubheaderUnderlined';
 import { useHasProvider } from '@/app/hooks/useHasProvider';
-import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { selectIsLoading, setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
@@ -12,7 +11,8 @@ import { TicketInterface } from '@/app/typings/ticket.interface';
 import { classNames } from '@/app/utils';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
-import React, { ReactElement, useEffect, useMemo, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
 
 import axios from 'axios';
 
@@ -21,15 +21,13 @@ import styles from './MyTickets.module.scss';
 export default function MyTickets({ id: eventId, name, slug }: Partial<EventInterface>): ReactElement {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectIsLoading);
-  const {
-    wallet: { accounts }
-  } = useMetaMask();
+  const { address } = useAccount();
+
   const hasProvider = useHasProvider();
   const [files, setFiles] = useState<TicketInterface[]>([]);
-  const address = useMemo((): string => accounts?.[0], [accounts]);
 
   useEffect((): void => {
-    if (!hasProvider || !accounts?.length) {
+    if (!hasProvider) {
       return;
     }
     const init = async (): Promise<void> => {
@@ -61,7 +59,7 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
       }
     };
     init().finally();
-  }, [accounts, address, dispatch, eventId, hasProvider]);
+  }, [address, address, dispatch, eventId, hasProvider]);
 
   return (
     <div className="pb-2 flex flex-col">

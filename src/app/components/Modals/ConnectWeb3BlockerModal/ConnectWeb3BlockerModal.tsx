@@ -1,15 +1,15 @@
-import { useMetaMask } from '@/app/hooks/useMetaMask';
 import { selectIsShowWeb3BlockerModal, setIsShowWeb3BlockerModal } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { Dialog, Transition } from '@headlessui/react';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import React, { Fragment, ReactElement } from 'react';
+import { useAccount } from 'wagmi';
 
 export default function ConnectWeb3BlockerModal(): ReactElement {
   const dispatch = useAppDispatch();
   const isShowWeb3BlockerModal = useAppSelector(selectIsShowWeb3BlockerModal);
   const { open: openWalletConnect } = useWeb3Modal();
-  const { isConnecting } = useMetaMask();
+  const { isConnecting } = useAccount();
 
   const closeModal = (): void => {
     dispatch(setIsShowWeb3BlockerModal(false));
