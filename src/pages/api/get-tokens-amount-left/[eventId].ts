@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const eventResponse = await StrapiService.getEventById(eventId, ['contractAddress', 'ABI', 'name', 'chainId']);
       const { contractAddress, ABI, chainId } = eventResponse.data.attributes;
-      const eventChainId = getChainIdFromString(chainId);
+      const eventChainId = getChainIdFromString(chainId) as number;
       const providerUrl = getMaticProvider(eventChainId);
       const web3 = new Web3(providerUrl);
 

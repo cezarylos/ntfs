@@ -12,16 +12,22 @@ import { classNames } from '@/app/utils';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import React, { ReactElement, useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useSignMessage } from 'wagmi';
 
 import axios from 'axios';
 
 import styles from './MyTickets.module.scss';
 
+const message = 'Zweryfikuj swój adres';
+
 export default function MyTickets({ id: eventId, name, slug }: Partial<EventInterface>): ReactElement {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectIsLoading);
   const { address } = useAccount();
+
+  const { data, isSuccess, signMessage } = useSignMessage({
+    message
+  });
 
   const hasProvider = useHasProvider();
   const [files, setFiles] = useState<TicketInterface[]>([]);
@@ -37,29 +43,33 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
           address,
           eventId
         });
+        signMessage();
+      } catch (e) {
+        dispatch(setIsLoading(false));
+      }
+    };
+    init().finally();
+  }, [address, dispatch, eventId, hasProvider, signMessage]);
 
-        const message = 'Zweryfikuj swój adres';
-
-        const signature = await window.ethereum.request({
-          method: 'personal_sign',
-          params: [message, address]
-        });
-
+  useEffect(() => {
+    if (!isSuccess) {
+      return;
+    }
+    const init = async (): Promise<void> => {
+      try {
         const res = await axios.post('/api/' + EndpointsEnum.GET_MY_REWARDS, {
-          signature,
+          signature: data,
           message,
           address,
           eventId
         });
         setFiles(res.data);
-      } catch (e) {
-        console.error(e);
       } finally {
         dispatch(setIsLoading(false));
       }
     };
     init().finally();
-  }, [address, address, dispatch, eventId, hasProvider]);
+  }, [isSuccess, data, address, eventId, dispatch]);
 
   return (
     <div className="pb-2 flex flex-col">

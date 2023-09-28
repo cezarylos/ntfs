@@ -41,7 +41,6 @@ export default function EventTokens({
 
   const getMyTokens = useCallback(async () => {
     try {
-      await switchChain();
       dispatch(await getMyEventTokens({ eventId: id, address }));
     } catch (e) {
       console.error(e);
@@ -55,8 +54,10 @@ export default function EventTokens({
   useEffect((): void => {
     if (isCurrentChainIdSameAsEventChainId) {
       getMyTokens().finally();
+    } else {
+      switchChain();
     }
-  }, [getMyTokens, isCurrentChainIdSameAsEventChainId]);
+  }, [getMyTokens, isCurrentChainIdSameAsEventChainId, switchChain]);
 
   const onTokenClick = (token: any) => () => {
     setSelectedToken(token);

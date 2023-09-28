@@ -1,5 +1,5 @@
 import { StrapiService } from '@/app/services/strapi.service';
-import { ChainsEnum } from '@/app/typings/chains.enum';
+import { ChainsEnum, ChainsIdsEnum } from '@/app/typings/chains.enum';
 import { SocialLinksEnum } from '@/app/typings/common.typings';
 import { EventInterface } from '@/app/typings/event.interface';
 
@@ -22,21 +22,22 @@ export const shuffleArray = (array: any[]): any[] => {
   return array;
 };
 
-export const getMaticProvider = (chainId: string): string => {
-  return chainId === ChainsEnum.POLYGON ? polygonRPC : mumbaiRPC;
+export const getMaticProvider = (chainId: number): string => {
+  return chainId === ChainsIdsEnum['0x89'] ? polygonRPC : mumbaiRPC;
 };
 
-export const getChainIdFromString = (chainString: string): string => {
+export const getChainIdFromString = (chainString: string): string | number => {
   if (!chainString) {
     console.error('No chainId provided');
     return '';
   }
+
   const input = chainString;
   const regex = /\[\w+\]:\s(0x[a-fA-F0-9]+)/;
   const match = input.match(regex);
 
   if (match) {
-    return match[1];
+    return ChainsIdsEnum[match[1] as any];
   }
   return chainString;
 };
@@ -58,12 +59,6 @@ export const createOpenSeaLink = ({
 export function classNames(...classes: Array<string | undefined | boolean>): string {
   return classes.filter(Boolean).join(' ');
 }
-
-export const connectMetamaskMobile = (): void => {
-  const dappUrl = window.location.href.split('//')[1];
-  const metamaskAppDeepLink = 'https://metamask.app.link/dapp/' + dappUrl;
-  window.open(metamaskAppDeepLink, '_self');
-};
 
 export const getEventBySlug = async (
   slug: string,

@@ -5,7 +5,5 @@ import { useNetwork } from 'wagmi';
 
 export const useIsCurrentChainIdSameAsEventChainId = (eventChainId: string): boolean | undefined => {
   const { chain } = useNetwork();
-  return useMemo(() => {
-    return !!chain;
-  }, [eventChainId, chain]);
+  return useMemo(() => chain?.id.toString() === eventChainId.toString(), [eventChainId, chain]);
 };

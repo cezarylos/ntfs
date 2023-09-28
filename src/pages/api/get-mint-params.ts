@@ -25,20 +25,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const contract = new web3.eth.Contract(ABI, contractAddress);
 
       const price = (await contract.methods.getPrice(amountToMint).call()) as number;
-      const valueInWei = new BN(price);
-      const valueInHex = '0x' + price.toString(16);
-      const valueInEther = valueInWei.div(new BN('1000000000000000000'));
 
       const transactionParameters = {
         to: contractAddress,
         from: address,
-        value: valueInHex,
-        data: contract.methods.mint(address, amountToMint).encodeABI()
+        value: price.toString(),
+        abi: ABI
       };
 
       return res.status(200).json({
         transactionParameters,
-        price: valueInEther.toString()
+        price: price.toString()
       });
     } catch (e) {
       console.error(e);

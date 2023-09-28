@@ -2,26 +2,24 @@
 
 import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
 import { useCallback } from 'react';
-import { toHex } from 'web3-utils';
+import { useAccount, useSwitchNetwork } from 'wagmi';
 
-export const useSwitchChain = (eventChainId: string): (() => Promise<void>) => {
+export const useSwitchChain = (eventChainId: string): (() => void) => {
   const isCurrentChainIdSameAsEventChainId = useIsCurrentChainIdSameAsEventChainId(eventChainId);
+  const { isConnected } = useAccount();
+  const { switchNetwork } = useSwitchNetwork();
 
-  return useCallback(async (): Promise<void> => {
-    if (!window?.ethereum) {
+  return useCallback((): void => {
+    if (!isConnected) {
       return;
     }
     if (isCurrentChainIdSameAsEventChainId) {
       return;
     }
-    const chainId = toHex(eventChainId);
     try {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId }]
-      });
+      switchNetwork?.(+eventChainId);
     } catch (error) {
       console.log(error);
     }
-  }, [eventChainId, isCurrentChainIdSameAsEventChainId]);
+  }, [eventChainId, isConnected, isCurrentChainIdSameAsEventChainId, switchNetwork]);
 };
