@@ -122,18 +122,7 @@ export default function Navbar() {
                 )}
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {isConnected ? (
-                  <p className={'text-white text-sm font-medium font-inter'} onClick={disconnect}>
-                    {formatAddress(address as string)}
-                  </p>
-                ) : (
-                  <button
-                    className="rounded-md shadow-xl text-white bg-pink-500 font-semibold p-1 text-sm hover:brightness-110 font-inter w-32 animate-pulse"
-                    onClick={openWalletConnect}
-                  >
-                    {isConnecting ? <span className="animate-pulse">Łączenie...</span> : 'Podłącz Portfel'}
-                  </button>
-                )}
+                <w3m-button label={'Podłącz Portfel'} loadingLabel={'Łączenie...'} balance={'hide'} />
               </div>
             </div>
           </div>

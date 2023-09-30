@@ -1,19 +1,23 @@
 import { selectIsShowWeb3BlockerModal, setIsShowWeb3BlockerModal } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { Dialog, Transition } from '@headlessui/react';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
-import React, { Fragment, ReactElement } from 'react';
+import React, { Fragment, ReactElement, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 
 export default function ConnectWeb3BlockerModal(): ReactElement {
   const dispatch = useAppDispatch();
   const isShowWeb3BlockerModal = useAppSelector(selectIsShowWeb3BlockerModal);
-  const { open: openWalletConnect } = useWeb3Modal();
-  const { isConnecting } = useAccount();
+  const { isConnected } = useAccount();
 
   const closeModal = (): void => {
     dispatch(setIsShowWeb3BlockerModal(false));
   };
+
+  useEffect(() => {
+    if (isConnected) {
+      closeModal();
+    }
+  }, [closeModal, isConnected]);
 
   return isShowWeb3BlockerModal ? (
     <>
@@ -52,11 +56,8 @@ export default function ConnectWeb3BlockerModal(): ReactElement {
                       </span>
                     </h3>
                   </div>
-                  <button
-                    className="rounded-md text-white bg-pink-500 shadow-lg font-semibold text-lg hover:brightness-110 font-inter px-4 py-2 mx-auto w-auto"
-                    onClick={openWalletConnect}
-                  >
-                    {isConnecting ? <span className="animate-pulse">Łączenie...</span> : 'Podłącz Portfel'}
+                  <button className="rounded-md text-white font-semibold text-lg hover:brightness-110 font-inter px-4 py-2 mx-auto w-auto">
+                    <w3m-connect-button label={'Podłącz Portfel'} loadingLabel={'Łączenie...'} size={'md'} />
                   </button>
                 </Dialog.Panel>
               </Transition.Child>
