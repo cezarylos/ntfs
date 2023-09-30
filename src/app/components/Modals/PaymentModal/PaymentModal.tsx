@@ -7,12 +7,12 @@ import { setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch } from '@/app/store/store';
 import { ModalInterface, PAYMENT_STATUS_STRING, SUCCESS_STRING } from '@/app/typings/common.typings';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
-import { classNames, getMaticProvider, getTokenWord } from '@/app/utils';
+import { classNames, getTokenWord } from '@/app/utils';
 import { CrossmintPayButton } from '@crossmint/client-sdk-react-ui';
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 import { formatEther } from 'viem';
-import Web3 from 'web3';
+import { useSendTransaction, useWaitForTransaction } from 'wagmi';
 
 interface Props extends ModalInterface {
   slug: string;
@@ -34,13 +34,26 @@ export default function PaymentModal({
   checkoutProjectId,
   eventId,
   checkoutCollectionId,
-  maxTokensPerWallet,
-  eventChainId
+  maxTokensPerWallet
 }: Props): ReactElement {
   const dispatch = useAppDispatch();
 
   const [mintParams, setMintParams] = useState({} as any);
   const [tokenPrice, setTokenPrice] = useState(0);
+
+  const { data, isLoading, sendTransaction, error } = useSendTransaction({
+    to: mintParams?.to,
+    value: mintParams?.value,
+    data: mintParams?.data
+  });
+
+  const {
+    isLoading: isTransactionLoading,
+    isSuccess: isTransactionSuccess,
+    error: transactionError
+  } = useWaitForTransaction({
+    hash: data?.hash
+  });
 
   const [tokenAmount, setTokenAmount] = useState(amount);
 
@@ -50,8 +63,7 @@ export default function PaymentModal({
   }
 
   const successRedirectionLink = useMemo((): string => {
-    const origin =
-      process.env.NODE_ENV === 'production' ? 'https://realbrain.art' : 'https://ntfs-git-develop-cezarylos.vercel.app';
+    const origin = process.env.NODE_ENV === 'production' ? 'https://realbrain.art' : window.origin;
     return `${origin}/collections/${slug}/tokens?${PAYMENT_STATUS_STRING}=${SUCCESS_STRING}`;
   }, [slug]);
 
@@ -92,52 +104,31 @@ export default function PaymentModal({
     [tokenAmount, tokenPrice]
   );
 
+  useEffect((): void => {
+    if (error || transactionError) {
+      alert('Transaction failed!');
+      dispatch(setIsLoading(false));
+    }
+  }, [dispatch, error, transactionError]);
+
+  useEffect((): void => {
+    if (isTransactionSuccess) {
+      dispatch(setIsLoading(false));
+      window.location.href = successRedirectionLink;
+    }
+  }, [dispatch, isTransactionSuccess, successRedirectionLink]);
+
+  useEffect((): void => {
+    dispatch(setIsLoading(isTransactionLoading || isLoading));
+  }, [dispatch, isTransactionLoading, isLoading]);
+
   const mintWithCrypto = useCallback(async () => {
     if (!mintParams || typeof mintParams !== 'object') {
       return;
     }
-    const providerUrl = getMaticProvider(eventChainId);
-    const web3 = new Web3(providerUrl);
-
     dispatch(setIsLoading(true));
-
-    try {
-      const transactionHash = await window.ethereum.request({
-        method: 'eth_sendTransaction',
-        params: [mintParams]
-      });
-
-      const waitForTransactionConfirmation = async (transactionHash: string): Promise<void> => {
-        try {
-          const receipt = await web3.eth.getTransactionReceipt(transactionHash);
-          if (receipt) {
-            if (receipt.status) {
-              console.log('Transaction successful!');
-              console.log('Receipt:', receipt);
-              dispatch(setIsLoading(false));
-              window.location.href = successRedirectionLink;
-            } else {
-              console.log('Transaction failed!');
-              console.log('Receipt:', receipt);
-              alert('Transaction failed!');
-              dispatch(setIsLoading(false));
-            }
-          }
-        } catch (error: any) {
-          setIsOpen(false);
-          setTimeout(() => waitForTransactionConfirmation(transactionHash), 1000); // Retry after 1 second
-          console.error('Error:', error);
-        }
-      };
-
-      await waitForTransactionConfirmation(transactionHash as string);
-    } catch (error: any) {
-      if (error?.code === 4001) {
-        dispatch(setIsLoading(false));
-        return;
-      }
-    }
-  }, [mintParams, eventChainId, dispatch, successRedirectionLink, setIsOpen]);
+    sendTransaction?.();
+  }, [mintParams, dispatch, sendTransaction]);
 
   return (
     <>

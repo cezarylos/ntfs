@@ -65,6 +65,7 @@ export default function MyQrCode(): ReactElement {
 
   return (
     <div className="pb-2" ref={parentRef}>
+      <h1 className="text-xl text-white my-4 text-center">{!address && 'Podłącz Portfel żeby zobaczyć QR kod'}</h1>
       {encryptedAddress && (
         <div className={'flex flex-col items-center mt-4'}>
           <Canvas

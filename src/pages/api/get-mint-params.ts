@@ -30,8 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         to: contractAddress,
         from: address,
         value: valueInHex,
-        data: contract.methods.mint(address, amountToMint).encodeABI(),
-        abi: ABI
+        data: contract.methods.mint(address, amountToMint).encodeABI()
       };
 
       return res.status(200).json({
