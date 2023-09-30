@@ -1,6 +1,5 @@
 import { StrapiService } from '@/app/services/strapi.service';
 import { getChainIdFromString, getMaticProvider } from '@/app/utils';
-import { BN } from 'bn.js';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Web3 from 'web3';
 
@@ -25,11 +24,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const contract = new web3.eth.Contract(ABI, contractAddress);
 
       const price = (await contract.methods.getPrice(amountToMint).call()) as number;
+      const valueInHex = '0x' + price.toString(16);
 
       const transactionParameters = {
         to: contractAddress,
         from: address,
-        value: price.toString(),
+        value: valueInHex,
+        data: contract.methods.mint(address, amountToMint).encodeABI(),
         abi: ABI
       };
 

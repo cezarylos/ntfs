@@ -56,7 +56,7 @@ export default function AcquireToken({
   const [isBuyPanelOpen, setIsBuyPanelOpen] = useState(false);
   const [isShowTokenDelayMessage, setIsShowTokenDelayMessage] = useState(false);
 
-  const eventChainId = useMemo((): string => getChainIdFromString(chainId), [chainId]);
+  const eventChainId = useMemo((): number => getChainIdFromString(chainId), [chainId]);
   const { address } = useAccount();
 
   const isTokensLeftMoreThenZero = useMemo((): boolean => (tokensLeft || 0) > 0, [tokensLeft]);
@@ -66,7 +66,7 @@ export default function AcquireToken({
   );
 
   const switchChain = useSwitchChain(eventChainId);
-  const addEventNetwork = useAddEventNetwork(eventChainId);
+  // const addEventNetwork = useAddEventNetwork(eventChainId);
 
   const openWidget = useCallback(async (): Promise<void> => {
     if (isBuyPanelOpen || !isAllowMintMore) {
@@ -88,9 +88,9 @@ export default function AcquireToken({
     }
   }, [isBuyPanelOpen, isAllowMintMore, address, dispatch, switchChain, myEventTokens?.length, eventId]);
 
-  useEffect((): void => {
-    addEventNetwork().finally();
-  }, [addEventNetwork]);
+  // useEffect((): void => {
+  //   addEventNetwork().finally();
+  // }, [addEventNetwork]);
 
   useEffect((): void => {
     if (!isStatusSuccess || !address || !eventId) {

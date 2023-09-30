@@ -11,14 +11,7 @@ import { classNames, getMaticProvider, getTokenWord } from '@/app/utils';
 import { CrossmintPayButton } from '@crossmint/client-sdk-react-ui';
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment, ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import { formatEther, formatUnits, parseEther } from 'viem';
-import {
-  useContractWrite,
-  usePrepareContractWrite,
-  usePrepareSendTransaction,
-  useSendTransaction,
-  useWaitForTransaction
-} from 'wagmi';
+import { formatEther } from 'viem';
 import Web3 from 'web3';
 
 interface Props extends ModalInterface {
@@ -29,7 +22,7 @@ interface Props extends ModalInterface {
   checkoutProjectId: string;
   checkoutCollectionId: string;
   eventId: string | number;
-  eventChainId: string;
+  eventChainId: number;
 }
 
 export default function PaymentModal({
@@ -41,37 +34,15 @@ export default function PaymentModal({
   checkoutProjectId,
   eventId,
   checkoutCollectionId,
-  maxTokensPerWallet
+  maxTokensPerWallet,
+  eventChainId
 }: Props): ReactElement {
   const dispatch = useAppDispatch();
 
   const [mintParams, setMintParams] = useState({} as any);
   const [tokenPrice, setTokenPrice] = useState(0);
 
-  const { config, error } = usePrepareContractWrite({
-    address: mintParams?.to,
-    abi: mintParams?.abi,
-    functionName: 'mint',
-    value: mintParams?.value,
-    args: [address, amount],
-    enabled: false
-  });
-
-  const { data, write: mint, error: mintError } = useContractWrite(config);
-
-  const { isLoading, isSuccess } = useWaitForTransaction({
-    hash: data?.hash
-  });
-
-  console.log(mintError);
-
   const [tokenAmount, setTokenAmount] = useState(amount);
-
-  useEffect(() => {
-    if (error?.message) {
-      alert(error?.message);
-    }
-  }, [error?.message]);
 
   function closeModal() {
     setIsOpen(false);
@@ -125,46 +96,48 @@ export default function PaymentModal({
     if (!mintParams || typeof mintParams !== 'object') {
       return;
     }
+    const providerUrl = getMaticProvider(eventChainId);
+    const web3 = new Web3(providerUrl);
+
     dispatch(setIsLoading(true));
 
     try {
-      const data = await mint?.();
+      const transactionHash = await window.ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [mintParams]
+      });
 
-      console.log(data);
+      const waitForTransactionConfirmation = async (transactionHash: string): Promise<void> => {
+        try {
+          const receipt = await web3.eth.getTransactionReceipt(transactionHash);
+          if (receipt) {
+            if (receipt.status) {
+              console.log('Transaction successful!');
+              console.log('Receipt:', receipt);
+              dispatch(setIsLoading(false));
+              window.location.href = successRedirectionLink;
+            } else {
+              console.log('Transaction failed!');
+              console.log('Receipt:', receipt);
+              alert('Transaction failed!');
+              dispatch(setIsLoading(false));
+            }
+          }
+        } catch (error: any) {
+          setIsOpen(false);
+          setTimeout(() => waitForTransactionConfirmation(transactionHash), 1000); // Retry after 1 second
+          console.error('Error:', error);
+        }
+      };
 
-      //
-      //
-      // const waitForTransactionConfirmation = async (transactionHash: string): Promise<void> => {
-      //   try {
-      //     const receipt = await web3.eth.getTransactionReceipt(transactionHash);
-      //     if (receipt) {
-      //       if (receipt.status) {
-      //         console.log('Transaction successful!');
-      //         console.log('Receipt:', receipt);
-      //         dispatch(setIsLoading(false));
-      //         window.location.href = successRedirectionLink;
-      //       } else {
-      //         console.log('Transaction failed!');
-      //         console.log('Receipt:', receipt);
-      //         alert('Transaction failed!');
-      //         dispatch(setIsLoading(false));
-      //       }
-      //     }
-      //   } catch (error: any) {
-      //     setIsOpen(false);
-      //     setTimeout(() => waitForTransactionConfirmation(transactionHash), 1000); // Retry after 1 second
-      //     console.error('Error:', error);
-      //   }
-      // };
-
-      // await waitForTransactionConfirmation(transactionHash as string);
+      await waitForTransactionConfirmation(transactionHash as string);
     } catch (error: any) {
       if (error?.code === 4001) {
         dispatch(setIsLoading(false));
         return;
       }
     }
-  }, [mintParams, dispatch, mint]);
+  }, [mintParams, eventChainId, dispatch, successRedirectionLink, setIsOpen]);
 
   return (
     <>

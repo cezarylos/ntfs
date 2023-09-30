@@ -5,7 +5,7 @@ import { ChainsEnum } from '@/app/typings/chains.enum';
 import { polygonRPC } from '@/app/utils';
 import { useCallback } from 'react';
 
-export const useAddEventNetwork = (eventChainId: string): (() => Promise<void>) => {
+export const useAddEventNetwork = (eventChainId: number): (() => Promise<void>) => {
   const isCurrentChainIdSameAsEventChainId = useIsCurrentChainIdSameAsEventChainId(eventChainId);
 
   return useCallback(async (): Promise<void> => {

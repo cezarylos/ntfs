@@ -4,7 +4,7 @@ import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentC
 import { useCallback } from 'react';
 import { useAccount, useSwitchNetwork } from 'wagmi';
 
-export const useSwitchChain = (eventChainId: string): (() => void) => {
+export const useSwitchChain = (eventChainId: number): (() => void) => {
   const isCurrentChainIdSameAsEventChainId = useIsCurrentChainIdSameAsEventChainId(eventChainId);
   const { isConnected } = useAccount();
   const { switchNetwork } = useSwitchNetwork();
