@@ -25,10 +25,7 @@
     "@types/react-dom": "18.2.4",
     "@types/web3": "^1.2.2",
     "@vercel/analytics": "^1.0.2",
-    "@walletconnect/ethereum-provider": "^2.10.1",
-    "@walletconnect/modal": "^2.6.2",
-    "@web3modal/ethereum": "^2.7.1",
-    "@web3modal/wagmi": "^3.1.0-beta.2",
+    "@web3modal/wagmi": "^3.0.2",
     "axios": "^1.4.0",
     "bn.js": "^5.2.1",
     "crypto": "^1.0.1",
@@ -47,10 +44,9 @@
     "react-gif-player": "^0.4.2",
     "react-redux": "^8.0.5",
     "typescript": "5.0.4",
-    "viem": "^1.12.2",
+    "viem": "^1.14.0",
     "wagmi": "^1.4.2",
-    "web3": "4.0.1",
-    "web3-utils": "^4.0.1"
+    "web3": "4.0.1"
   },
   "devDependencies": {
     "@metamask/providers": "^11.0.0",
