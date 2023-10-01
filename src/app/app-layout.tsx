@@ -17,8 +17,9 @@ const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string;
 
 const metadata = {
   name: 'RealBrain',
+  description: 'Tokeny Promocje',
   url: 'https://realbrain.art',
-  icons: ['https://prod-strapi-aws-s3-realbrain.s3.eu-north-1.amazonaws.com/preview_fyrtel_b2b3f3c44c.gif']
+  icons: ['https://static.realbrain.art/logo1_927998ef8d.gif']
 };
 
 const chains = [polygon, polygonMumbai];

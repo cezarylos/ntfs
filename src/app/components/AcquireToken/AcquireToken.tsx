@@ -118,7 +118,9 @@ export default function AcquireToken({
     const tokensCount = valFromStorage?.split(':')?.[0];
     const eventIdFromStorage = valFromStorage?.split(':')?.[1];
     const isTokenDelayMessageShownValue =
-      (myEventTokens?.length || 0).toString() === tokensCount && eventIdFromStorage === eventId.toString();
+      isStatusSuccess &&
+      (myEventTokens?.length || 0).toString() === tokensCount &&
+      eventIdFromStorage === eventId.toString();
     setIsShowTokenDelayMessage(isTokenDelayMessageShownValue);
   }, [eventId, isStatusSuccess, myEventTokens]);
 

@@ -1,7 +1,7 @@
 import { selectIsShowWeb3BlockerModal, setIsShowWeb3BlockerModal } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { Dialog, Transition } from '@headlessui/react';
-import React, { Fragment, ReactElement, useEffect } from 'react';
+import React, { Fragment, ReactElement, useCallback, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 
 export default function ConnectWeb3BlockerModal(): ReactElement {
@@ -9,9 +9,9 @@ export default function ConnectWeb3BlockerModal(): ReactElement {
   const isShowWeb3BlockerModal = useAppSelector(selectIsShowWeb3BlockerModal);
   const { isConnected } = useAccount();
 
-  const closeModal = (): void => {
+  const closeModal = useCallback((): void => {
     dispatch(setIsShowWeb3BlockerModal(false));
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     if (isConnected) {

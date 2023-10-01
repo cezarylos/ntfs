@@ -1,24 +1,18 @@
 'use client';
 
 import { navigationItems, NavigationRoutes } from '@/app/consts/navigation-items.const';
-import { classNames, formatAddress, isMobileDevice } from '@/app/utils';
+import { classNames, isMobileDevice } from '@/app/utils';
 import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, ChevronDoubleLeftIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { disconnect } from '@wagmi/core';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { ReactElement, useMemo } from 'react';
-import { useAccount } from 'wagmi';
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const isMobile = isMobileDevice();
-  const { open: openWalletConnect } = useWeb3Modal();
-
-  const { address, isConnected, isConnecting } = useAccount();
 
   const isHomePage = useMemo(() => pathname === NavigationRoutes.HOME, [pathname]);
 
