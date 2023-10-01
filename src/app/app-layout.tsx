@@ -17,7 +17,7 @@ const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string;
 
 const metadata = {
   name: 'RealBrain',
-  description: 'Tokeny Promocje',
+  description: 'RealBrain',
   url: 'https://realbrain.art',
   icons: ['https://static.realbrain.art/logo1_927998ef8d.gif']
 };
