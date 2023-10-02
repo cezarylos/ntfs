@@ -36,7 +36,9 @@ export default function MyQrCode(): ReactElement {
     const init = async (): Promise<void> => {
       try {
         dispatch(setIsLoading(true));
-        signMessage();
+        setTimeout((): void => {
+          signMessage();
+        }, 500);
       } catch (e) {
         dispatch(setIsLoading(false));
       }
