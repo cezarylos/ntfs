@@ -229,7 +229,17 @@ export class StrapiService {
   public static async getEncryptionKey(jwt: string): Promise<StrapiResponseInterface<{ key: string }>> {
     try {
       const headers = getHeaders(jwt);
-      const res = await fetch(`${BASE_STRAPI_URL}/api/encrypt-key`, { headers, cache: 'no-cache' });
+      const res = await fetch(`${BASE_STRAPI_URL}/api/encrypt-key`, { headers, ...cacheOptions });
+      return res.json();
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  public static async getPosterQrCodeUrl(): Promise<StrapiResponseInterface<{ url: string }>> {
+    try {
+      const res = await fetch(`${BASE_STRAPI_URL}/api/poster-qr-code-link`, { ...cacheOptions });
       return res.json();
     } catch (e) {
       console.error(e);
