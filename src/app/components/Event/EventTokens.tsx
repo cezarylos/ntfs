@@ -111,7 +111,7 @@ export default function EventTokens({
               </div>
             ) : (
               !isMyEventTokensLoading && (
-                <p className="text-white text-md mt-4">Nie masz w tym momencie żadnych tokenów</p>
+                <p className="text-white text-md mt-4 text-center">Nie masz w tym momencie żadnych tokenów</p>
               )
             )}
           </div>
