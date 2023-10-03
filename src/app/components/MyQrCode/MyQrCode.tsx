@@ -19,7 +19,7 @@ export default function MyQrCode(): ReactElement {
 
   const hasProvider = useHasProvider();
 
-  const { address } = useAccount() as { address: string };
+  const { address, connector } = useAccount();
 
   const [encryptedAddress, setEncryptedAddress] = useState<string>('');
 
@@ -30,21 +30,19 @@ export default function MyQrCode(): ReactElement {
   });
 
   useEffect((): void => {
-    if (!hasProvider) {
+    if (!hasProvider || !connector) {
       return;
     }
     const init = async (): Promise<void> => {
       try {
         dispatch(setIsLoading(true));
-        setTimeout((): void => {
-          signMessage();
-        }, 500);
+        signMessage();
       } catch (e) {
         dispatch(setIsLoading(false));
       }
     };
     init().finally();
-  }, [address, dispatch, hasProvider, signMessage]);
+  }, [address, dispatch, hasProvider, signMessage, connector]);
 
   useEffect(() => {
     if (!isSuccess) {

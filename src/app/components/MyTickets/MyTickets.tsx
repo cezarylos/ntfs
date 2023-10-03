@@ -23,7 +23,7 @@ const message = 'Zweryfikuj swój adres';
 export default function MyTickets({ id: eventId, name, slug }: Partial<EventInterface>): ReactElement {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectIsLoading);
-  const { address } = useAccount();
+  const { address, connector } = useAccount();
 
   const { data, isSuccess, signMessage } = useSignMessage({
     message
@@ -33,7 +33,7 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
   const [files, setFiles] = useState<TicketInterface[]>([]);
 
   useEffect((): void => {
-    if (!hasProvider) {
+    if (!hasProvider || !connector) {
       return;
     }
     const init = async (): Promise<void> => {
@@ -49,7 +49,7 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
       }
     };
     init().finally();
-  }, [address, dispatch, eventId, hasProvider, signMessage]);
+  }, [address, dispatch, eventId, hasProvider, signMessage, connector]);
 
   useEffect(() => {
     if (!isSuccess) {
