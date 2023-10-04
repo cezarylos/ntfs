@@ -1,18 +1,16 @@
-import NftMedia from '@/app/components/NftMedia/NftMedia';
 import { styleTileSets } from '@/app/consts/style-tile-sets';
 import { ModalInterface } from '@/app/typings/common.typings';
-import { checkIfImageIsGift, classNames } from '@/app/utils';
+import { classNames } from '@/app/utils';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
-import DOMPurify from 'dompurify';
-import { marked } from 'marked';
+import Image from 'next/image';
 import React, { Fragment, ReactElement } from 'react';
 
 interface Props extends ModalInterface {
-  collectionName: string;
+  collectionImage: string;
 }
 
-export default function BuySuccessModal({ isOpen, setIsOpen }: Props): ReactElement {
+export default function BuySuccessModal({ isOpen, setIsOpen, collectionImage }: Props): ReactElement {
   function closeModal(): void {
     setIsOpen(false);
   }
@@ -57,48 +55,28 @@ export default function BuySuccessModal({ isOpen, setIsOpen }: Props): ReactElem
                       )}
                     >
                       <h1 className={classNames('text-3xl font-bold mb-2 text-purple-900 outline-none relative')}>
-                        {tokenName}
+                        Beng! Gratulacje!
                       </h1>
                     </span>
                   </Dialog.Title>
-                  <div>
-                    <NftMedia
-                      imageSrc={tokenUrl}
+                  <div className="flex flex-col mt-4 mb-6">
+                    <Image
+                      src={collectionImage}
+                      alt={'collectionImage'}
+                      width={0}
+                      height={0}
+                      fill={false}
+                      priority
+                      sizes={'100vw'}
                       style={{ width: '100%', height: '100%' }}
-                      className="max-w-[100%] xl:max-w-[70%] mx-auto mt-2 rounded-md shadow-lg pointer-events-none"
-                      isGif={checkIfImageIsGift(tokenUrl)}
-                      isAutoPlay
+                      className={classNames('max-w-[calc(50%)] h-auto m-auto rounded-md drop-shadow-xl outline-none')}
                     />
-                    <div
-                      className="text-base md:text-sm mt-4 text-center font-inter m-auto mb-2"
-                      dangerouslySetInnerHTML={{
-                        __html: DOMPurify.sanitize(
-                          marked
-                            .parse(tokenDescription || '', { mangle: false, headerIds: false })
-                            .replace(
-                              '<a ',
-                              '<a target="_blank" class="underline text-purple-900 font-mogra cursor-pointer outline-none" '
-                            )
-                        )
-                      }}
-                    />
-                  </div>
-                  <div className="text-center mt-2">
-                    <p className="mb-0.5 text-purple-900">Adres kontraktu:</p>
-                    <p className="font-inter break-words">{contractAddress}</p>
-                  </div>
-                  <div className="text-center mt-2">
-                    <p className="mb-0.5 text-purple-900">Token ID:</p>
-                    <p className="font-inter break-words">{tokenId}</p>
-                  </div>
-                  <div className="mt-1">
-                    <a
-                      href={openSeaUrl}
-                      target="_blank"
-                      className="m-auto mt-2 p-2 w-3/4 font-inter justify-center bg-pink-500 flex item-center text-white px-3 py-2 text-lg md:text-sm font-medium shadow-xl rounded-md hover:brightness-110 outline-none"
-                    >
-                      Obczaj na OpenSea
-                    </a>
+                    <p className="text-xl text-center font-medium leading-6 text-purple-900 mt-4">
+                      Twój token już do Ciebie leci!
+                    </p>
+                    <p className="text-purple-600 text-md mt-4 text-center font-inter">
+                      *** Jeśli po zamknięciu tego okna, nie widzisz zakupionych tokenów - odswież stronę ***
+                    </p>
                   </div>
                   <button className="mt-1" onClick={closeModal}>
                     <span className="m-auto mt-2 p-2 w-3/4 font-inter justify-center bg-pink-200 flex item-center text-purple-900 px-3 py-2 text-lg md:text-sm font-medium shadow-xl rounded-md hover:brightness-110 cursor-pointer">

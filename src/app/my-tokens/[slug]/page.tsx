@@ -12,7 +12,7 @@ const EventTokens = dynamic(() => import('@/app/components/Event/EventTokens'), 
 export default async function MyEventTokens({ params: { slug } }: { params: { slug: string } }): Promise<ReactElement> {
   const event = await getEventBySlug(
     slug,
-    ['name', 'chainId', 'checkoutProjectId', 'amountOfTokensToGetReward', 'contractAddress'],
+    ['name', 'chainId', 'checkoutProjectId', 'amountOfTokensToGetReward', 'contractAddress', 'maxTokensPerWallet'],
     true
   );
 

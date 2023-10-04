@@ -1,5 +1,6 @@
 'use client';
 
+import BuySuccessModal from '@/app/components/Modals/BuySuccessModal/BuySuccessModal';
 import PaymentModal from '@/app/components/Modals/PaymentModal/PaymentModal';
 import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
 import { useSwitchChain } from '@/app/hooks/useSwitchChain';
@@ -54,6 +55,7 @@ export default function AcquireToken({
   const router = useRouter();
 
   const [isBuyPanelOpen, setIsBuyPanelOpen] = useState(false);
+  const [isBuySuccessModalOpen, setIsBuySuccessModalOpen] = useState(false);
   const [isShowTokenDelayMessage, setIsShowTokenDelayMessage] = useState(false);
 
   const eventChainId = useMemo((): number => getChainIdFromString(chainId) as number, [chainId]);
@@ -124,8 +126,19 @@ export default function AcquireToken({
     setIsShowTokenDelayMessage(isTokenDelayMessageShownValue);
   }, [eventId, isStatusSuccess, myEventTokens]);
 
+  useEffect((): void => {
+    if (isStatusSuccess) {
+      setIsBuySuccessModalOpen(true);
+    }
+  }, [isStatusSuccess]);
+
   return (
     <>
+      <BuySuccessModal
+        isOpen={isBuySuccessModalOpen}
+        setIsOpen={setIsBuySuccessModalOpen}
+        collectionImage={collectionImage}
+      />
       <PaymentModal
         isOpen={isBuyPanelOpen}
         setIsOpen={setIsBuyPanelOpen}
