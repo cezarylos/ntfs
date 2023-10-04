@@ -1,10 +1,11 @@
-import { selectIsLoading } from '@/app/store/global/global.slice';
+import { selectExtraLoadingInfo, selectIsLoading } from '@/app/store/global/global.slice';
 import { useAppSelector } from '@/app/store/store';
 import Image from 'next/image';
 import React, { ReactElement } from 'react';
 
 export default function GlobalLoader(): ReactElement {
   const isLoading = useAppSelector(selectIsLoading);
+  const extraLoadingInfo = useAppSelector(selectExtraLoadingInfo);
 
   return isLoading ? (
     <div className="h-screen w-screen top-0 left-0 fixed bg-green-400/80 z-[5000] pointer-events-none flex flex-col items-center justify-center">
@@ -21,6 +22,11 @@ export default function GlobalLoader(): ReactElement {
         />
       </div>
       <h1 className="animate-pulse text-white text-4xl">Ładowanie...</h1>
+      {extraLoadingInfo && (
+        <h1 className="font-inter text-white text-2xl absolute top-24 bottom-0 right-0 left-0 m-auto w-fit h-fit whitespace-break-spaces text-center">
+          {extraLoadingInfo}
+        </h1>
+      )}
     </div>
   ) : (
     <></>

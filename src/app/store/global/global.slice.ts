@@ -70,6 +70,7 @@ export interface EventTokensSupplyData {
 
 type SliceState = {
   isLoading: boolean;
+  extraLoadingInfo: string | undefined;
   eventTokensSupplyData: EventTokensSupplyData;
   myEventTokens: any[];
   isMyEventTokensLoading: boolean;
@@ -78,6 +79,7 @@ type SliceState = {
 
 const initialState = {
   isLoading: false,
+  extraLoadingInfo: '',
   eventTokensSupplyData: {} as EventTokensSupplyData,
   myEventTokens: [],
   isMyEventTokensLoading: false,
@@ -88,8 +90,12 @@ export const globalSlice = createSlice({
   name: Slices.GLOBAL,
   initialState,
   reducers: {
-    setIsLoading: (state: SliceState, { payload }: PayloadAction<boolean>): void => {
-      state.isLoading = payload;
+    setIsLoading: (
+      state: SliceState,
+      { payload: { isLoading, extraLoadingInfo } }: PayloadAction<{ isLoading: boolean; extraLoadingInfo?: string }>
+    ): void => {
+      state.isLoading = isLoading;
+      state.extraLoadingInfo = extraLoadingInfo;
     },
     setIsMyEventTokensLoading: (state: SliceState, { payload }: PayloadAction<boolean>): void => {
       state.isMyEventTokensLoading = payload;
@@ -114,6 +120,7 @@ export const globalSlice = createSlice({
 export const { setIsLoading, setIsMyEventTokensLoading, setIsShowWeb3BlockerModal } = globalSlice.actions;
 
 export const selectIsLoading = (state: AppState) => state.global.isLoading;
+export const selectExtraLoadingInfo = (state: AppState) => state.global.extraLoadingInfo;
 export const selectIsMyEventTokensLoading = (state: AppState) => state.global.isMyEventTokensLoading;
 export const selectEventSupplyData = (state: AppState) => state.global.eventTokensSupplyData;
 export const selectMyEventTokens = (state: AppState) => state.global.myEventTokens;

@@ -80,13 +80,13 @@ export default function AcquireToken({
     }
     try {
       await switchChain();
-      dispatch(setIsLoading(true));
+      dispatch(setIsLoading({ isLoading: true }));
       setIsBuyPanelOpen(true);
       localStorage.setItem(LocalStorageEnum.TOKENS_COUNT, `${(myEventTokens?.length || 0).toString()}:${eventId}`);
     } catch (e) {
       console.error(e);
     } finally {
-      dispatch(setIsLoading(false));
+      dispatch(setIsLoading({ isLoading: false }));
     }
   }, [isBuyPanelOpen, isAllowMintMore, address, dispatch, switchChain, myEventTokens?.length, eventId]);
 
@@ -100,7 +100,7 @@ export default function AcquireToken({
     }
     const assignTicket = async (): Promise<void> => {
       try {
-        dispatch(setIsLoading(true));
+        dispatch(setIsLoading({ isLoading: true }));
         await axios.post('/api/' + EndpointsEnum.ASSIGN_TICKET_TO_ADDRESS, {
           address,
           eventId
@@ -109,7 +109,7 @@ export default function AcquireToken({
         console.error(e);
       } finally {
         router.push(`/collections/${slug}/tokens`);
-        dispatch(setIsLoading(false));
+        dispatch(setIsLoading({ isLoading: false }));
       }
     };
     assignTicket().finally();

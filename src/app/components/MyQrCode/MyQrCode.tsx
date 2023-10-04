@@ -3,6 +3,7 @@
 import { useHasProvider } from '@/app/hooks/useHasProvider';
 import { setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch } from '@/app/store/store';
+import { WALLET_COLLECTION_LAG_THRESHOLD, WALLET_CONNECTION_LAG } from '@/app/typings/common.typings';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { useQRCode } from 'next-qrcode';
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
@@ -35,10 +36,12 @@ export default function MyQrCode(): ReactElement {
     }
     const init = async (): Promise<void> => {
       try {
-        dispatch(setIsLoading(true));
+        setTimeout(() => {
+          dispatch(setIsLoading({ isLoading: true, extraLoadingInfo: WALLET_CONNECTION_LAG }));
+        }, WALLET_COLLECTION_LAG_THRESHOLD);
         signMessage();
       } catch (e) {
-        dispatch(setIsLoading(false));
+        dispatch(setIsLoading({ isLoading: false, extraLoadingInfo: '' }));
       }
     };
     init().finally();
@@ -57,7 +60,7 @@ export default function MyQrCode(): ReactElement {
         });
         setEncryptedAddress(res.data);
       } finally {
-        dispatch(setIsLoading(false));
+        dispatch(setIsLoading({ isLoading: false }));
       }
     };
     init().finally();

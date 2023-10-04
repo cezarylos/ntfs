@@ -5,6 +5,7 @@ import SubheaderUnderlined from '@/app/components/SubheaderUnderlined/SubheaderU
 import { useHasProvider } from '@/app/hooks/useHasProvider';
 import { selectIsLoading, setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
+import { WALLET_COLLECTION_LAG_THRESHOLD, WALLET_CONNECTION_LAG } from '@/app/typings/common.typings';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { EventInterface } from '@/app/typings/event.interface';
 import { TicketInterface } from '@/app/typings/ticket.interface';
@@ -38,14 +39,17 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
     }
     const init = async (): Promise<void> => {
       try {
-        dispatch(setIsLoading(true));
+        dispatch(setIsLoading({ isLoading: true }));
         await axios.post('/api/' + EndpointsEnum.ASSIGN_TICKET_TO_ADDRESS, {
           address,
           eventId
         });
+        setTimeout(() => {
+          dispatch(setIsLoading({ isLoading: true, extraLoadingInfo: WALLET_CONNECTION_LAG }));
+        }, WALLET_COLLECTION_LAG_THRESHOLD);
         signMessage();
       } catch (e) {
-        dispatch(setIsLoading(false));
+        dispatch(setIsLoading({ isLoading: false, extraLoadingInfo: '' }));
       }
     };
     init().finally();
@@ -65,7 +69,7 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
         });
         setFiles(res.data);
       } finally {
-        dispatch(setIsLoading(false));
+        dispatch(setIsLoading({ isLoading: false }));
       }
     };
     init().finally();

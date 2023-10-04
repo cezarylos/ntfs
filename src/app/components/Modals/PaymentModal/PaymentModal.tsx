@@ -61,7 +61,7 @@ export default function PaymentModal({
 
   function closeModal() {
     setIsOpen(false);
-    dispatch(setIsLoading(false));
+    dispatch(setIsLoading({ isLoading: false }));
   }
 
   const successRedirectionLink = useMemo((): string => {
@@ -74,7 +74,7 @@ export default function PaymentModal({
       return;
     }
     const init = async (): Promise<void> => {
-      dispatch(setIsLoading(true));
+      dispatch(setIsLoading({ isLoading: true }));
       try {
         const params = {
           address,
@@ -91,7 +91,7 @@ export default function PaymentModal({
       } catch (e) {
         console.error(e);
       } finally {
-        dispatch(setIsLoading(false));
+        dispatch(setIsLoading({ isLoading: false }));
       }
     };
     init().finally();
@@ -109,26 +109,26 @@ export default function PaymentModal({
   useEffect((): void => {
     if (error || transactionError) {
       alert('Transaction failed!');
-      dispatch(setIsLoading(false));
+      dispatch(setIsLoading({ isLoading: false }));
     }
   }, [dispatch, error, transactionError]);
 
   useEffect((): void => {
     if (isTransactionSuccess) {
-      dispatch(setIsLoading(false));
+      dispatch(setIsLoading({ isLoading: false }));
       window.location.href = successRedirectionLink;
     }
   }, [dispatch, isTransactionSuccess, successRedirectionLink]);
 
   useEffect((): void => {
-    dispatch(setIsLoading(isTransactionLoading || isLoading));
+    dispatch(setIsLoading({ isLoading: isTransactionLoading || isLoading }));
   }, [dispatch, isTransactionLoading, isLoading]);
 
   const mintWithCrypto = useCallback(async () => {
     if (!mintParams || typeof mintParams !== 'object') {
       return;
     }
-    dispatch(setIsLoading(true));
+    dispatch(setIsLoading({ isLoading: true }));
     sendTransaction?.();
   }, [mintParams, dispatch, sendTransaction]);
 
