@@ -72,10 +72,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const warningMessages = [];
 
+      let emptyTicketId = null;
+
       for (let i = 0; i < tokenIdsGroups.length; i++) {
         const tokenSetNumber = i + 1;
         const tokenIdsGroup = tokenIdsGroups[i];
         const tokensCount = tokenIdsGroup.length;
+
+        const emptyTicketFromResponse = emptyTicketsResponse.data[i];
+
+        if (emptyTicketFromResponse) {
+          emptyTicketId = emptyTicketFromResponse.id;
+        }
+
         if (tokensCount < amountOfTokensToGetReward) {
           warningMessages.push({ tokenSetNumber, message: 'Not enough tokens to receive a reward' });
           continue;
@@ -91,7 +100,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           continue;
         }
 
-        const emptyTicketId = emptyTicketsResponse.data[i]?.id;
         if (!emptyTicketId) {
           warningMessages.push({
             tokenSetNumber,
