@@ -5,6 +5,7 @@ import GlobalLoader from '@/app/components/GlobalLoader/GlobalLoader';
 import AmountInput from '@/app/components/Modals/PaymentModal/AmountInput';
 import { setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch } from '@/app/store/store';
+import { ChainsIdsEnum } from '@/app/typings/chains.enum';
 import { ModalInterface, PAYMENT_STATUS_STRING, SUCCESS_STRING } from '@/app/typings/common.typings';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { classNames, getTokenWord } from '@/app/utils';
@@ -22,7 +23,7 @@ interface Props extends ModalInterface {
   checkoutProjectId: string;
   checkoutCollectionId: string;
   eventId: string | number;
-  eventChainId: number;
+  eventChainId: ChainsIdsEnum;
 }
 
 export default function PaymentModal({
@@ -34,7 +35,8 @@ export default function PaymentModal({
   checkoutProjectId,
   eventId,
   checkoutCollectionId,
-  maxTokensPerWallet
+  maxTokensPerWallet,
+  eventChainId
 }: Props): ReactElement {
   const dispatch = useAppDispatch();
 
@@ -189,7 +191,11 @@ export default function PaymentModal({
                       collectionId={checkoutCollectionId}
                       clientId={checkoutCollectionId}
                       mintConfig={mintConfig}
-                      environment={process.env.NEXT_PUBLIC_ENV === 'production' ? 'production' : 'staging'}
+                      environment={
+                        process.env.NEXT_PUBLIC_ENV === 'production' && eventChainId === ChainsIdsEnum['0x89']
+                          ? 'production'
+                          : 'staging'
+                      }
                       successCallbackURL={successRedirectionLink}
                       mintTo={address}
                       className={styles.xmintBtn}

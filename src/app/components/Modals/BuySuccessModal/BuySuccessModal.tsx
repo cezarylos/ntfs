@@ -6,36 +6,16 @@ import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
-import React, { Fragment, ReactElement, useEffect } from 'react';
+import React, { Fragment, ReactElement } from 'react';
 
 interface Props extends ModalInterface {
-  openSeaUrl: string;
-  tokenName: string;
-  tokenUrl: string;
-  tokenDescription: string;
-  contractAddress: string;
-  tokenId: string;
+  collectionName: string;
 }
 
-export default function TokenModal({
-  isOpen,
-  setIsOpen,
-  openSeaUrl,
-  tokenName,
-  tokenUrl,
-  tokenDescription,
-  contractAddress,
-  tokenId
-}: Props): ReactElement {
+export default function BuySuccessModal({ isOpen, setIsOpen }: Props): ReactElement {
   function closeModal(): void {
     setIsOpen(false);
   }
-
-  useEffect((): void => {
-    if (isOpen) {
-      window.scrollTo(0, 0);
-    }
-  }, [isOpen]);
 
   return (
     <>
