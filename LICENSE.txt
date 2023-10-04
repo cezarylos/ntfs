@@ -1,0 +1,15 @@
+Exclusive Use and Modification License
+
+Copyright 2023 Cezary Los
+
+Permission is hereby granted, free of charge, to [Your Full Name], the author and copyright holder of this software (the "Software"), to use the Software for any purpose, to copy the Software for backup and archival purposes, and to modify the Software for personal use, subject to the following conditions:
+
+1. No other person, entity, or party is granted any rights or permissions whatsoever with respect to the Software.
+
+2. You may not sublicense, sell, rent, or lease the Software or any part thereof.
+
+3. You may not distribute or make the Software available to any other person, entity, or party in any form, whether in source code or compiled form.
+
+4. You may not publicly display, share, or otherwise disclose the Software or its source code to any other person, entity, or party.
+
+For inquiries about licensing or permissions, please contact the author at cezlos100@gmail.com.
