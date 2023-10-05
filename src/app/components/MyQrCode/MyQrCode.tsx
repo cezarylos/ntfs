@@ -6,7 +6,7 @@ import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import { setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch } from '@/app/store/store';
 import { ChainsIdsEnum } from '@/app/typings/chains.enum';
-import {  WALLET_CONNECTION_LAG } from '@/app/typings/common.typings';
+import { WALLET_CONNECTION_LAG } from '@/app/typings/common.typings';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { useQRCode } from 'next-qrcode';
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
