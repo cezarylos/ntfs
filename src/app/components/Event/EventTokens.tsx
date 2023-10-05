@@ -4,14 +4,11 @@ import TokenModal from '@/app/components/Modals/TokenModal/TokenModal';
 import NftMedia from '@/app/components/NftMedia/NftMedia';
 import ProgressBar from '@/app/components/ProgressBar/ProgressBar';
 import MetamaskLinks from '@/app/components/metamaskLinks';
-import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
-import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
-import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import { getMyEventTokens, selectIsMyEventTokensLoading, selectMyEventTokens } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
 import { EventInterface } from '@/app/typings/event.interface';
-import { checkIfImageIsGift, classNames, getChainIdFromString } from '@/app/utils';
-import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import { checkIfImageIsGift, classNames } from '@/app/utils';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 
 interface Props extends EventInterface {
@@ -20,7 +17,6 @@ interface Props extends EventInterface {
 
 export default function EventTokens({
   id,
-  chainId,
   wrapperClassName,
   contractAddress,
   maxTokensPerWallet
@@ -31,12 +27,6 @@ export default function EventTokens({
   const myEventTokens = useAppSelector(selectMyEventTokens);
   const isMyEventTokensLoading = useAppSelector(selectIsMyEventTokensLoading);
 
-  const eventChainId = useMemo((): string => getChainIdFromString(chainId), [chainId]);
-  const isCurrentChainIdSameAsEventChainId = useIsCurrentChainIdSameAsEventChainId(eventChainId);
-
-  const switchChain = useSwitchChain(eventChainId);
-  const addEventNetwork = useAddEventNetwork(eventChainId);
-
   const { address } = useAccount() as { address: string };
 
   const getMyTokens = useCallback(async () => {
@@ -45,19 +35,11 @@ export default function EventTokens({
     } catch (e) {
       console.error(e);
     }
-  }, [switchChain, dispatch, id, address]);
+  }, [dispatch, id, address]);
 
   useEffect((): void => {
-    addEventNetwork().finally();
-  }, [addEventNetwork]);
-
-  useEffect((): void => {
-    if (isCurrentChainIdSameAsEventChainId) {
-      getMyTokens().finally();
-    } else {
-      switchChain();
-    }
-  }, [getMyTokens, isCurrentChainIdSameAsEventChainId, switchChain]);
+    getMyTokens().finally();
+  }, [getMyTokens]);
 
   const onTokenClick = (token: any) => () => {
     setSelectedToken(token);
@@ -68,7 +50,7 @@ export default function EventTokens({
 
   return (
     <>
-      {isCurrentChainIdSameAsEventChainId ? (
+      {address ? (
         <>
           <div className={classNames('my-2', wrapperClassName)}>
             <h2 className="text-xl mb-2 text-yellow-300 uppercase text-center">

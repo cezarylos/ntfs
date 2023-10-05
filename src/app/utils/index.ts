@@ -22,11 +22,11 @@ export const shuffleArray = (array: any[]): any[] => {
   return array;
 };
 
-export const getMaticProvider = (chainId: number): string => {
-  return chainId === ChainsIdsEnum['0x89'] ? polygonRPC : mumbaiRPC;
+export const getMaticProvider = (chainId: string): string => {
+  return +chainId === ChainsIdsEnum['0x89'] ? polygonRPC : mumbaiRPC;
 };
 
-export const getChainIdFromString = (chainString: string): string | number => {
+export const getChainIdFromString = (chainString: string): string => {
   if (!chainString) {
     console.error('No chainId provided');
     return '';
@@ -37,7 +37,7 @@ export const getChainIdFromString = (chainString: string): string | number => {
   const match = input.match(regex);
 
   if (match) {
-    return ChainsIdsEnum[match[1] as any];
+    return ChainsIdsEnum[match[1] as any]?.toString();
   }
   return chainString;
 };

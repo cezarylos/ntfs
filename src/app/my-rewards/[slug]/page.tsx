@@ -9,7 +9,7 @@ export const metadata = {
 const MyTicketsComponent = dynamic(() => import('@/app/components/MyTickets/MyTickets'), { ssr: false });
 
 export default async function MyTickets({ params: { slug } }: { params: { slug: string } }): Promise<ReactElement> {
-  const { id, name } = await getEventBySlug(slug, ['name']);
+  const { id, name, chainId } = await getEventBySlug(slug, ['name', 'chainId']);
 
-  return <MyTicketsComponent id={id} name={name} slug={slug} />;
+  return <MyTicketsComponent id={id} name={name} slug={slug} chainId={chainId} />;
 }

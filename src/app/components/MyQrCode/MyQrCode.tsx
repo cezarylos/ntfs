@@ -1,9 +1,12 @@
 'use client';
 
 import { useHasProvider } from '@/app/hooks/useHasProvider';
+import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
+import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import { setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch } from '@/app/store/store';
-import { WALLET_COLLECTION_LAG_THRESHOLD, WALLET_CONNECTION_LAG } from '@/app/typings/common.typings';
+import { ChainsIdsEnum } from '@/app/typings/chains.enum';
+import {  WALLET_CONNECTION_LAG } from '@/app/typings/common.typings';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { useQRCode } from 'next-qrcode';
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
@@ -12,6 +15,8 @@ import { useAccount, useSignMessage } from 'wagmi';
 import axios from 'axios';
 
 const message = 'Zweryfikuj swój adres';
+
+const eventChainId = ChainsIdsEnum['0x89'].toString();
 
 export default function MyQrCode(): ReactElement {
   const { Canvas } = useQRCode();
@@ -30,22 +35,24 @@ export default function MyQrCode(): ReactElement {
     message
   });
 
+  const isCurrentChainIdSameAsEventChainId = useIsCurrentChainIdSameAsEventChainId(eventChainId);
+  const switchChain = useSwitchChain(eventChainId);
+
   useEffect((): void => {
-    if (!hasProvider || !connector) {
+    if (!hasProvider || !connector || !isCurrentChainIdSameAsEventChainId) {
+      switchChain();
       return;
     }
     const init = async (): Promise<void> => {
       try {
-        setTimeout(() => {
-          dispatch(setIsLoading({ isLoading: true, extraLoadingInfo: WALLET_CONNECTION_LAG }));
-        }, WALLET_COLLECTION_LAG_THRESHOLD);
-        signMessage();
-      } catch (e) {
+        dispatch(setIsLoading({ isLoading: true, extraLoadingInfo: WALLET_CONNECTION_LAG }));
+        await signMessage();
+      } catch {
         dispatch(setIsLoading({ isLoading: false, extraLoadingInfo: '' }));
       }
     };
     init().finally();
-  }, [address, dispatch, hasProvider, signMessage, connector]);
+  }, [address, dispatch, hasProvider, signMessage, connector, isCurrentChainIdSameAsEventChainId, switchChain]);
 
   useEffect(() => {
     if (!isSuccess) {

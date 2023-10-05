@@ -3,16 +3,18 @@
 import EventName from '@/app/components/Event/EventName';
 import SubheaderUnderlined from '@/app/components/SubheaderUnderlined/SubheaderUnderlined';
 import { useHasProvider } from '@/app/hooks/useHasProvider';
+import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
+import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import { selectIsLoading, setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
-import { WALLET_COLLECTION_LAG_THRESHOLD, WALLET_CONNECTION_LAG } from '@/app/typings/common.typings';
+import { WALLET_CONNECTION_LAG } from '@/app/typings/common.typings';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { EventInterface } from '@/app/typings/event.interface';
 import { TicketInterface } from '@/app/typings/ticket.interface';
-import { classNames } from '@/app/utils';
+import { classNames, getChainIdFromString } from '@/app/utils';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useMemo, useState } from 'react';
 import { useAccount, useSignMessage } from 'wagmi';
 
 import axios from 'axios';
@@ -21,7 +23,7 @@ import styles from './MyTickets.module.scss';
 
 const message = 'Zweryfikuj swój adres';
 
-export default function MyTickets({ id: eventId, name, slug }: Partial<EventInterface>): ReactElement {
+export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<EventInterface>): ReactElement {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectIsLoading);
   const { address, connector } = useAccount();
@@ -33,27 +35,38 @@ export default function MyTickets({ id: eventId, name, slug }: Partial<EventInte
   const hasProvider = useHasProvider();
   const [files, setFiles] = useState<TicketInterface[]>([]);
 
+  const eventChainId = useMemo((): string => getChainIdFromString(chainId as string), [chainId]);
+  const isCurrentChainIdSameAsEventChainId = useIsCurrentChainIdSameAsEventChainId(eventChainId);
+  const switchChain = useSwitchChain(eventChainId);
+
   useEffect((): void => {
-    if (!hasProvider || !connector) {
+    if (!hasProvider || !connector || !isCurrentChainIdSameAsEventChainId) {
+      switchChain();
       return;
     }
     const init = async (): Promise<void> => {
       try {
-        dispatch(setIsLoading({ isLoading: true }));
+        dispatch(setIsLoading({ isLoading: true, extraLoadingInfo: WALLET_CONNECTION_LAG }));
         await axios.post('/api/' + EndpointsEnum.ASSIGN_TICKET_TO_ADDRESS, {
           address,
           eventId
         });
-        setTimeout(() => {
-          dispatch(setIsLoading({ isLoading: true, extraLoadingInfo: WALLET_CONNECTION_LAG }));
-        }, WALLET_COLLECTION_LAG_THRESHOLD);
         signMessage();
-      } catch (e) {
+      } catch {
         dispatch(setIsLoading({ isLoading: false, extraLoadingInfo: '' }));
       }
     };
     init().finally();
-  }, [address, dispatch, eventId, hasProvider, signMessage, connector]);
+  }, [
+    address,
+    dispatch,
+    eventId,
+    hasProvider,
+    signMessage,
+    connector,
+    switchChain,
+    isCurrentChainIdSameAsEventChainId
+  ]);
 
   useEffect(() => {
     if (!isSuccess) {

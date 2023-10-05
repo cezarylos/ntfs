@@ -9,11 +9,11 @@ export const metadata = {
 const MyTicketsComponent = dynamic(() => import('@/app/components/MyTickets/MyTickets'), { ssr: false });
 
 export default async function MyTickets({ params: { slug } }: { params: { slug: string } }): Promise<ReactElement> {
-  const eventResponse = await StrapiService.getEventBySlug(slug, ['name']);
+  const eventResponse = await StrapiService.getEventBySlug(slug, ['name', 'chainId']);
   const {
     id,
-    attributes: { name }
+    attributes: { name, chainId }
   } = eventResponse.data[0] || { attributes: {} };
 
-  return <MyTicketsComponent id={id} name={name} slug={slug} />;
+  return <MyTicketsComponent id={id} name={name} slug={slug} chainId={chainId} />;
 }

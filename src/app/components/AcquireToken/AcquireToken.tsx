@@ -2,7 +2,6 @@
 
 import BuySuccessModal from '@/app/components/Modals/BuySuccessModal/BuySuccessModal';
 import PaymentModal from '@/app/components/Modals/PaymentModal/PaymentModal';
-import { useAddEventNetwork } from '@/app/hooks/useAddEventNetwork';
 import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import {
   selectEventSupplyData,
@@ -58,7 +57,7 @@ export default function AcquireToken({
   const [isBuySuccessModalOpen, setIsBuySuccessModalOpen] = useState(false);
   const [isShowTokenDelayMessage, setIsShowTokenDelayMessage] = useState(false);
 
-  const eventChainId = useMemo((): number => getChainIdFromString(chainId) as number, [chainId]);
+  const eventChainId = useMemo((): string => getChainIdFromString(chainId), [chainId]);
   const { address } = useAccount();
 
   const isTokensLeftMoreThenZero = useMemo((): boolean => (tokensLeft || 0) > 0, [tokensLeft]);
@@ -68,7 +67,6 @@ export default function AcquireToken({
   );
 
   const switchChain = useSwitchChain(eventChainId);
-  const addEventNetwork = useAddEventNetwork(eventChainId);
 
   const openWidget = useCallback(async (): Promise<void> => {
     if (isBuyPanelOpen || !isAllowMintMore) {
@@ -79,7 +77,7 @@ export default function AcquireToken({
       return;
     }
     try {
-      await switchChain();
+      switchChain();
       dispatch(setIsLoading({ isLoading: true }));
       setIsBuyPanelOpen(true);
       localStorage.setItem(LocalStorageEnum.TOKENS_COUNT, `${(myEventTokens?.length || 0).toString()}:${eventId}`);
@@ -89,10 +87,6 @@ export default function AcquireToken({
       dispatch(setIsLoading({ isLoading: false }));
     }
   }, [isBuyPanelOpen, isAllowMintMore, address, dispatch, switchChain, myEventTokens?.length, eventId]);
-
-  useEffect((): void => {
-    addEventNetwork().finally();
-  }, [addEventNetwork]);
 
   useEffect((): void => {
     if (!isStatusSuccess || !address || !eventId) {
