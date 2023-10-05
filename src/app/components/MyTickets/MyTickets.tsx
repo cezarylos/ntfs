@@ -7,7 +7,6 @@ import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentC
 import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import { selectIsLoading, setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch, useAppSelector } from '@/app/store/store';
-import { WALLET_CONNECTION_LAG } from '@/app/typings/common.typings';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { EventInterface } from '@/app/typings/event.interface';
 import { TicketInterface } from '@/app/typings/ticket.interface';
@@ -46,7 +45,7 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
     }
     const init = async (): Promise<void> => {
       try {
-        dispatch(setIsLoading({ isLoading: true, extraLoadingInfo: WALLET_CONNECTION_LAG }));
+        dispatch(setIsLoading({ isLoading: true }));
         await axios.post('/api/' + EndpointsEnum.ASSIGN_TICKET_TO_ADDRESS, {
           address,
           eventId
@@ -69,7 +68,7 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
   ]);
 
   useEffect(() => {
-    if (!isSuccess) {
+    if (!isSuccess || !data) {
       return;
     }
     const init = async (): Promise<void> => {

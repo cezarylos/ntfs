@@ -6,7 +6,6 @@ import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import { setIsLoading } from '@/app/store/global/global.slice';
 import { useAppDispatch } from '@/app/store/store';
 import { ChainsIdsEnum } from '@/app/typings/chains.enum';
-import { WALLET_CONNECTION_LAG } from '@/app/typings/common.typings';
 import { EndpointsEnum } from '@/app/typings/endpoints.enum';
 import { useQRCode } from 'next-qrcode';
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
@@ -45,8 +44,8 @@ export default function MyQrCode(): ReactElement {
     }
     const init = async (): Promise<void> => {
       try {
-        dispatch(setIsLoading({ isLoading: true, extraLoadingInfo: WALLET_CONNECTION_LAG }));
-        await signMessage();
+        dispatch(setIsLoading({ isLoading: true }));
+        signMessage();
       } catch {
         dispatch(setIsLoading({ isLoading: false, extraLoadingInfo: '' }));
       }
@@ -55,7 +54,7 @@ export default function MyQrCode(): ReactElement {
   }, [address, dispatch, hasProvider, signMessage, connector, isCurrentChainIdSameAsEventChainId, switchChain]);
 
   useEffect(() => {
-    if (!isSuccess) {
+    if (!isSuccess || !data) {
       return;
     }
     const init = async (): Promise<void> => {
