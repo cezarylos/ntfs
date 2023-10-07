@@ -192,7 +192,7 @@ export default function PaymentModal({
                       clientId={checkoutCollectionId}
                       mintConfig={mintConfig}
                       environment={
-                        process.env.NEXT_PUBLIC_ENV === 'production'
+                        process.env.NEXT_PUBLIC_ENV === 'production' && +eventChainId === ChainsIdsEnum['0x89']
                           ? 'production'
                           : 'staging'
                       }
