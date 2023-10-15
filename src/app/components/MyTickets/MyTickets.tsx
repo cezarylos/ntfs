@@ -69,9 +69,7 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
     if (!connector || !isCurrentChainIdSameAsEventChainId) {
       return;
     }
-    setTimeout(() => {
-      signMessage({ message });
-    }, 3000);
+    signMessage({ message });
   }, [connector, isCurrentChainIdSameAsEventChainId, signMessage]);
 
   useEffect((): void => {
