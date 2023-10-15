@@ -2,7 +2,6 @@
 
 import EventName from '@/app/components/Event/EventName';
 import SubheaderUnderlined from '@/app/components/SubheaderUnderlined/SubheaderUnderlined';
-import { useHasProvider } from '@/app/hooks/useHasProvider';
 import { useIsCurrentChainIdSameAsEventChainId } from '@/app/hooks/useIsCurrentChainIdSameAsEventChainId';
 import { useSwitchChain } from '@/app/hooks/useSwitchChain';
 import { selectIsLoading, setIsLoading } from '@/app/store/global/global.slice';
@@ -38,16 +37,21 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
   const switchChain = useSwitchChain(eventChainId);
 
   useEffect((): void => {
+    if (!connector || !isConnected || !address || !eventId) {
+      return;
+    }
     const init = async (): Promise<void> => {
       try {
         dispatch(setIsLoading({ isLoading: true }));
         if (!isCurrentChainIdSameAsEventChainId) {
           await switchChain();
+          return;
         }
         await axios.post('/api/' + EndpointsEnum.ASSIGN_TICKET_TO_ADDRESS, {
           address,
           eventId
         });
+        signMessage();
       } catch (e) {
         console.error(e);
       } finally {
@@ -65,12 +69,6 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
     switchChain,
     isCurrentChainIdSameAsEventChainId
   ]);
-
-  useEffect(() => {
-    if (isCurrentChainIdSameAsEventChainId && connector) {
-      signMessage();
-    }
-  }, [isCurrentChainIdSameAsEventChainId, signMessage, connector]);
 
   useEffect((): void => {
     if (isError) {

@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const excludedAddressesFromRewardsLowercase = excludedAddressesFromRewards.map(address => address.toLowerCase());
 
       if (excludedAddressesFromRewardsLowercase.includes(address.toLowerCase())) {
-        return res.status(400).json({ message: 'Address is excluded from rewards' });
+        return res.status(200).json({ message: 'Address is excluded from rewards' });
       }
 
       const providerUrl = getMaticProvider(getChainIdFromString(chainId));
