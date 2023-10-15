@@ -51,7 +51,9 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
           address,
           eventId
         });
-        signMessage();
+        setTimeout(() => {
+          signMessage();
+        }, 5000);
       } catch (e) {
         console.error(e);
       } finally {
