@@ -45,7 +45,7 @@
     "react-redux": "^8.0.5",
     "typescript": "5.0.4",
     "viem": "^1.14.0",
-    "wagmi": "^1.4.2",
+    "wagmi": "^1.4.3",
     "web3": "4.0.1"
   },
   "devDependencies": {
