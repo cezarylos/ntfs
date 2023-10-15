@@ -25,8 +25,7 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectIsLoading);
   const { address, connector, isConnected } = useAccount();
-  const { data, isSuccess, signMessageAsync, isError } = useSignMessage();
-  const [userSignature, setUserSignature] = useState('');
+  const { data, isSuccess, signMessage, isError } = useSignMessage();
 
   const [files, setFiles] = useState<TicketInterface[]>([]);
 
@@ -41,15 +40,14 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
     const init = async (): Promise<void> => {
       try {
         dispatch(setIsLoading({ isLoading: true }));
-        if (!isCurrentChainIdSameAsEventChainId) {
-          await switchChain();
-          return;
-        }
         await axios.post('/api/' + EndpointsEnum.ASSIGN_TICKET_TO_ADDRESS, {
           address,
           eventId
         });
-        await signMessageAsync({ message });
+        if (!isCurrentChainIdSameAsEventChainId) {
+          await switchChain();
+          return;
+        }
       } catch (e) {
         dispatch(setIsLoading({ isLoading: false, extraLoadingInfo: '' }));
         console.error(e);
@@ -61,14 +59,20 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
     dispatch,
     eventId,
     isConnected,
-    signMessageAsync,
+    signMessage,
     connector,
     switchChain,
     isCurrentChainIdSameAsEventChainId
   ]);
 
-  console.log(userSignature);
-  console.log(data);
+  useEffect(() => {
+    if (!connector || !isCurrentChainIdSameAsEventChainId) {
+      return;
+    }
+    setTimeout(() => {
+      signMessage({ message });
+    }, 3000);
+  }, [connector, isCurrentChainIdSameAsEventChainId, signMessage]);
 
   useEffect((): void => {
     if (isError) {
