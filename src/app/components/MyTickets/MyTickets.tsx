@@ -13,7 +13,7 @@ import { classNames, getChainIdFromString } from '@/app/utils';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import React, { ReactElement, useEffect, useMemo, useState } from 'react';
-import { useAccount, useConnect, useSignMessage } from 'wagmi';
+import { useAccount, useSignMessage } from 'wagmi';
 
 import axios from 'axios';
 
@@ -25,10 +25,6 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectIsLoading);
   const { address, connector, isConnected } = useAccount();
-  const useConnect123 = useConnect();
-
-  console.log(useConnect123);
-  console.log(connector);
 
   const { data, isSuccess, signMessage, isError } = useSignMessage({
     message
@@ -57,9 +53,8 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
         });
         signMessage();
       } catch (e) {
-        console.error(e);
-      } finally {
         dispatch(setIsLoading({ isLoading: false, extraLoadingInfo: '' }));
+        console.error(e);
       }
     };
     init().finally();
