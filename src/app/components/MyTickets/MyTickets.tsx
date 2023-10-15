@@ -26,7 +26,7 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
   const isLoading = useAppSelector(selectIsLoading);
   const { address, connector, isConnected } = useAccount();
 
-  const { data, isSuccess, signMessage, isError } = useSignMessage({
+  const { data, isSuccess, signMessage, isError, status } = useSignMessage({
     message
   });
 
@@ -103,6 +103,7 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
           <SubheaderUnderlined name={'Moje Nagrody'} />
         </>
       )}
+      <p>Status: {status}</p>
       {files?.map(({ title, description, url, isRewardCollected }, idx) => (
         <div key={idx} className={classNames('bg-purple-200 rounded-xl p-4 my-4', styles.ticket)}>
           <h2 className="text-xl text-purple-950">{title}</h2>
