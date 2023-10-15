@@ -25,13 +25,12 @@ const message = 'Zweryfikuj swój adres';
 export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<EventInterface>): ReactElement {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectIsLoading);
-  const { address, connector } = useAccount();
+  const { address, connector, isConnected } = useAccount();
 
-  const { data, isSuccess, signMessage } = useSignMessage({
+  const { data, isSuccess, signMessage, isError } = useSignMessage({
     message
   });
 
-  const hasProvider = useHasProvider();
   const [files, setFiles] = useState<TicketInterface[]>([]);
 
   const eventChainId = useMemo((): string => getChainIdFromString(chainId as string), [chainId]);
@@ -39,19 +38,19 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
   const switchChain = useSwitchChain(eventChainId);
 
   useEffect((): void => {
-    if (!hasProvider || !connector || !isCurrentChainIdSameAsEventChainId) {
-      switchChain();
-      return;
-    }
     const init = async (): Promise<void> => {
       try {
         dispatch(setIsLoading({ isLoading: true }));
+        if (!isCurrentChainIdSameAsEventChainId) {
+          await switchChain();
+        }
         await axios.post('/api/' + EndpointsEnum.ASSIGN_TICKET_TO_ADDRESS, {
           address,
           eventId
         });
-        signMessage();
-      } catch {
+      } catch (e) {
+        console.error(e);
+      } finally {
         dispatch(setIsLoading({ isLoading: false, extraLoadingInfo: '' }));
       }
     };
@@ -60,12 +59,24 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
     address,
     dispatch,
     eventId,
-    hasProvider,
+    isConnected,
     signMessage,
     connector,
     switchChain,
     isCurrentChainIdSameAsEventChainId
   ]);
+
+  useEffect(() => {
+    if (isCurrentChainIdSameAsEventChainId && connector) {
+      signMessage();
+    }
+  }, [isCurrentChainIdSameAsEventChainId, signMessage, connector]);
+
+  useEffect((): void => {
+    if (isError) {
+      dispatch(setIsLoading({ isLoading: false, extraLoadingInfo: '' }));
+    }
+  }, [dispatch, isError]);
 
   useEffect(() => {
     if (!isSuccess || !data) {
