@@ -55,9 +55,7 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
           address,
           eventId
         });
-        setTimeout(() => {
-          signMessage();
-        }, 5000);
+        signMessage();
       } catch (e) {
         console.error(e);
       } finally {
@@ -110,8 +108,6 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
           <SubheaderUnderlined name={'Moje Nagrody'} />
         </>
       )}
-      <p>connector ready: {connector?.ready ? 'yes' : 'no'}</p>
-      <p>connector undefined: {connector === undefined ? 'yes' : 'no'}</p>
       {files?.map(({ title, description, url, isRewardCollected }, idx) => (
         <div key={idx} className={classNames('bg-purple-200 rounded-xl p-4 my-4', styles.ticket)}>
           <h2 className="text-xl text-purple-950">{title}</h2>
