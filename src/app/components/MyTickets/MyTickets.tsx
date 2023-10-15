@@ -13,7 +13,7 @@ import { classNames, getChainIdFromString } from '@/app/utils';
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import React, { ReactElement, useEffect, useMemo, useState } from 'react';
-import { useAccount, useConnect, useSignMessage } from 'wagmi';
+import { useAccount, useSignMessage } from 'wagmi';
 
 import axios from 'axios';
 
@@ -25,13 +25,11 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectIsLoading);
   const { address, connector, isConnected } = useAccount();
-  const { connectAsync } = useConnect();
   const {
     data,
     isSuccess,
     signMessage,
     isError,
-    status,
     isLoading: isSignMessageLoading
   } = useSignMessage({
     message
@@ -58,8 +56,10 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
           address,
           eventId
         });
-        await connectAsync({ connector });
-        signMessage();
+        const signature = await signMessage({
+          message: 'gm wagmi frens'
+        });
+        // signMessage();
       } catch (e) {
         dispatch(setIsLoading({ isLoading: false, extraLoadingInfo: '' }));
         console.error(e);
@@ -111,7 +111,6 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
           <SubheaderUnderlined name={'Moje Nagrody'} />
         </>
       )}
-      <p>Status: {status}</p>
       {files?.map(({ title, description, url, isRewardCollected }, idx) => (
         <div key={idx} className={classNames('bg-purple-200 rounded-xl p-4 my-4', styles.ticket)}>
           <h2 className="text-xl text-purple-950">{title}</h2>
