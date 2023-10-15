@@ -25,15 +25,8 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectIsLoading);
   const { address, connector, isConnected } = useAccount();
-  const {
-    data,
-    isSuccess,
-    signMessage,
-    isError,
-    isLoading: isSignMessageLoading
-  } = useSignMessage({
-    message
-  });
+  const { data, isSuccess, signMessageAsync, isError } = useSignMessage();
+  const [userSignature, setUserSignature] = useState('');
 
   const [files, setFiles] = useState<TicketInterface[]>([]);
 
@@ -56,10 +49,7 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
           address,
           eventId
         });
-        const signature = await signMessage({
-          message: 'gm wagmi frens'
-        });
-        // signMessage();
+        await signMessageAsync({ message });
       } catch (e) {
         dispatch(setIsLoading({ isLoading: false, extraLoadingInfo: '' }));
         console.error(e);
@@ -71,11 +61,14 @@ export default function MyTickets({ id: eventId, name, slug, chainId }: Partial<
     dispatch,
     eventId,
     isConnected,
-    signMessage,
+    signMessageAsync,
     connector,
     switchChain,
     isCurrentChainIdSameAsEventChainId
   ]);
+
+  console.log(userSignature);
+  console.log(data);
 
   useEffect((): void => {
     if (isError) {
