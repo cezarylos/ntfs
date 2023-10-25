@@ -11,7 +11,7 @@ export const metadata = {
 
 const populateFields = ['name', 'startDate', 'endDate', 'slug', 'isCollab'];
 
-const soon = Array(1).fill({});
+const soon = Array(0).fill({});
 
 export default async function Events(): Promise<ReactElement> {
   const events = await StrapiService.getAllEvents(populateFields);
@@ -31,7 +31,8 @@ export default async function Events(): Promise<ReactElement> {
                 }}
                 mainText={
                   <>
-                    <span className={'normal-case'}>{`${isCollab ? 'RealBrain x ' : ''}`}</span>
+                    {/* uncomment when collabs are enabled*/}
+                    {/*<span className={'normal-case'}>{`${isCollab ? 'RealBrain x ' : ''}`}</span>*/}
                     {name}
                   </>
                 }

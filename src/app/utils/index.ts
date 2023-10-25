@@ -51,8 +51,8 @@ export const createOpenSeaLink = ({
   tokenId: number;
   chainId: string;
 }): string => {
-  const testnetPrefix = chainId === ChainsEnum.MUMBAI ? 'testnets.' : '';
-  const chainName = chainId === ChainsEnum.MUMBAI ? 'mumbai' : 'matic';
+  const testnetPrefix = chainId !== ChainsIdsEnum['0x89'].toString() ? 'testnets.' : '';
+  const chainName = chainId !== ChainsIdsEnum['0x89'].toString() ? 'mumbai' : 'matic';
   return `https://${testnetPrefix}opensea.io/assets/${chainName}/${contractAddress}/${tokenId}`;
 };
 
