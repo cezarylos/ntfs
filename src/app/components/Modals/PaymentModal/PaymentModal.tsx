@@ -23,7 +23,7 @@ interface Props extends ModalInterface {
   checkoutProjectId: string;
   checkoutCollectionId: string;
   eventId: string | number;
-  eventChainId: ChainsIdsEnum;
+  eventChainId: string;
 }
 
 export default function PaymentModal({
@@ -167,9 +167,9 @@ export default function PaymentModal({
                         as="h3"
                         className="text-3xl text-center font-medium leading-6 text-purple-950 uppercase"
                       >
-                        <h1 className={classNames('text-xl font-bold text-purple-900 outline-none relative')}>
+                        <span className={classNames('text-xl font-bold text-purple-900 outline-none relative')}>
                           Wybierz ilość
-                        </h1>
+                        </span>
                       </Dialog.Title>
                       <AmountInput amount={tokenAmount} setAmount={setTokenAmount} maxAmount={maxTokensPerWallet} />
                       <h1 className="text-lg text-center mb-4 text-purple-800">
@@ -181,9 +181,9 @@ export default function PaymentModal({
                     as="h3"
                     className="text-3xl text-center font-medium leading-6 text-purple-950 uppercase"
                   >
-                    <h1 className={classNames('text-xl font-bold text-purple-900 outline-none relative')}>
+                    <span className={classNames('text-xl font-bold text-purple-900 outline-none relative')}>
                       Wybierz metodę płatności
-                    </h1>
+                    </span>
                   </Dialog.Title>
                   <div>
                     <CrossmintPayButton

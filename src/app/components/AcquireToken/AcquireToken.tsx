@@ -138,7 +138,7 @@ export default function AcquireToken({
         setIsOpen={setIsBuyPanelOpen}
         address={address as string}
         slug={slug}
-        amount={amountOfTokensToGetReward}
+        amount={amountOfTokensToGetReward || 1}
         maxTokensPerWallet={maxTokensPerWallet}
         checkoutProjectId={checkoutProjectId}
         eventChainId={eventChainId}
