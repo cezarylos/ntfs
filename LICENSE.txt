@@ -2,7 +2,7 @@ Exclusive Use and Modification License
 
 Copyright 2023 Cezary Los
 
-Permission is hereby granted, free of charge, to [Your Full Name], the author and copyright holder of this software (the "Software"), to use the Software for any purpose, to copy the Software for backup and archival purposes, and to modify the Software for personal use, subject to the following conditions:
+Permission is hereby granted, free of charge, to Cezary Los, the author and copyright holder of this software (the "Software"), to use the Software for any purpose, to copy the Software for backup and archival purposes, and to modify the Software for personal use, subject to the following conditions:
 
 1. No other person, entity, or party is granted any rights or permissions whatsoever with respect to the Software.
 
