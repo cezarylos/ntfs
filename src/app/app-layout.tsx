@@ -11,7 +11,7 @@ import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 import { usePathname } from 'next/navigation';
 import { ReactNode, useMemo } from 'react';
 import { Provider } from 'react-redux';
-import { WagmiConfig } from 'wagmi';
+import { mainnet, WagmiConfig } from 'wagmi';
 import { polygon, polygonMumbai } from 'wagmi/chains';
 
 const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string;
@@ -23,7 +23,7 @@ const metadata = {
   icons: ['https://static.realbrain.art/logo1_927998ef8d.gif']
 };
 
-const chains = [polygon, polygonMumbai];
+const chains = [mainnet, polygon, polygonMumbai];
 const wagmiConfig = defaultWagmiConfig({ projectId, chains, metadata });
 
 createWeb3Modal({ wagmiConfig, projectId, chains });
