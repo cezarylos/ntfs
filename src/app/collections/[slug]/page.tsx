@@ -28,7 +28,7 @@ export default async function Page({ params: { slug } }: { params: { slug: strin
       isExternal: href === EventNavigationRoutes.GALLERY
     }));
 
-  const myTokensClassName = isCollab ? '!col-span-2' : '!col-span-1';
+  const myTokensClassName = isCollab ? '!col-span-2' : 'col-span-1';
 
   return (
     <div className="h-full flex flex-col">
