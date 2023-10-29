@@ -20,4 +20,5 @@ export interface EventInterface {
   socialLinks: Record<SocialLinksEnum, string>;
   rewardTitle: string;
   isCollab: boolean;
+  collectionOpenSeaUrl: string;
 }
