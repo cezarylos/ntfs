@@ -30,6 +30,7 @@ export default function Tile({
     'grid-row w-min-full flex flex-col justify-center items-center rounded-lg text-white shadow-2xl',
     styleTileSets[styledTileIdx].background,
     isActive && 'sm:hover:brightness-110',
+    'col-span-2',
     additionalTileClassName
   );
 
