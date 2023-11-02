@@ -30,8 +30,8 @@ export enum HelpNavigationRoutes {
 export const eventNavigationItems = [
   { label: 'KUP TOKEN', href: EventNavigationRoutes.TOKENS },
   { label: 'GALERIA', href: EventNavigationRoutes.GALLERY },
-  { label: 'MOJE TOKENY', href: EventNavigationRoutes.MY_TOKENS, className: 'col-span-1' },
-  { label: 'MOJE NAGRODY', href: EventNavigationRoutes.REWARDS, className: 'col-span-1' },
+  { label: 'MOJE TOKENY', href: EventNavigationRoutes.MY_TOKENS, className: 'col-span-1 col-span-1' },
+  { label: 'MOJE NAGRODY', href: EventNavigationRoutes.REWARDS, className: 'col-span-1 col-span-1' },
   { label: 'INFORMACJE', href: EventNavigationRoutes.ABOUT }
   // { label: 'BONUS', href: EventNavigationRoutes.ABOUT }
 ];
