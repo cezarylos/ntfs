@@ -1,6 +1,5 @@
 'use client';
 
-import Web3Wrapper from '@/app/(web3Wrapper)/layout';
 import GlobalLoader from '@/app/components/GlobalLoader/GlobalLoader';
 import ConnectWeb3BlockerModal from '@/app/components/Modals/ConnectWeb3BlockerModal/ConnectWeb3BlockerModal';
 import Navbar from '@/app/components/Navigation/Navbar';
@@ -61,7 +60,7 @@ export default function AppLayout({
                   <h1 className="text-5xl mb-2 text-white relative">{sectionName}</h1>
                 </span>
               )}
-              <Web3Wrapper>{children}</Web3Wrapper>
+              {children}
             </div>
           </div>
         </WagmiConfig>
